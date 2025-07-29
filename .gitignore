@@ -1,0 +1,34 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyd
+*.so
+
+# Environments
+.venv/
+venv/
+env/
+.env
+
+# Editor directories and files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.bak
+*.swo
+
+# Logs
+*.log
+
+# Database
+*.sqlite3
+*.db
+
+# Specific to this project
+files.txt
+
+# OS-specific files
+.DS_Store
+Thumbs.db

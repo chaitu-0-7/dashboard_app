@@ -1,0 +1,10 @@
+flask
+pymongo
+fyers_apiv3
+requests
+APScheduler
+python-dotenv
+waitress
+Werkzeug
+pandas
+numpy

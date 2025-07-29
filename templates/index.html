@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nifty Shop Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #f8fafc; /* slate-50 */
+            --foreground: #0f172a; /* slate-900 */
+            --card: #ffffff;
+            --card-foreground: #0f172a;
+            --popover: #ffffff;
+            --popover-foreground: #0f172a;
+            --primary: #0f172a; /* slate-900 */
+            --primary-foreground: #f8fafc; /* slate-50 */
+            --secondary: #e2e8f0; /* slate-200 */
+            --secondary-foreground: #1e293b; /* slate-800 */
+            --muted: #e2e8f0; /* slate-200 */
+            --muted-foreground: #64748b; /* slate-500 */
+            --accent: #e2e8f0; /* slate-200 */
+            --accent-foreground: #1e293b; /* slate-800 */
+            --destructive: #ef4444; /* red-500 */
+            --destructive-foreground: #f8fafc; /* slate-50 */
+            --border: #e2e8f0; /* slate-200 */
+            --input: #e2e8f0; /* slate-200 */
+            --ring: #0f172a; /* slate-900 */
+            --radius: 0.5rem;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        .navbar {
+            background-color: var(--primary);
+            padding: 1rem 1.5rem;
+            color: var(--primary-foreground);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .navbar a {
+            color: var(--primary-foreground);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            padding: 0.5rem 0;
+        }
+        .navbar a:hover {
+            color: var(--accent);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background-color: var(--card);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+        }
+        h1 {
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.4rem;
+            margin-top: 0;
+            font-size: 1.5em; /* Final reduction */
+            text-align: center;
+            margin-bottom: 0.8rem; /* Final reduction */
+            font-weight: 600;
+        }
+        h3 {
+            color: var(--foreground);
+            margin-top: 0.5rem;
+            margin-bottom: 0.2rem;
+            font-size: 1em; /* Increased font size for h3 */
+            font-weight: 600;
+        }
+        .day-section {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.75rem; /* Increased and even padding */
+            margin-bottom: 0.75rem; /* Consistent margin */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem; /* Reduced margin */
+            font-size: 0.8rem; /* Increased font size for tables */
+        }
+        th, td {
+            padding: 0.3rem 0.5rem; /* Further reduced and consistent padding */
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tbody tr:hover {
+            background-color: var(--secondary);
+        }
+
+        .log-level-indicator, .trade-action-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .log-level-INFO { background-color: #3b82f6; /* blue-500 */ }
+        .log-level-WARNING { background-color: #f59e0b; /* amber-500 */ }
+        .log-level-ERROR { background-color: #ef4444; /* red-500 */ }
+
+        .trade-action-BUY { background-color: #22c55e; /* green-500 */ }
+        .trade-action-SELL { background-color: #ef4444; /* red-500 */ }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+        .pagination button {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .pagination button:hover:not(:disabled) {
+            background-color: var(--primary-foreground);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            transform: translateY(-1px);
+        }
+        .pagination button:disabled {
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .no-data-message {
+            text-align: center;
+            padding: 4rem 1.5rem;
+            color: var(--muted-foreground);
+            font-size: 1.2em;
+            background-color: var(--muted);
+            border-radius: var(--radius);
+            border: 1px dashed var(--border);
+            margin-top: 2rem;
+        }
+        .no-data-message p {
+            margin: 0;
+        }
+
+        details {
+            margin-top: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background-color: var(--secondary);
+        }
+        summary {
+            padding: 0.3rem 0.5rem; /* Consistent with th, td */
+            font-weight: 600;
+            cursor: pointer;
+            background-color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        details[open] summary {
+            border-bottom: 1px solid var(--border);
+        }
+        details .content {
+            padding: 0.5rem; /* Final reduction and consistent padding */
+            background-color: var(--card);
+            border-radius: 0 0 var(--radius) var(--radius);
+        }
+        .sort-icon {
+            margin-left: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>Nifty Shop Bot</div>
+        <div>
+            <a href="/">Home</a>
+            <a href="/performance">Performance</a>
+            <a href="/logs">Logs</a>
+            <a href="/token-refresh">Token Refresh</a>
+            <a href="/run-strategy">Strategy</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Recent Trading Activity (Last 10 Days)</h1>
+
+        {% if daily_data %}
+            {% for date_str, data in daily_data.items() %}
+                <div class="day-section">
+                    <h2>Activity for {{ date_str }}</h2>
+
+                    <h3>Executed Trades:</h3>
+                    {% if data.executed_trades %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Action</th>
+                                    <th>Qty</th>
+                                    <th>Symbol</th>
+                                    <th>Price</th>
+                                    <th>Order ID</th>
+                                    <th>Status</th>
+                                    <th>Comment</th>
+                                    <th>Profit (₹)</th>
+                                    <th>Profit (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for trade in data.executed_trades %}
+                                    <tr>
+                                        <td>
+                                            <span class="trade-action-indicator trade-action-{{ trade.action }}"></span>
+                                            {{ trade.action }}
+                                        </td>
+                                        <td>{{ trade.quantity }}</td>
+                                        <td>{{ trade.symbol }}</td>
+                                        <td>₹{{ '%.2f' | format(trade.price) }}</td>
+                                        <td>{{ trade.order_id }}</td>
+                                        <td>{{ 'FILLED' if trade.filled else 'PENDING/FAILED' }}</td>
+                                        <td>{% if trade.comment %}{{ trade.comment }}{% else %}-{% endif %}</td>
+                                        <td>{% if trade.profit is not none %}₹{{ '%.2f' | format(trade.profit) }}{% else %}-{% endif %}</td>
+                                        <td>{% if trade.profit_pct is not none %}{{ '%.1f' | format(trade.profit_pct) }}%{% else %}-{% endif %}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>No executed trades for this day.</p>
+                    {% endif %}
+
+                    <details>
+                        <summary>View Logs</summary>
+                        <div class="content">
+                            {% if data.logs %}
+                                <table class="logs-table">
+                                    <thead>
+                                        <tr>
+                                            <th data-sort-key="timestamp">Time <span class="sort-icon">&#8597;</span></th>
+                                            <th>Level</th>
+                                            <th>Message</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for log in data.logs %}
+                                            <tr>
+                                                <td>{{ log.timestamp.strftime('%H:%M') }}</td>
+                                                <td>
+                                                    <span class="log-level-indicator log-level-{{ log.level }}"></span>
+                                                    {{ log.level }}
+                                                </td>
+                                                <td>{{ log.message }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p>No logs for this day.</p>
+                            {% endif %}
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>View Cancelled Orders</summary>
+                        <div class="content">
+                            {% if data.cancelled_trades %}
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Timestamp</th>
+                                            <th>Action</th>
+                                            <th>Qty</th>
+                                            <th>Symbol</th>
+                                            <th>Price</th>
+                                            <th>Order ID</th>
+                                            <th>Status</th>
+                                            <th>Comment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for trade in data.cancelled_trades %}
+                                            <tr>
+                                                <td>{{ trade.date.strftime('%H:%M') }}</td>
+                                                <td>
+                                                    <span class="trade-action-indicator trade-action-{{ trade.action }}"></span>
+                                                    {{ trade.action }}
+                                                </td>
+                                                <td>{{ trade.quantity }}</td>
+                                                <td>{{ trade.symbol }}</td>
+                                                <td>₹{{ '%.2f' | format(trade.price) }}</td>
+                                                <td>{{ trade.order_id }}</td>
+                                                <td>{{ 'FILLED' if trade.filled else 'PENDING/FAILED' }}</td>
+                                                <td>{% if trade.comment %}{{ trade.comment }}{% else %}-{% endif %}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p>No cancelled orders for this day.</p>
+                            {% endif %}
+                        </div>
+                    </details>
+
+                </div>
+            {% endfor %}
+
+            <div class="pagination">
+                <button {% if page == 1 %}disabled{% endif %} onclick="window.location.href='/?page={{ page - 1 }}'">Previous Days</button>
+                <button {% if not has_more_days %}disabled{% endif %} onclick="window.location.href='/?page={{ page + 1 }}'">Show More Days</button>
+            </div>
+        {% else %}
+            <div class="no-data-message">
+                <p>No trading activity found. Please ensure the bot is running and generating data.</p>
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortableHeaders = document.querySelectorAll('.logs-table th[data-sort-key]');
+
+            sortableHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const table = header.closest('table');
+                    const tbody = table.querySelector('tbody');
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+                    const sortKey = header.dataset.sortKey;
+                    const currentSort = header.dataset.sortDir || 'desc';
+                    const newSort = currentSort === 'asc' ? 'desc' : 'asc';
+                    header.dataset.sortDir = newSort;
+
+                    rows.sort((a, b) => {
+                        const aVal = a.cells[0].textContent.trim();
+                        const bVal = b.cells[0].textContent.trim();
+
+                        if (newSort === 'asc') {
+                            return aVal.localeCompare(bVal);
+                        } else {
+                            return bVal.localeCompare(aVal);
+                        }
+                    });
+
+                    rows.forEach(row => tbody.appendChild(row));
+                });
+            });
+        });
+    </script>
+</body>
+</html>

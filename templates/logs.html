@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nifty Shop Logs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #f8fafc; /* slate-50 */
+            --foreground: #0f172a; /* slate-900 */
+            --card: #ffffff;
+            --card-foreground: #0f172a;
+            --popover: #ffffff;
+            --popover-foreground: #0f172a;
+            --primary: #0f172a; /* slate-900 */
+            --primary-foreground: #f8fafc; /* slate-50 */
+            --secondary: #e2e8f0; /* slate-200 */
+            --secondary-foreground: #1e293b; /* slate-800 */
+            --muted: #e2e8f0; /* slate-200 */
+            --muted-foreground: #64748b; /* slate-500 */
+            --accent: #e2e8f0; /* slate-200 */
+            --accent-foreground: #1e293b; /* slate-800 */
+            --destructive: #ef4444; /* red-500 */
+            --destructive-foreground: #f8fafc; /* slate-50 */
+            --border: #e2e8f0; /* slate-200 */
+            --input: #e2e8f0; /* slate-200 */
+            --ring: #0f172a; /* slate-900 */
+            --radius: 0.5rem;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        .navbar {
+            background-color: var(--primary);
+            padding: 1rem 1.5rem;
+            color: var(--primary-foreground);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .navbar a {
+            color: var(--primary-foreground);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            padding: 0.5rem 0;
+        }
+        .navbar a:hover {
+            color: var(--accent);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background-color: var(--card);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+        }
+        h1 {
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.4rem;
+            margin-top: 0;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+        }
+        th, td {
+            padding: 0.3rem 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tbody tr:hover {
+            background-color: var(--secondary);
+        }
+
+        .log-level-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .log-level-INFO { background-color: #3b82f6; /* blue-500 */ }
+        .log-level-WARNING { background-color: #f59e0b; /* amber-500 */ }
+        .log-level-ERROR { background-color: #ef4444; /* red-500 */ }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+        .pagination button {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .pagination button:hover:not(:disabled) {
+            background-color: var(--primary-foreground);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            transform: translateY(-1px);
+        }
+        .pagination button:disabled {
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .no-data-message {
+            text-align: center;
+            padding: 4rem 1.5rem;
+            color: var(--muted-foreground);
+            font-size: 1.2em;
+            background-color: var(--muted);
+            border-radius: var(--radius);
+            border: 1px dashed var(--border);
+            margin-top: 2rem;
+        }
+        .no-data-message p {
+            margin: 0;
+        }
+        .sort-icon {
+            margin-left: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>Nifty Shop Bot</div>
+        <div>
+            <a href="/">Home</a>
+            <a href="/performance">Performance</a>
+            <a href="/logs">Logs</a>
+            <a href="/token-refresh">Token Refresh</a>
+            <a href="/run-strategy">Strategy</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Application Logs</h1>
+
+        <table id="logs-table">
+            <thead>
+                <tr>
+                    <th data-sort-key="timestamp">Timestamp <span class="sort-icon">&#8597;</span></th>
+                    <th>Level</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody id="log-table-body">
+                <!-- Logs will be loaded here by JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <button id="load-more-logs">Load More Logs</button>
+        </div>
+
+        <div id="no-logs-message" class="no-data-message" style="display: none;">
+            <p>No logs to display.</p>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let hasMoreLogs = true;
+        const logTableBody = document.getElementById('log-table-body');
+        const loadMoreButton = document.getElementById('load-more-logs');
+        const noLogsMessage = document.getElementById('no-logs-message');
+        const logsTable = document.getElementById('logs-table');
+
+        async function fetchLogs() {
+            if (!hasMoreLogs) return;
+
+            loadMoreButton.disabled = true;
+            loadMoreButton.textContent = 'Loading...';
+
+            try {
+                const response = await fetch(`/api/logs?page=${currentPage}`);
+                const data = await response.json();
+
+                if (data.logs.length === 0 && currentPage === 1) {
+                    noLogsMessage.style.display = 'block';
+                    loadMoreButton.style.display = 'none';
+                    logsTable.style.display = 'none';
+                    return;
+                }
+
+                data.logs.forEach(log => {
+                    const row = logTableBody.insertRow();
+                    row.innerHTML = `
+                        <td>${log.timestamp}</td>
+                        <td>
+                            <span class="log-level-indicator log-level-${log.level}"></span>
+                            ${log.level}
+                        </td>
+                        <td>${log.message}</td>
+                    `;
+                });
+
+                hasMoreLogs = data.has_more;
+                currentPage = data.next_page;
+
+                if (!hasMoreLogs) {
+                    loadMoreButton.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error fetching logs:', error);
+                // Optionally display an error message to the user
+            } finally {
+                loadMoreButton.disabled = false;
+                loadMoreButton.textContent = 'Load More Logs';
+            }
+        }
+
+        loadMoreButton.addEventListener('click', fetchLogs);
+
+        // Initial load
+        fetchLogs();
+
+        const sortableHeaders = logsTable.querySelectorAll('th[data-sort-key]');
+
+        sortableHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const tbody = logTableBody;
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const sortKey = header.dataset.sortKey;
+                const currentSort = header.dataset.sortDir || 'desc';
+                const newSort = currentSort === 'asc' ? 'desc' : 'asc';
+                header.dataset.sortDir = newSort;
+
+                rows.sort((a, b) => {
+                    const aVal = a.cells[0].textContent.trim();
+                    const bVal = b.cells[0].textContent.trim();
+
+                    if (newSort === 'asc') {
+                        return aVal.localeCompare(bVal);
+                    } else {
+                        return bVal.localeCompare(aVal);
+                    }
+                });
+
+                rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    </script>
+</body>
+</html>

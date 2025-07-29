@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategy Runs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #f8fafc; /* slate-50 */
+            --foreground: #0f172a; /* slate-900 */
+            --card: #ffffff;
+            --card-foreground: #0f172a;
+            --popover: #ffffff;
+            --popover-foreground: #0f172a;
+            --primary: #0f172a; /* slate-900 */
+            --primary-foreground: #f8fafc; /* slate-50 */
+            --secondary: #e2e8f0; /* slate-200 */
+            --secondary-foreground: #1e293b; /* slate-800 */
+            --muted: #e2e8f0; /* slate-200 */
+            --muted-foreground: #64748b; /* slate-500 */
+            --accent: #e2e8f0; /* slate-200 */
+            --accent-foreground: #1e293b; /* slate-800 */
+            --destructive: #ef4444; /* red-500 */
+            --destructive-foreground: #f8fafc; /* slate-50 */
+            --border: #e2e8f0; /* slate-200 */
+            --input: #e2e8f0; /* slate-200 */
+            --ring: #0f172a; /* slate-900 */
+            --radius: 0.5rem;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        .navbar {
+            background-color: var(--primary);
+            padding: 1rem 1.5rem;
+            color: var(--primary-foreground);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .navbar a {
+            color: var(--primary-foreground);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            padding: 0.5rem 0;
+        }
+        .navbar a:hover {
+            color: var(--accent);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background-color: var(--card);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+        }
+        h1 {
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.4rem;
+            margin-top: 0;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+        .run-button {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: block;
+            margin: 2rem auto;
+        }
+        .run-button:hover {
+            background-color: var(--primary-foreground);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            transform: translateY(-1px);
+        }
+        .run-entry {
+            background-color: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+        .run-summary {
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .run-logs {
+            padding: 0.5rem 1rem;
+            background-color: var(--card);
+            border-top: 1px solid var(--border);
+            border-radius: 0 0 var(--radius) var(--radius);
+        }
+        .run-logs table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        .run-logs th, .run-logs td {
+            padding: 0.3rem 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .run-logs th {
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .run-logs tbody tr:hover {
+            background-color: var(--secondary);
+        }
+        .log-level-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .log-level-INFO { background-color: #3b82f6; /* blue-500 */ }
+        .log-level-WARNING { background-color: #f59e0b; /* amber-500 */ }
+        .log-level-ERROR { background-color: #ef4444; /* red-500 */ }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+        .pagination button {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .pagination button:hover:not(:disabled) {
+            background-color: var(--primary-foreground);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            transform: translateY(-1px);
+        }
+        .pagination button:disabled {
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .no-data-message {
+            text-align: center;
+            padding: 4rem 1.5rem;
+            color: var(--muted-foreground);
+            font-size: 1.2em;
+            background-color: var(--muted);
+            border-radius: var(--radius);
+            border: 1px dashed var(--border);
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>Nifty Shop Bot</div>
+        <div>
+            <a href="/">Home</a>
+            <a href="/performance">Performance</a>
+            <a href="/logs">Logs</a>
+            <a href="/token-refresh">Token Refresh</a>
+            <a href="/run-strategy">Strategy</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Strategy Runs</h1>
+        <form action="/execute-strategy" method="post">
+            <button class="run-button" type="submit">Run Strategy Now</button>
+        </form>
+        {% if request.args.get('status') == 'success' %}
+            <p style="text-align: center; color: green;">Strategy execution started successfully!</p>
+        {% endif %}
+
+        {% if runs %}
+            {% for run in runs %}
+                <details class="run-entry" data-run-id="{{ run.run_id }}">
+                    <summary class="run-summary">
+                        <span>Run at: {{ run.run_time.strftime('%Y-%m-%d %H:%M:%S') }} ({{ run.run_type }})</span>
+                    </summary>
+                    <div class="run-logs">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Level</th>
+                                    <th>Message</th>
+                                </tr>
+                            </thead>
+                            <tbody class="log-table-body">
+                                <!-- Logs will be loaded here by JavaScript -->
+                            </tbody>
+                        </table>
+                        <p class="no-logs-message" style="display: none;">No logs found for this run.</p>
+                    </div>
+                </details>
+            {% endfor %}
+
+            <div class="pagination">
+                <button {% if page == 1 %}disabled{% endif %} onclick="window.location.href='/run-strategy?page={{ page - 1 }}'">Previous Runs</button>
+                <button {% if not has_more_runs %}disabled{% endif %} onclick="window.location.href='/run-strategy?page={{ page + 1 }}'">Next Runs</button>
+            </div>
+        {% else %}
+            <div class="no-data-message">
+                <p>No strategy runs found.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const runEntries = document.querySelectorAll('.run-entry');
+
+            runEntries.forEach(entry => {
+                entry.addEventListener('toggle', async function() {
+                    if (this.open) {
+                        const runId = this.dataset.runId;
+                        const logTableBody = this.querySelector('.log-table-body');
+                        const noLogsMessage = this.querySelector('.no-logs-message');
+
+                        // Clear previous logs
+                        logTableBody.innerHTML = '';
+                        noLogsMessage.style.display = 'none';
+
+                        try {
+                            const response = await fetch(`/api/run-logs/${runId}`);
+                            const data = await response.json();
+
+                            if (data.logs.length > 0) {
+                                data.logs.forEach(log => {
+                                    const row = logTableBody.insertRow();
+                                    row.innerHTML = `
+                                        <td>${log.timestamp}</td>
+                                        <td>
+                                            <span class="log-level-indicator log-level-${log.level}"></span>
+                                            ${log.level}
+                                        </td>
+                                        <td>${log.message}</td>
+                                    `;
+                                });
+                            } else {
+                                noLogsMessage.style.display = 'block';
+                            }
+                        } catch (error) {
+                            console.error('Error fetching logs:', error);
+                            noLogsMessage.textContent = 'Error loading logs.';
+                            noLogsMessage.style.display = 'block';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

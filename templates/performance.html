@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nifty Shop Performance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #f8fafc; /* slate-50 */
+            --foreground: #0f172a; /* slate-900 */
+            --card: #ffffff;
+            --card-foreground: #0f172a;
+            --popover: #ffffff;
+            --popover-foreground: #0f172a;
+            --primary: #0f172a; /* slate-900 */
+            --primary-foreground: #f8fafc; /* slate-50 */
+            --secondary: #e2e8f0; /* slate-200 */
+            --secondary-foreground: #1e293b; /* slate-800 */
+            --muted: #e2e8f0; /* slate-200 */
+            --muted-foreground: #64748b; /* slate-500 */
+            --accent: #e2e8f0; /* slate-200 */
+            --accent-foreground: #1e293b; /* slate-800 */
+            --destructive: #ef4444; /* red-500 */
+            --destructive-foreground: #f8fafc; /* slate-50 */
+            --border: #e2e8f0; /* slate-200 */
+            --input: #e2e8f0; /* slate-200 */
+            --ring: #0f172a; /* slate-900 */
+            --radius: 0.5rem;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        .navbar {
+            background-color: var(--primary);
+            padding: 1rem 1.5rem;
+            color: var(--primary-foreground);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .navbar a {
+            color: var(--primary-foreground);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            padding: 0.5rem 0;
+        }
+        .navbar a:hover {
+            color: var(--accent);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background-color: var(--card);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+        }
+        h1 {
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.4rem;
+            margin-top: 0;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+        h2 {
+            color: var(--foreground);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        h3 {
+            color: var(--foreground);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+        th, td {
+            padding: 0.3rem 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tbody tr:hover {
+            background-color: var(--secondary);
+        }
+
+        .profit-positive {
+            color: #22c55e; /* green-500 */
+            font-weight: 500;
+        }
+        .profit-negative {
+            color: #ef4444; /* red-500 */
+            font-weight: 500;
+        }
+        .profit-neutral {
+            color: var(--foreground);
+        }
+
+        .no-data-message {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--muted-foreground);
+            font-size: 1em;
+            background-color: var(--muted);
+            border-radius: var(--radius);
+            border: 1px dashed var(--border);
+            margin-top: 1rem;
+        }
+
+        /* Chart Placeholder Styles */
+        .chart-placeholder {
+            background-color: var(--muted);
+            border: 1px dashed var(--border);
+            border-radius: var(--radius);
+            height: 200px; /* Adjust as needed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted-foreground);
+            font-size: 1.1em;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>Nifty Shop Bot</div>
+        <div>
+            <a href="/">Home</a>
+            <a href="/performance">Performance</a>
+            <a href="/logs">Logs</a>
+            <a href="/token-refresh">Token Refresh</a>
+            <a href="/run-strategy">Strategy</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Performance Analysis</h1>
+
+        <h2>Current Positions</h2>
+        {% if current_positions %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Quantity</th>
+                        <th>Average Price</th>
+                        <th>Current Price</th>
+                        <th>P&L (₹)</th>
+                        <th>P&L (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for position in current_positions %}
+                        <tr>
+                            <td>{{ position.symbol }}</td>
+                            <td>{{ position.quantity }}</td>
+                            <td>₹{{ '%.2f' | format(position.avg_price) }}</td>
+                            <td>₹{{ '%.2f' | format(position.current_price) }}</td>
+                            <td class="{% if position.pnl > 0 %}profit-positive{% elif position.pnl < 0 %}profit-negative{% else %}profit-neutral{% endif %}">₹{{ '%.2f' | format(position.pnl) }}</td>
+                            <td class="{% if position.pnl_pct > 0 %}profit-positive{% elif position.pnl_pct < 0 %}profit-negative{% else %}profit-neutral{% endif %}">{{ '%.2f' | format(position.pnl_pct) }}%</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="chart-placeholder">Pie Chart: Portfolio Allocation by Symbol (Placeholder)</div>
+        {% else %}
+            <div class="no-data-message">
+                <p>No current positions to display.</p>
+            </div>
+        {% endif %}
+
+        <h2>Closed Trades</h2>
+        {% if closed_trades %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Action</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                        <th>Profit/Loss (₹)</th>
+                        <th>Profit/Loss (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trade in closed_trades %}
+                        <tr>
+                            <td>{{ trade.symbol }}</td>
+                            <td>{{ trade.action }}</td>
+                            <td>{{ trade.quantity }}</td>
+                            <td>₹{{ '%.2f' | format(trade.price) }}</td>
+                            <td>{{ trade.date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td class="{% if trade.profit > 0 %}profit-positive{% elif trade.profit < 0 %}profit-negative{% else %}profit-neutral{% endif %}">₹{{ '%.2f' | format(trade.profit) }}</td>
+                            <td class="{% if trade.profit_pct > 0 %}profit-positive{% elif trade.profit_pct < 0 %}profit-negative{% else %}profit-neutral{% endif %}">{{ '%.2f' | format(trade.profit_pct) }}%</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="chart-placeholder">Line Chart: Cumulative Profit/Loss Over Time (Placeholder)</div>
+        {% else %}
+            <div class="no-data-message">
+                <p>No closed trades to display.</p>
+            </div>
+        {% endif %}
+
+    </div>
+</body>
+</html>

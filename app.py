@@ -186,7 +186,7 @@ def dashboard():
         token_data = load_tokens()
         access_token = token_data.get("access_token") if token_data else ""
         if access_token and is_access_token_valid(token_data.get("generated_at")):
-            fyers = fyersModel.FyersModel(client_id=CLIENT_ID, token=access_token, log_path="./")
+            fyers = fyersModel.FyersModel(client_id=CLIENT_ID, token=access_token, log_path='./')
             holdings_response = fyers.holdings()
             if holdings_response.get('s') == 'ok':
                 raw_positions = holdings_response.get('holdings', [])
@@ -228,7 +228,7 @@ def trading_overview():
         flash("Access token is invalid or expired. Please refresh it.", "warning")
         return redirect(url_for('token_refresh'))
 
-    fyers = fyersModel.FyersModel(client_id=CLIENT_ID, token=access_token, log_path=os.path.join(os.path.dirname(__file__), 'fyers_logs'))
+    fyers = fyersModel.FyersModel(client_id=CLIENT_ID, token=access_token, log_path='./')
 
     try:
         holdings_response = fyers.holdings()
@@ -497,7 +497,7 @@ def self_ping():
         # Assuming the app is accessible at http://localhost:5000 or similar in deployment
         # For Render, this would be the app's public URL
         # For simplicity, we'll use the root path, which will hit the dashboard
-        requests.get("http://127.0.0.1:5000/") # Or your deployed app's URL
+        requests.get("http://127.0.0.1:8080/") # Or your deployed app's URL
         print("[INFO] Self-ping successful.")
     except requests.exceptions.RequestException as e:
         print(f"[ERROR] Self-ping failed: {e}")

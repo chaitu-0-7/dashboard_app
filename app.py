@@ -186,7 +186,7 @@ def dashboard():
         token_data = load_tokens()
         access_token = token_data.get("access_token") if token_data else ""
         if access_token and is_access_token_valid(token_data.get("generated_at")):
-            fyers = fyersModel.FyersModel(client_id=CLIENT_ID, token=access_token, log_path=os.path.join(os.path.dirname(__file__), 'fyers_logs'))
+            fyers = fyersModel.FyersModel(client_id=CLIENT_ID, token=access_token, log_path="./")
             holdings_response = fyers.holdings()
             if holdings_response.get('s') == 'ok':
                 raw_positions = holdings_response.get('holdings', [])

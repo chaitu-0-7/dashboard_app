@@ -198,31 +198,46 @@ class SimpleNiftyTrader:
         )
         return False
 
-    def get_current_positions(self) -> Dict:
-        """Get current positions from Fyers API"""
-        def _get_positions():
-            return self.fyers.positions()
+    def get_current_positions(self) -> (Dict, bool):
+        """Get current holdings from Fyers API. Returns a tuple: (positions, is_successful)"""
+        def _get_holdings():
+            return self.fyers.holdings()
         
         try:
-            response = self.rate_limiter.retry_with_backoff(_get_positions)
+            response = self.rate_limiter.retry_with_backoff(_get_holdings)
+            
+
             if response and response.get('s') == 'ok':
                 positions = {}
-                for pos in response.get('netPositions', []):
+                
+                # The .holdings() API returns a list under the 'holdings' key
+                for pos in response.get('holdings', []):
                     symbol = pos['symbol']
-                    qty = int(pos['netQty'])
+                    qty = int(pos['quantity'])
                     if qty > 0:
                         positions[symbol] = {
                             'quantity': qty,
-                            'avg_price': float(pos['avgPrice']),
+                            'avg_price': float(pos['costPrice']),
                             'current_price': 0.0,
                             'pnl': 0.0,
                             'pnl_pct': 0.0
                         }
-                return positions
+                            
+                return positions, True # Success
+            else:
+                logging.error(f"Failed to get holdings, API response: {response}")
+                return {}, False # Failure
+
         except Exception as e:
-            logging.error(f"Error getting positions: {e}")
-            return {}
-        return {}
+            logging.error(f"Error getting holdings: {e}")
+            return {}, False # Failure
+
+    def check_for_closed_positions(self, current_positions: Dict, positions_fetch_success: bool):
+        """Check for manually closed positions and record them"""
+        # If fetching positions failed, we can't reliably check for closed ones.
+        if not positions_fetch_success:
+            logging.warning("Skipping check for closed positions because fetching positions failed.")
+            return
 
     def get_current_price(self, symbol: str) -> float:
         """Get current market price"""
@@ -278,6 +293,10 @@ class SimpleNiftyTrader:
 
     def place_buy_order(self, symbol: str, quantity: int) -> Dict:
         """Place buy order"""
+        if self.db_handler.env == 'test':
+            logging.info(f"TEST MODE: Buy order for {quantity} {symbol} would be placed here.")
+            return {"s": "error", "message": "REJECTED_IN_TEST_ENV"}
+
         def _place_order():
             data = {
             "symbol": symbol,
@@ -303,6 +322,10 @@ class SimpleNiftyTrader:
 
     def place_sell_order(self, symbol: str, quantity: int) -> Dict:
         """Place sell order"""
+        if self.db_handler.env == 'test':
+            logging.info(f"TEST MODE: Sell order for {quantity} {symbol} would be placed here.")
+            return {"s": "error", "message": "REJECTED_IN_TEST_ENV"}
+            
         def _place_order():
             data = {
                 "symbol": symbol,
@@ -492,8 +515,12 @@ class SimpleNiftyTrader:
             logging.error(f"Exception in execute_sell for {symbol}: {e}")
             return False
 
-    def check_for_closed_positions(self, current_positions: Dict):
+    def check_for_closed_positions(self, current_positions: Dict, positions_fetch_success: bool):
         """Check for manually closed positions and record them"""
+        # If fetching positions failed, we can't reliably check for closed ones.
+        if not positions_fetch_success:
+            logging.warning("Skipping check for closed positions because fetching positions failed.")
+            return
         try:
             # self.trades only contains filled trades now
             recent_buys = {}
@@ -567,11 +594,15 @@ class SimpleNiftyTrader:
         
         try:
             # self.trades is now only filled trades
-            current_positions = self.get_current_positions()
-            self.check_for_closed_positions(current_positions)
+            current_positions, positions_fetch_success = self.get_current_positions()
+            self.check_for_closed_positions(current_positions, positions_fetch_success)
             
             # Get fresh positions after checking for manual closes
-            current_positions = self.get_current_positions()
+            current_positions, positions_fetch_success = self.get_current_positions()
+
+            if not positions_fetch_success:
+                logging.error("Could not fetch current positions. Aborting strategy for this run.")
+                return
 
             for symbol, position in current_positions.items():
                 current_price = self.get_current_price(symbol)
@@ -595,7 +626,9 @@ class SimpleNiftyTrader:
                     pass
             
             # Get fresh positions again before making buy decisions
-            current_positions = self.get_current_positions()
+            current_positions, positions_fetch_success = self.get_current_positions()
+            if not positions_fetch_success:
+                logging.warning("Could not refresh positions before buying. Proceeding with potentially stale data.")
 
             if len(current_positions) < self.max_stocks_to_buy:
                 entry_candidates = self.scan_for_opportunities()

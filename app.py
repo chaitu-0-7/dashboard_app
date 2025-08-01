@@ -237,8 +237,70 @@ def performance():
     if db is None:
         return "Database connection failed. Please check your MongoDB URI in files.txt"
 
-    current_positions = list(db[f"positions_{MONGO_ENV}"].find({})) # Assuming a positions_test collection
-    closed_trades = list(db[f"trades_{MONGO_ENV}"].find({"filled": True}).sort("date", -1)) # Assuming filled trades are closed
+    token_data = load_tokens()
+    access_token = token_data.get("access_token") if token_data else ""
+
+    if not access_token or not is_access_token_valid(token_data.get("generated_at")):
+        flash("Access token is invalid or expired. Please refresh it.", "warning")
+        return redirect(url_for('token_refresh'))
+
+    fyers = fyersModel.FyersModel(client_id=CLIENT_ID, token=access_token, log_path=os.path.join(os.path.dirname(__file__), 'fyers_logs'))
+
+    try:
+        holdings_response = fyers.holdings()
+        
+        if holdings_response.get('s') == 'ok':
+            # Standardize the keys to match what the template expects
+            raw_positions = holdings_response.get('holdings', [])
+            current_positions = []
+            for p in raw_positions:
+                if p.get('quantity', 0) != 0:
+                    cost_price = p.get('costPrice', 0)
+                    pnl = p.get('pl', 0)
+                    pnl_pct = (pnl / (cost_price * p.get('quantity', 1))) * 100 if cost_price > 0 else 0
+
+                    current_positions.append({
+                        'symbol': p.get('symbol'),
+                        'quantity': p.get('quantity'),
+                        'avg_price': cost_price,
+                        'current_price': p.get('ltp'),
+                        'pnl': pnl,
+                        'pnl_pct': pnl_pct
+                    })
+        else:
+            current_positions = []
+            flash(f"Failed to fetch holdings: {holdings_response.get('message', 'Unknown error')}", "danger")
+    except Exception as e:
+        current_positions = []
+        flash(f"An error occurred while fetching holdings: {e}", "danger")
+
+    # Get all filled trades from the database
+    all_filled_trades = list(db[f"trades_{MONGO_ENV}"].find({"filled": True}).sort("date", -1))
+
+    # Get a set of symbols for currently open positions
+    open_position_symbols = {pos['symbol'] for pos in current_positions}
+
+    # Separate trades into open and closed
+    open_trades = []
+    closed_trades = []
+
+    # Group trades by symbol to check their final state
+    trades_by_symbol = defaultdict(list)
+    for trade in all_filled_trades:
+        trades_by_symbol[trade['symbol']].append(trade)
+
+    for symbol, trades in trades_by_symbol.items():
+        if symbol in open_position_symbols:
+            # Find the latest BUY trade for this open position
+            latest_buy = max((t for t in trades if t.get('action') == 'BUY'), key=lambda x: x['date'], default=None)
+            if latest_buy:
+                open_trades.append(latest_buy)
+        else:
+            # If not in open positions, it's a closed trade
+            closed_trades.extend(trades)
+
+    # Sort closed trades by date descending
+    closed_trades.sort(key=lambda x: x['date'], reverse=True)
 
     # Ensure profit/profit_pct for closed trades
     for trade in closed_trades:
@@ -332,6 +394,7 @@ def refresh_token_action():
 
 def run_executor(run_type="scheduled"):
     run_id = str(uuid.uuid4())
+    strategy_runs_collection = db[f"strategy_runs_{MONGO_ENV}"]
     try:
         result = subprocess.run(
             ["python", "executor.py", "--run-id", run_id],
@@ -343,7 +406,7 @@ def run_executor(run_type="scheduled"):
         print(f"Executor stdout: {result.stdout}")
         print(f"Executor stderr: {result.stderr}")
         if db is not None:
-            db.strategy_runs.insert_one({
+            strategy_runs_collection.insert_one({
                 "run_id": run_id,
                 "run_time": datetime.now(),
                 "run_type": run_type,
@@ -355,7 +418,7 @@ def run_executor(run_type="scheduled"):
         print(f"Executor stdout (on error): {e.stdout}")
         print(f"Executor stderr (on error): {e.stderr}")
         if db is not None:
-            db.strategy_runs.insert_one({
+            strategy_runs_collection.insert_one({
                 "run_id": run_id,
                 "run_time": datetime.now(),
                 "run_type": run_type,
@@ -379,8 +442,9 @@ def run_strategy():
     runs = []
     total_runs = 0
     if db is not None:
-        runs = list(db.strategy_runs.find({}).sort("run_time", -1).skip(skip_runs).limit(runs_per_page))
-        total_runs = db.strategy_runs.count_documents({})
+        strategy_runs_collection = db[f"strategy_runs_{MONGO_ENV}"]
+        runs = list(strategy_runs_collection.find({}).sort("run_time", -1).skip(skip_runs).limit(runs_per_page))
+        total_runs = strategy_runs_collection.count_documents({})
 
     has_more_runs = total_runs > (skip_runs + len(runs))
 

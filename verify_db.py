@@ -1,11 +1,7 @@
 from pymongo import MongoClient
 
 MONGO_URI = None
-with open("files.txt", "r") as f:
-    for line in f:
-        if line.strip().startswith("uri ="):
-            MONGO_URI = line.split('=', 1)[1].strip().strip('"')
-            break
+
 
 if MONGO_URI:
     client = MongoClient(MONGO_URI)

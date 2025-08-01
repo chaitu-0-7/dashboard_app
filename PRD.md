@@ -1,4 +1,3 @@
-
 # Product Requirements Document (PRD) for Nifty Shop UI/UX Overhaul
 
 ## 1. Overview
@@ -92,5 +91,16 @@ The implementation of these changes can be broken down into the following phases
 2.  **Phase 2: Dashboard & Performance Pages:** Redesign the home page as a dashboard and implement the interactive charts and KPIs on the performance page.
 3.  **Phase 3: Logs & Token Refresh Pages:** Enhance the logs page with advanced filtering and improve the token refresh page with clearer instructions and feedback.
 4.  **Phase 4: Strategy Page & Final Polish:** Redesign the strategy page and perform a final review of the entire application for consistency and polish.
-
-By following this plan, we can systematically improve the UI/UX of the Nifty Shop application, resulting in a more professional, user-friendly, and production-ready product.
+5.  **Phase 5: Application Structure Refinement**
+    *   **Goal:** Streamline navigation and information access by consolidating related content.
+    *   **Proposed Changes:**
+        *   **Consolidate Home and Performance Content:** Merge the detailed daily trading activity (executed trades, cancelled trades, and daily logs) from the current `index.html` into the `performance.html` page. This content will be presented as a "Daily Summaries" or "Trade History" section within the consolidated page.
+        *   **Rename Pages:**
+            *   The current `index.html` will be renamed to `dashboard.html` and will serve as a dedicated "Dashboard" focusing solely on high-level, at-a-glance metrics (Holdings P&L, Open Positions, Recent Trades count). It will provide quick links to detailed sections.
+            *   The current `performance.html` will be renamed to `trading_overview.html` (or similar, e.g., "Portfolio & History") and will contain:
+                *   Key Performance Indicators (KPIs).
+                *   Current Positions.
+                *   Comprehensive Closed Trades history.
+                *   The consolidated daily activity from the old `index.html`.
+        *   **Navigation Update:** Adjust the navigation bar across all templates to reflect the new page structure and names (`Dashboard`, `Trading Overview`, `Logs`, `Token Refresh`, `Strategy`).
+    *   **Rationale:** This consolidation reduces redundancy, improves information grouping, and provides a clearer, more intuitive path for users to drill down from high-level summaries to detailed historical and performance data.

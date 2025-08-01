@@ -57,6 +57,25 @@
         .navbar a:hover {
             color: var(--accent);
         }
+        .navbar a.active {
+            border-bottom: 2px solid var(--accent);
+        }
+        .logout-button {
+            background-color: #dc2626; /* red-700 */
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius);
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            border: 1px solid transparent;
+        }
+        .logout-button:hover {
+            background-color: #b91c1c; /* red-800 */
+            color: white;
+            border-color: #b91c1c;
+            transform: translateY(-1px);
+        }
         .container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -110,6 +129,23 @@
             justify-content: space-between;
             align-items: center;
         }
+        .run-details {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9em;
+            color: var(--muted-foreground);
+        }
+        .run-status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        .status-completed { background-color: #22c55e; /* green-500 */ }
+        .status-failed { background-color: #ef4444; /* red-500 */ }
+        .status-in-progress { background-color: #f59e0b; /* amber-500 */ }
         .run-logs {
             padding: 0.5rem 1rem;
             background-color: var(--card);
@@ -192,12 +228,12 @@
     <div class="navbar">
         <div>Nifty Shop Bot</div>
         <div>
-            <a href="/">Home</a>
-            <a href="/performance">Performance</a>
-            <a href="/logs">Logs</a>
-            <a href="/token-refresh">Token Refresh</a>
-            <a href="/run-strategy">Strategy</a>
-            <a href="/logout">Logout</a>
+            <a href="/" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
+            <a href="/trading-overview" class="{% if active_page == 'trading_overview' %}active{% endif %}">Trading Overview</a>
+            <a href="/logs" class="{% if active_page == 'logs' %}active{% endif %}">Logs</a>
+            <a href="/token-refresh" class="{% if active_page == 'token_refresh' %}active{% endif %}">Token Refresh</a>
+            <a href="/run-strategy" class="{% if active_page == 'run_strategy' %}active{% endif %}">Strategy</a>
+            <a href="/logout" class="logout-button">Logout</a>
         </div>
     </div>
 
@@ -214,7 +250,14 @@
             {% for run in runs %}
                 <details class="run-entry" data-run-id="{{ run.run_id }}">
                     <summary class="run-summary">
-                        <span>Run at: {{ run.run_time.strftime('%Y-%m-%d %H:%M:%S') }} ({{ run.run_type }})</span>
+                        <span>
+                            <span class="run-status-indicator status-{{ run.status }}"></span>
+                            Run at: {{ run.run_time.strftime('%Y-%m-%d %H:%M:%S') }} ({{ run.run_type }})
+                        </span>
+                        <div class="run-details">
+                            <span>Trades: {{ run.executed_trades_count }}</span>
+                            <span>P&L: ₹{{ '%.2f' | format(run.total_pnl) }}</span>
+                        </div>
                     </summary>
                     <div class="run-logs">
                         <table>

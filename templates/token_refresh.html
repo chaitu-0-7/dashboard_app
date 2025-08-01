@@ -57,6 +57,25 @@
         .navbar a:hover {
             color: var(--accent);
         }
+        .navbar a.active {
+            border-bottom: 2px solid var(--accent);
+        }
+        .logout-button {
+            background-color: #dc2626; /* red-700 */
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius);
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            border: 1px solid transparent;
+        }
+        .logout-button:hover {
+            background-color: #b91c1c; /* red-800 */
+            color: white;
+            border-color: #b91c1c;
+            transform: translateY(-1px);
+        }
         .container {
             max-width: 800px;
             margin: 2rem auto;
@@ -156,18 +175,33 @@
             margin-top: 1rem;
             text-align: center;
         }
+        .token-timer-bar-container {
+            width: 100%;
+            background-color: var(--muted);
+            border-radius: var(--radius);
+            height: 10px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+        .token-timer-bar {
+            height: 100%;
+            width: 100%;
+            background-color: #22c55e; /* green-500 */
+            border-radius: var(--radius);
+            transition: width 1s linear;
+        }
     </style>
 </head>
 <body>
     <div class="navbar">
         <div>Nifty Shop Bot</div>
         <div>
-            <a href="/">Home</a>
-            <a href="/performance">Performance</a>
-            <a href="/logs">Logs</a>
-            <a href="/token-refresh">Token Refresh</a>
-            <a href="/run-strategy">Strategy</a>
-            <a href="/logout">Logout</a>
+            <a href="/" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
+            <a href="/trading-overview" class="{% if active_page == 'trading_overview' %}active{% endif %}">Trading Overview</a>
+            <a href="/logs" class="{% if active_page == 'logs' %}active{% endif %}">Logs</a>
+            <a href="/token-refresh" class="{% if active_page == 'token_refresh' %}active{% endif %}">Token Refresh</a>
+            <a href="/run-strategy" class="{% if active_page == 'run_strategy' %}active{% endif %}">Strategy</a>
+            <a href="/logout" class="logout-button">Logout</a>
         </div>
     </div>
 
@@ -177,6 +211,10 @@
         {% if token_status == 'VALID' %}
             <div class="status-message status-valid">
                 Fyers API Access Token is VALID.
+                <span id="token-expires-in"></span>
+            </div>
+            <div class="token-timer-bar-container">
+                <div class="token-timer-bar" id="token-timer-bar"></div>
             </div>
             <div class="action-section">
                 <button id="manual-auth-button">Manually Generate New Token</button>
@@ -274,6 +312,47 @@
                     }
                 });
             }
+
+            // Token timer logic
+            const generatedAt = {{ generated_at | default(0) }};
+            const accessTokenValidity = 24 * 60 * 60; // 1 day in seconds
+
+            function updateTokenTimer() {
+                if (generatedAt === 0) return;
+
+                const now = Math.floor(Date.now() / 1000); // current time in seconds
+                const expiresAt = generatedAt + accessTokenValidity;
+                const timeLeft = expiresAt - now;
+
+                const tokenExpiresInElement = document.getElementById('token-expires-in');
+                const tokenTimerBar = document.getElementById('token-timer-bar');
+
+                if (timeLeft > 0) {
+                    const hours = Math.floor(timeLeft / 3600);
+                    const minutes = Math.floor((timeLeft % 3600) / 60);
+                    const seconds = timeLeft % 60;
+                    tokenExpiresInElement.textContent = `Expires in: ${hours}h ${minutes}m ${seconds}s`;
+
+                    const percentageLeft = (timeLeft / accessTokenValidity) * 100;
+                    tokenTimerBar.style.width = `${percentageLeft}%`;
+
+                    if (percentageLeft < 25) {
+                        tokenTimerBar.style.backgroundColor = '#ef4444'; // red
+                    } else if (percentageLeft < 50) {
+                        tokenTimerBar.style.backgroundColor = '#f59e0b'; // amber
+                    } else {
+                        tokenTimerBar.style.backgroundColor = '#22c55e'; // green
+                    }
+
+                } else {
+                    tokenExpiresInElement.textContent = 'Expired';
+                    tokenTimerBar.style.width = '0%';
+                    tokenTimerBar.style.backgroundColor = '#ef4444'; // red
+                }
+            }
+
+            setInterval(updateTokenTimer, 1000);
+            updateTokenTimer(); // Initial call
         });
     </script>
 </body>

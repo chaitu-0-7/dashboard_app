@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 *.pyd
 *.so
+fyers_logs/
 
 # Environments
 .venv/
@@ -28,6 +29,8 @@ env/
 
 # Specific to this project
 files.txt
+PRD.md
+
 
 # OS-specific files
 .DS_Store

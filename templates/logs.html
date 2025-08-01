@@ -57,6 +57,25 @@
         .navbar a:hover {
             color: var(--accent);
         }
+        .navbar a.active {
+            border-bottom: 2px solid var(--accent);
+        }
+        .logout-button {
+            background-color: #dc2626; /* red-700 */
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius);
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            border: 1px solid transparent;
+        }
+        .logout-button:hover {
+            background-color: #b91c1c; /* red-800 */
+            color: white;
+            border-color: #b91c1c;
+            transform: translateY(-1px);
+        }
         .container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -75,6 +94,23 @@
             text-align: center;
             margin-bottom: 0.8rem;
             font-weight: 600;
+        }
+        .log-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+        .log-controls input, .log-controls select {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background-color: var(--input);
+            color: var(--foreground);
+        }
+        .log-controls input[type="text"] {
+            flex-grow: 1;
         }
 
         table {
@@ -102,6 +138,11 @@
             background-color: var(--secondary);
         }
 
+        .log-message {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap; /* Preserve whitespace and wrap text */
+            word-break: break-all; /* Break long words */
+        }
         .log-level-indicator {
             display: inline-block;
             width: 10px;
@@ -167,17 +208,29 @@
     <div class="navbar">
         <div>Nifty Shop Bot</div>
         <div>
-            <a href="/">Home</a>
-            <a href="/performance">Performance</a>
-            <a href="/logs">Logs</a>
-            <a href="/token-refresh">Token Refresh</a>
-            <a href="/run-strategy">Strategy</a>
-            <a href="/logout">Logout</a>
+            <a href="/" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
+            <a href="/trading-overview" class="{% if active_page == 'trading_overview' %}active{% endif %}">Trading Overview</a>
+            <a href="/logs" class="{% if active_page == 'logs' %}active{% endif %}">Logs</a>
+            <a href="/token-refresh" class="{% if active_page == 'token_refresh' %}active{% endif %}">Token Refresh</a>
+            <a href="/run-strategy" class="{% if active_page == 'run_strategy' %}active{% endif %}">Strategy</a>
+            <a href="/logout" class="logout-button">Logout</a>
         </div>
     </div>
 
     <div class="container">
         <h1>Application Logs</h1>
+
+        <div class="log-controls">
+            <input type="text" id="log-search" placeholder="Search logs...">
+            <select id="log-level-filter">
+                <option value="">All Levels</option>
+                <option value="INFO">INFO</option>
+                <option value="WARNING">WARNING</option>
+                <option value="ERROR">ERROR</option>
+            </select>
+            <input type="date" id="log-date-filter">
+            <span id="loading-indicator" style="display: none; margin-left: 1rem; color: var(--muted-foreground);"></span>
+        </div>
 
         <table id="logs-table">
             <thead>
@@ -208,15 +261,39 @@
         const loadMoreButton = document.getElementById('load-more-logs');
         const noLogsMessage = document.getElementById('no-logs-message');
         const logsTable = document.getElementById('logs-table');
+        const logSearchInput = document.getElementById('log-search');
+        const logLevelFilter = document.getElementById('log-level-filter');
+        const logDateFilter = document.getElementById('log-date-filter');
+        const loadingIndicator = document.getElementById('loading-indicator');
 
-        async function fetchLogs() {
+        async function fetchLogs(reset = false) {
+            if (reset) {
+                currentPage = 1;
+                logTableBody.innerHTML = '';
+                hasMoreLogs = true;
+                noLogsMessage.style.display = 'none';
+                logsTable.style.display = 'table';
+                loadMoreButton.style.display = 'block';
+            }
+
             if (!hasMoreLogs) return;
 
             loadMoreButton.disabled = true;
             loadMoreButton.textContent = 'Loading...';
+            loadingIndicator.textContent = 'Loading...';
+            loadingIndicator.style.display = 'inline';
+
+            const searchQuery = logSearchInput.value;
+            const logLevel = logLevelFilter.value;
+            const logDate = logDateFilter.value;
+
+            let url = `/api/logs?page=${currentPage}`;
+            if (searchQuery) url += `&search=${searchQuery}`;
+            if (logLevel) url += `&level=${logLevel}`;
+            if (logDate) url += `&date=${logDate}`;
 
             try {
-                const response = await fetch(`/api/logs?page=${currentPage}`);
+                const response = await fetch(url);
                 const data = await response.json();
 
                 if (data.logs.length === 0 && currentPage === 1) {
@@ -234,7 +311,7 @@
                             <span class="log-level-indicator log-level-${log.level}"></span>
                             ${log.level}
                         </td>
-                        <td>${log.message}</td>
+                        <td class="log-message">${log.message}</td>
                     `;
                 });
 
@@ -250,10 +327,32 @@
             } finally {
                 loadMoreButton.disabled = false;
                 loadMoreButton.textContent = 'Load More Logs';
+                loadingIndicator.style.display = 'none';
             }
         }
 
-        loadMoreButton.addEventListener('click', fetchLogs);
+        // Debounce function to limit how often a function is called
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                loadingIndicator.textContent = 'Typing...'; // Show typing indicator
+                loadingIndicator.style.display = 'inline';
+                timeout = setTimeout(() => {
+                    loadingIndicator.textContent = ''; // Clear typing indicator before fetch
+                    loadingIndicator.style.display = 'none';
+                    func.apply(context, args);
+                }, delay);
+            };
+        }
+
+        const debouncedFetchLogs = debounce(() => fetchLogs(true), 1000); // Increased delay to 1 second
+
+        loadMoreButton.addEventListener('click', () => fetchLogs());
+        logSearchInput.addEventListener('input', debouncedFetchLogs);
+        logLevelFilter.addEventListener('change', debouncedFetchLogs);
+        logDateFilter.addEventListener('change', debouncedFetchLogs);
 
         // Initial load
         fetchLogs();

@@ -57,6 +57,74 @@
         .navbar a:hover {
             color: var(--accent);
         }
+        .navbar a.active {
+            border-bottom: 2px solid var(--accent);
+        }
+        .logout-button {
+            background-color: #dc2626; /* red-700 */
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius);
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            border: 1px solid transparent;
+        }
+        .logout-button:hover {
+            background-color: #b91c1c; /* red-800 */
+            color: white;
+            border-color: #b91c1c;
+            transform: translateY(-1px);
+        }
+        .dashboard-metrics {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+        .metric-card {
+            background-color: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            flex: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .metric-card h3 {
+            margin-top: 0;
+            color: var(--muted-foreground);
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+        .metric-card p {
+            font-size: 2em;
+            font-weight: 700;
+            margin: 0.5rem 0 0;
+            color: var(--foreground);
+        }
+        .profit-positive {
+            color: #22c55e; /* green-500 */
+        }
+        .profit-negative {
+            color: #ef4444; /* red-500 */
+        }
+        .profit-neutral {
+            color: var(--foreground);
+        }
+        .chart-placeholder {
+            background-color: var(--muted);
+            border: 1px dashed var(--border);
+            border-radius: var(--radius);
+            height: 250px; /* Adjust as needed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted-foreground);
+            font-size: 1.1em;
+            margin-top: 1.5rem;
+            margin-bottom: 2rem;
+        }
         .container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -208,18 +276,36 @@
     <div class="navbar">
         <div>Nifty Shop Bot</div>
         <div>
-            <a href="/">Home</a>
-            <a href="/performance">Performance</a>
-            <a href="/logs">Logs</a>
-            <a href="/token-refresh">Token Refresh</a>
-            <a href="/run-strategy">Strategy</a>
-            <a href="/logout">Logout</a>
+            <a href="/" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
+            <a href="/trading-overview" class="{% if active_page == 'trading_overview' %}active{% endif %}">Trading Overview</a>
+            <a href="/logs" class="{% if active_page == 'logs' %}active{% endif %}">Logs</a>
+            <a href="/token-refresh" class="{% if active_page == 'token_refresh' %}active{% endif %}">Token Refresh</a>
+            <a href="/run-strategy" class="{% if active_page == 'run_strategy' %}active{% endif %}">Strategy</a>
+            <a href="/logout" class="logout-button">Logout</a>
         </div>
     </div>
 
     <div class="container">
-        <h1>Recent Trading Activity (Last 10 Days)</h1>
+        <h1>Nifty Shop Dashboard</h1>
 
+        <div class="dashboard-metrics">
+            <div class="metric-card">
+                <h3>Holdings P&L</h3>
+                <p class="{% if holdings_pnl > 0 %}profit-positive{% elif holdings_pnl < 0 %}profit-negative{% else %}profit-neutral{% endif %}">₹{{ '%.2f' | format(holdings_pnl) }}</p>
+            </div>
+            <div class="metric-card">
+                <h3>Open Positions</h3>
+                <p>{{ open_positions_count }}</p>
+            </div>
+            <div class="metric-card">
+                <h3>Recent Trades (Today)</h3>
+                <p>{{ recent_trades_count }}</p>
+            </div>
+        </div>
+
+        <div class="chart-placeholder">Bar Chart: Daily P&L (Placeholder)</div>
+
+        <h2>Recent Trading Activity</h2>
         {% if daily_data %}
             {% for date_str, data in daily_data.items() %}
                 <div class="day-section">

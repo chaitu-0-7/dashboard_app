@@ -55,6 +55,20 @@
             margin-bottom: 1rem;
             text-align: left;
         }
+        .form-group-inline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .forgot-password {
+            font-size: 0.9rem;
+            color: var(--muted-foreground);
+            text-decoration: none;
+        }
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
         label {
             display: block;
             margin-bottom: 0.5rem;
@@ -141,6 +155,11 @@
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group-inline">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Remember Me</label>
+                <a href="#" class="forgot-password">Forgot Password?</a>
             </div>
             <button type="submit" class="btn-login">Login</button>
         </form>

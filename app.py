@@ -13,6 +13,7 @@ from fyers_apiv3 import fyersModel
 from apscheduler.schedulers.background import BackgroundScheduler
 import uuid
 import subprocess
+import random
 
 load_dotenv() # Load environment variables from .env file
 
@@ -134,7 +135,7 @@ def refresh_access_token_custom(refresh_token, client_id, secret_id, pin):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if g.user:
-        return redirect(url_for('home'))
+        return redirect(url_for('dashboard'))
 
     if request.method == 'POST':
         username = request.form['username']
@@ -155,7 +156,7 @@ def login():
             session_token = auth_manager.create_session(username)
             session['session_token'] = session_token
             flash('Logged in successfully!', 'success')
-            return redirect(url_for('home'))
+            return redirect(url_for('dashboard'))
 
         flash(error, 'danger')
 
@@ -172,71 +173,54 @@ def logout():
 
 @app.route('/')
 @login_required
-def home():
+def dashboard():
     if db is None:
         return "Database connection failed. Please check your MongoDB URI in files.txt"
 
-    page = request.args.get('page', 1, type=int)
-    skip_days = (page - 1) * LOGS_PER_PAGE
+    # Calculate dashboard metrics
+    holdings_pnl = 0.0
+    open_positions_count = 0
+    recent_trades_count = 0 # This will now be for today's trades only
 
-    # Get distinct dates from logs and trades, sorted descending
-    distinct_log_dates = db[f"logs_{MONGO_ENV}"].distinct("timestamp", {"timestamp": {"$ne": None}})
-    distinct_trade_dates = db[f"trades_{MONGO_ENV}"].distinct("date", {"date": {"$ne": None}})
+    try:
+        token_data = load_tokens()
+        access_token = token_data.get("access_token") if token_data else ""
+        if access_token and is_access_token_valid(token_data.get("generated_at")):
+            fyers = fyersModel.FyersModel(client_id=CLIENT_ID, token=access_token, log_path=os.path.join(os.path.dirname(__file__), 'fyers_logs'))
+            holdings_response = fyers.holdings()
+            if holdings_response.get('s') == 'ok':
+                raw_positions = holdings_response.get('holdings', [])
+                for p in raw_positions:
+                    if p.get('quantity', 0) != 0:
+                        holdings_pnl += p.get('pl', 0)
+                        open_positions_count += 1
+    except Exception as e:
+        print(f"Error fetching holdings/positions for dashboard: {e}")
 
-    all_distinct_dates = sorted(list(set([d.date() for d in distinct_log_dates] + [d.date() for d in distinct_trade_dates])), reverse=True)
+    # Fetch today's executed trades for the dashboard metric
+    today = datetime.now().date()
+    start_of_today = datetime(today.year, today.month, today.day, 0, 0, 0)
+    end_of_today = datetime(today.year, today.month, today.day, 23, 59, 59)
+    
+    today_trades = list(db[f"trades_{MONGO_ENV}"].find({
+        "date": {"$gte": start_of_today, "$lte": end_of_today},
+        "filled": True
+    }))
+    recent_trades_count = len(today_trades)
 
-    total_days = len(all_distinct_dates)
-    has_more_days = total_days > (skip_days + LOGS_PER_PAGE)
+    return render_template('dashboard.html',
+                           active_page='dashboard',
+                           holdings_pnl=holdings_pnl,
+                           open_positions_count=open_positions_count,
+                           recent_trades_count=recent_trades_count)
 
-    # Get the dates for the current page
-    current_page_dates = all_distinct_dates[skip_days : skip_days + LOGS_PER_PAGE]
-
-    daily_data = {}
-
-    for date_obj in current_page_dates:
-        start_of_day = datetime(date_obj.year, date_obj.month, date_obj.day, 0, 0, 0)
-        end_of_day = datetime(date_obj.year, date_obj.month, date_obj.day, 23, 59, 59)
-
-        logs_for_day = list(db[f"logs_{MONGO_ENV}"].find({
-            "timestamp": {"$gte": start_of_day, "$lte": end_of_day}
-        }).sort("timestamp", -1))
-
-        trades_for_day = list(db[f"trades_{MONGO_ENV}"].find({
-            "date": {"$gte": start_of_day, "$lte": end_of_day}
-        }).sort("date", -1))
-
-        executed_trades = []
-        cancelled_trades = []
-
-        for trade in trades_for_day:
-            if 'profit' not in trade:
-                trade['profit'] = 0.0
-            if 'profit_pct' not in trade:
-                trade['profit_pct'] = 0.0
-            
-            if trade.get('filled', False):
-                executed_trades.append(trade)
-            else:
-                cancelled_trades.append(trade)
-        
-        daily_data[date_obj.strftime('%Y-%m-%d')] = {
-            'logs': logs_for_day,
-            'executed_trades': executed_trades,
-            'cancelled_trades': cancelled_trades
-        }
-
-    return render_template('index.html',
-                           daily_data=daily_data,
-                           page=page,
-                           has_more_days=has_more_days,
-                           total_days=total_days)
-
-@app.route('/performance')
+@app.route('/trading-overview')
 @login_required
-def performance():
+def trading_overview():
     if db is None:
         return "Database connection failed. Please check your MongoDB URI in files.txt"
 
+    # --- Existing performance logic ---
     token_data = load_tokens()
     access_token = token_data.get("access_token") if token_data else ""
 
@@ -250,7 +234,6 @@ def performance():
         holdings_response = fyers.holdings()
         
         if holdings_response.get('s') == 'ok':
-            # Standardize the keys to match what the template expects
             raw_positions = holdings_response.get('holdings', [])
             current_positions = []
             for p in raw_positions:
@@ -274,51 +257,108 @@ def performance():
         current_positions = []
         flash(f"An error occurred while fetching holdings: {e}", "danger")
 
-    # Get all filled trades from the database
     all_filled_trades = list(db[f"trades_{MONGO_ENV}"].find({"filled": True}).sort("date", -1))
 
-    # Get a set of symbols for currently open positions
     open_position_symbols = {pos['symbol'] for pos in current_positions}
 
-    # Separate trades into open and closed
     open_trades = []
     closed_trades = []
 
-    # Group trades by symbol to check their final state
     trades_by_symbol = defaultdict(list)
     for trade in all_filled_trades:
         trades_by_symbol[trade['symbol']].append(trade)
 
     for symbol, trades in trades_by_symbol.items():
         if symbol in open_position_symbols:
-            # Find the latest BUY trade for this open position
             latest_buy = max((t for t in trades if t.get('action') == 'BUY'), key=lambda x: x['date'], default=None)
             if latest_buy:
                 open_trades.append(latest_buy)
         else:
-            # If not in open positions, it's a closed trade
             closed_trades.extend(trades)
 
-    # Sort closed trades by date descending
     closed_trades.sort(key=lambda x: x['date'], reverse=True)
 
-    # Ensure profit/profit_pct for closed trades
     for trade in closed_trades:
         if 'profit' not in trade:
             trade['profit'] = 0.0
         if 'profit_pct' not in trade:
             trade['profit_pct'] = 0.0
 
-    return render_template('performance.html',
+    total_pnl = sum(trade.get('profit', 0.0) for trade in closed_trades)
+    winning_trades = [trade for trade in closed_trades if trade.get('profit', 0.0) > 0]
+    losing_trades = [trade for trade in closed_trades if trade.get('profit', 0.0) < 0]
+
+    win_loss_ratio = len(winning_trades) / len(losing_trades) if len(losing_trades) > 0 else (1 if len(winning_trades) > 0 else 0)
+    average_winning_trade = sum(trade['profit'] for trade in winning_trades) / len(winning_trades) if len(winning_trades) > 0 else 0
+    average_losing_trade = sum(trade['profit'] for trade in losing_trades) / len(losing_trades) if len(losing_trades) > 0 else 0
+
+    # --- New daily activity logic from old home route ---
+    page = request.args.get('page', 1, type=int)
+    skip_days = (page - 1) * LOGS_PER_PAGE
+
+    distinct_log_dates = db[f"logs_{MONGO_ENV}"].distinct("timestamp", {"timestamp": {"$ne": None}})
+    distinct_trade_dates = db[f"trades_{MONGO_ENV}"].distinct("date", {"date": {"$ne": None}})
+
+    all_distinct_dates = sorted(list(set([d.date() for d in distinct_log_dates] + [d.date() for d in distinct_trade_dates])), reverse=True)
+
+    total_days = len(all_distinct_dates)
+    has_more_days = total_days > (skip_days + LOGS_PER_PAGE)
+
+    current_page_dates = all_distinct_dates[skip_days : skip_days + LOGS_PER_PAGE]
+
+    daily_data = {}
+
+    for date_obj in current_page_dates:
+        start_of_day = datetime(date_obj.year, date_obj.month, date_obj.day, 0, 0, 0)
+        end_of_day = datetime(date_obj.year, date_obj.month, date_obj.day, 23, 59, 59)
+
+        logs_for_day = list(db[f"logs_{MONGO_ENV}"].find({
+            "timestamp": {"$gte": start_of_day, "$lte": end_of_day}
+        }).sort("timestamp", -1))
+
+        trades_for_day = list(db[f"trades_{MONGO_ENV}"].find({
+            "date": {"$gte": start_of_day, "$lte": end_of_day}
+        }).sort("date", -1))
+
+        executed_trades_daily = []
+        cancelled_trades_daily = []
+
+        for trade in trades_for_day:
+            if 'profit' not in trade:
+                trade['profit'] = 0.0
+            if 'profit_pct' not in trade:
+                trade['profit_pct'] = 0.0
+            
+            if trade.get('filled', False):
+                executed_trades_daily.append(trade)
+            else:
+                cancelled_trades_daily.append(trade)
+        
+        daily_data[date_obj.strftime('%Y-%m-%d')] = {
+            'logs': logs_for_day,
+            'executed_trades': executed_trades_daily,
+            'cancelled_trades': cancelled_trades_daily
+        }
+
+    return render_template('trading_overview.html',
                            current_positions=current_positions,
-                           closed_trades=closed_trades)
+                           closed_trades=closed_trades,
+                           active_page='trading_overview',
+                           total_pnl=total_pnl,
+                           win_loss_ratio=win_loss_ratio,
+                           average_winning_trade=average_winning_trade,
+                           average_losing_trade=average_losing_trade,
+                           daily_data=daily_data,
+                           page=page,
+                           has_more_days=has_more_days,
+                           total_days=total_days)
 
 @app.route('/logs')
 @login_required
 def logs_page():
     if db is None:
         return "Database connection failed. Please check your MongoDB URI in files.txt"
-    return render_template('logs.html')
+    return render_template('logs.html', active_page='logs')
 
 @app.route('/api/logs')
 @login_required
@@ -330,7 +370,24 @@ def api_logs():
     page = request.args.get('page', 1, type=int)
     skip_logs = (page - 1) * logs_per_page
 
-    all_logs = list(db[f"logs_{MONGO_ENV}"].find({}).sort("timestamp", -1).skip(skip_logs).limit(logs_per_page))
+    query = {}
+    search_query = request.args.get('search')
+    log_level = request.args.get('level')
+    log_date = request.args.get('date')
+
+    if search_query:
+        query['message'] = {'$regex': search_query, '$options': 'i'}
+    if log_level:
+        query['level'] = log_level
+    if log_date:
+        try:
+            start_of_day = datetime.strptime(log_date, '%Y-%m-%d')
+            end_of_day = start_of_day + timedelta(days=1) - timedelta(microseconds=1)
+            query['timestamp'] = {'$gte': start_of_day, '$lte': end_of_day}
+        except ValueError:
+            pass # Invalid date format, ignore filter
+
+    all_logs = list(db[f"logs_{MONGO_ENV}"].find(query).sort("timestamp", -1).skip(skip_logs).limit(logs_per_page))
     total_logs = db[f"logs_{MONGO_ENV}"].count_documents({})
 
     has_more = total_logs > (skip_logs + len(all_logs))
@@ -361,7 +418,7 @@ def token_refresh():
     else:
         token_status = "NO_TOKENS_FOUND"
     
-    return render_template('token_refresh.html', token_status=token_status, auth_url=auth_url)
+    return render_template('token_refresh.html', token_status=token_status, auth_url=auth_url, active_page='token_refresh', generated_at=tokens.get("generated_at") if tokens else None)
 
 @app.route('/token-callback')
 @login_required
@@ -430,6 +487,22 @@ def run_executor(run_type="scheduled"):
 
 scheduler = BackgroundScheduler(daemon=True)
 scheduler.add_job(run_executor, 'cron', hour=15, minute=20, timezone='Asia/Kolkata')
+
+def self_ping():
+    delay = random.randint(5 * 60, 7 * 60) # Random delay between 5 and 7 minutes
+    print(f"[INFO] Next self-ping in {delay / 60:.2f} minutes.")
+    time.sleep(delay)
+    try:
+        # Use the internal URL for the dashboard endpoint
+        # Assuming the app is accessible at http://localhost:5000 or similar in deployment
+        # For Render, this would be the app's public URL
+        # For simplicity, we'll use the root path, which will hit the dashboard
+        requests.get("http://127.0.0.1:5000/") # Or your deployed app's URL
+        print("[INFO] Self-ping successful.")
+    except requests.exceptions.RequestException as e:
+        print(f"[ERROR] Self-ping failed: {e}")
+
+scheduler.add_job(self_ping, 'interval', minutes=random.randint(5, 7))
 scheduler.start()
 
 @app.route('/run-strategy')
@@ -446,9 +519,17 @@ def run_strategy():
         runs = list(strategy_runs_collection.find({}).sort("run_time", -1).skip(skip_runs).limit(runs_per_page))
         total_runs = strategy_runs_collection.count_documents({})
 
+    for run in runs:
+        run_id = run['run_id']
+        # Fetch trades for this run
+        trades_for_run = list(db[f"trades_{MONGO_ENV}"].find({"run_id": run_id, "filled": True}))
+        run['executed_trades_count'] = len(trades_for_run)
+        run['total_pnl'] = sum(trade.get('profit', 0.0) for trade in trades_for_run)
+        run['status'] = run.get('status', 'completed') # Default to completed if not explicitly set
+
     has_more_runs = total_runs > (skip_runs + len(runs))
 
-    return render_template('run_strategy.html', runs=runs, page=page, has_more_runs=has_more_runs)
+    return render_template('run_strategy.html', runs=runs, page=page, has_more_runs=has_more_runs, active_page='run_strategy')
 
 
 @app.route('/api/run-logs/<run_id>')

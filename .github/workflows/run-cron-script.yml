@@ -22,4 +22,11 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run script
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          FYERS_CLIENT_ID: ${{ secrets.FYERS_CLIENT_ID }}
+          FYERS_SECRET_ID: ${{ secrets.FYERS_SECRET_ID }}
+          FYERS_PIN: ${{ secrets.FYERS_PIN }}
+          FYERS_REDIRECT_URI: ${{ secrets.FYERS_REDIRECT_URI }}
+          FLASK_SECRET_KEY: ${{ secrets.FLASK_SECRET_KEY }}
         run: python executor.py

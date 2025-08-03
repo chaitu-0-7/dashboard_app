@@ -10,6 +10,8 @@ from typing import Dict, List
 import os
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from dotenv import load_dotenv
+from config import MONGO_DB_NAME, MONGO_ENV, MAX_TRADE_VALUE, MA_PERIOD
 
 # --- Database Handler ---
 class DatabaseHandler:
@@ -721,22 +723,21 @@ def main():
     run_id = args.run_id
 
     # --- Configuration ---
-    from dotenv import load_dotenv
     load_dotenv()
 
     CLIENT_ID = os.getenv('FYERS_CLIENT_ID')
     
     # MongoDB connection for Fyers tokens
     mongo_client_fyers = MongoClient(os.getenv('MONGO_URI'))
-    fyers_tokens_collection = mongo_client_fyers[os.getenv('MONGO_DB_NAME', 'nifty_shop')]['fyers_tokens']
+    fyers_tokens_collection = mongo_client_fyers[MONGO_DB_NAME]['fyers_tokens']
 
     token_data = fyers_tokens_collection.find_one({"_id": "fyers_token_data"})
     ACCESS_TOKEN = token_data.get("access_token") if token_data else ""
     MONGO_URI = os.getenv('MONGO_URI')
-    MAX_TRADE_VALUE = int(os.getenv('MAX_TRADE_VALUE', 2000))
-    MA_PERIOD = int(os.getenv('MA_PERIOD', 30))
-    DB_NAME = os.getenv('MONGO_DB_NAME', 'nifty_shop')
-    ENV = os.getenv('MONGO_ENV', 'test') # or 'prod'
+    MAX_TRADE_VALUE_CONFIG = MAX_TRADE_VALUE
+    MA_PERIOD_CONFIG = MA_PERIOD
+    DB_NAME = MONGO_DB_NAME
+    ENV = MONGO_ENV # or 'prod'
 
     if not all([CLIENT_ID, ACCESS_TOKEN, MONGO_URI]) or fyers_tokens_collection is None:
         print("❌ Please update configuration values.")
@@ -759,8 +760,8 @@ def main():
             client_id=CLIENT_ID,
             access_token=ACCESS_TOKEN,
             db_handler=db_handler,
-            max_trade_value=MAX_TRADE_VALUE,
-            ma_period=MA_PERIOD
+            max_trade_value=MAX_TRADE_VALUE_CONFIG,
+            ma_period=MA_PERIOD_CONFIG
         )
         trader.run_daily_strategy()
         

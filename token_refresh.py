@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from fyers_apiv3 import fyersModel
 from urllib.parse import urlencode
 from dotenv import load_dotenv
+from config import MONGO_DB_NAME, ACCESS_TOKEN_VALIDITY, REFRESH_TOKEN_VALIDITY, FYERS_REDIRECT_URI
 from pymongo import MongoClient
 
 load_dotenv()
@@ -15,11 +16,11 @@ load_dotenv()
 CLIENT_ID = os.getenv('FYERS_CLIENT_ID')           # Your Fyers client ID
 SECRET_ID = os.getenv('FYERS_SECRET_ID')               # Your Fyers secret key
 PIN = os.getenv('FYERS_PIN')                          # Your 4-digit PIN for token refresh and generation
-REDIRECT_URI = os.getenv('FYERS_REDIRECT_URI')  # must match app config
+REDIRECT_URI = FYERS_REDIRECT_URI
 
 # MongoDB Configuration
 MONGO_URI = os.getenv('MONGO_URI')
-MONGO_DB_NAME = os.getenv('MONGO_DB_NAME', 'nifty_shop')
+MONGO_DB_NAME = MONGO_DB_NAME
 
 # Connect to MongoDB
 if MONGO_URI:
@@ -36,8 +37,8 @@ else:
 REFRESH_TOKEN_URL = "https://api-t1.fyers.in/api/v3/validate-refresh-token"
 
 # Token validity (seconds)
-ACCESS_TOKEN_VALIDITY = 24 * 60 * 60        # 1 day
-REFRESH_TOKEN_VALIDITY = 15 * ACCESS_TOKEN_VALIDITY  # 15 days
+ACCESS_TOKEN_VALIDITY = ACCESS_TOKEN_VALIDITY
+REFRESH_TOKEN_VALIDITY = REFRESH_TOKEN_VALIDITY
 
 # Initialize Fyers session model
 session = fyersModel.SessionModel(

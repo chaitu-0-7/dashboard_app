@@ -14,6 +14,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import uuid
 import subprocess
 import random
+from config import MONGO_DB_NAME, MONGO_ENV, APP_LOGS_PER_PAGE_HOME, FYERS_REDIRECT_URI, ACCESS_TOKEN_VALIDITY, REFRESH_TOKEN_VALIDITY
 
 load_dotenv() # Load environment variables from .env file
 
@@ -24,8 +25,8 @@ auth_manager = None # Will be initialized after db connection
 
 # --- Database Connection ---
 MONGO_URI = os.getenv('MONGO_URI')
-MONGO_DB_NAME = os.getenv('MONGO_DB_NAME', 'nifty_shop')
-MONGO_ENV = os.getenv('MONGO_ENV', 'test')
+MONGO_DB_NAME = MONGO_DB_NAME
+MONGO_ENV = MONGO_ENV
 print(MONGO_URI, MONGO_DB_NAME, MONGO_ENV)
 
 if MONGO_URI:
@@ -58,18 +59,18 @@ def load_logged_in_user():
         else:
             session.pop('session_token', None) # Clear invalid session token
 
-LOGS_PER_PAGE = int(os.getenv('APP_LOGS_PER_PAGE_HOME', 10)) # Number of trading days to show per page
+LOGS_PER_PAGE = APP_LOGS_PER_PAGE_HOME
 
 # --- Fyers API Configuration (from token_refresh.py) ---
 CLIENT_ID = os.getenv('FYERS_CLIENT_ID')           # Your Fyers client ID
 SECRET_ID = os.getenv('FYERS_SECRET_ID')               # Your Fyers secret key
 PIN = os.getenv('FYERS_PIN')                          # Your 4-digit PIN for token refresh and generation
-REDIRECT_URI = os.getenv('FYERS_REDIRECT_URI')  # Must match your Fyers app config
+REDIRECT_URI = FYERS_REDIRECT_URI
 
 REFRESH_TOKEN_URL = "https://api-t1.fyers.in/api/v3/validate-refresh-token"
 
-ACCESS_TOKEN_VALIDITY = 24 * 60 * 60        # 1 day
-REFRESH_TOKEN_VALIDITY = 15 * ACCESS_TOKEN_VALIDITY  # 15 days
+ACCESS_TOKEN_VALIDITY = ACCESS_TOKEN_VALIDITY
+REFRESH_TOKEN_VALIDITY = REFRESH_TOKEN_VALIDITY
 
 # Initialize Fyers session model
 fyers_session = fyersModel.SessionModel(

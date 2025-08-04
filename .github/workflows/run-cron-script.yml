@@ -2,7 +2,7 @@ name: Scheduled Python Script
 
 on:
   schedule:
-    - cron: '50 9 * * 1-5'  # 3:20 PM IST (UTC = IST - 5:30)
+    - cron: '40 9 * * 1-5'  # 3:20 PM IST (UTC = IST - 5:30)
   workflow_dispatch:       # Allow manual triggering too
 
 jobs:

@@ -2,9 +2,13 @@ import pandas as pd
 import numpy as np
 import math
 from datetime import datetime, timedelta
-import time
-import json
 import logging
+import pytz
+import time
+
+# Define timezones
+UTC = pytz.utc
+IST = pytz.timezone('Asia/Kolkata')
 from fyers_apiv3 import fyersModel
 from typing import Dict, List
 import os
@@ -35,7 +39,7 @@ class MongoLogHandler(logging.Handler):
 
     def emit(self, record):
         log_entry = {
-            'timestamp': datetime.fromtimestamp(record.created),
+            'timestamp': datetime.now(UTC),
             'level': record.levelname,
             'message': self.format(record)
         }
@@ -148,7 +152,7 @@ class SimpleNiftyTrader:
         """Save a single trade to the database and return its document ID."""
         try:
             trades_collection = self.db_handler.get_trades_collection()
-            trade_data['created_at'] = datetime.now()
+            trade_data['created_at'] = datetime.now(UTC)
             trade_data['filled'] = False  # Default to not filled
             result = trades_collection.insert_one(trade_data)
             return result.inserted_id
@@ -200,7 +204,7 @@ class SimpleNiftyTrader:
         )
         return False
 
-    def get_current_positions(self) -> (Dict, bool):
+    def get_current_positions(self):
         """Get current holdings from Fyers API. Returns a tuple: (positions, is_successful)"""
         def _get_holdings():
             return self.fyers.holdings()
@@ -210,6 +214,7 @@ class SimpleNiftyTrader:
             
 
             if response and response.get('s') == 'ok':
+                print(f"[DEBUG] Fyers Holdings API Response: {response}")
                 positions = {}
                 
                 # The .holdings() API returns a list under the 'holdings' key
@@ -220,9 +225,9 @@ class SimpleNiftyTrader:
                         positions[symbol] = {
                             'quantity': qty,
                             'avg_price': float(pos['costPrice']),
-                            'current_price': 0.0,
-                            'pnl': 0.0,
-                            'pnl_pct': 0.0
+                            'current_price': float(pos.get('ltp', 0.0)), # Use LTP from holdings
+                            'pnl': float(pos.get('pl', 0.0)),
+                            'pnl_pct': 0.0 # Will be calculated later based on updated current_price
                         }
                             
                 return positions, True # Success
@@ -233,28 +238,6 @@ class SimpleNiftyTrader:
         except Exception as e:
             logging.error(f"Error getting holdings: {e}")
             return {}, False # Failure
-
-    def check_for_closed_positions(self, current_positions: Dict, positions_fetch_success: bool):
-        """Check for manually closed positions and record them"""
-        # If fetching positions failed, we can't reliably check for closed ones.
-        if not positions_fetch_success:
-            logging.warning("Skipping check for closed positions because fetching positions failed.")
-            return
-
-    def get_current_price(self, symbol: str) -> float:
-        """Get current market price"""
-        def _get_quote():
-            data = {"symbols": symbol}
-            return self.fyers.quotes(data)
-        
-        try:
-            response = self.rate_limiter.retry_with_backoff(_get_quote)
-            if response and response.get('s') == 'ok' and 'd' in response:
-                return float(response['d'][0]['v']['lp'])
-        except Exception as e:
-            logging.error(f"Error getting current price for {symbol}: {e}")
-            return 0.0
-        return 0.0
 
     def get_historical_data(self, symbol: str, days: int = 25) -> pd.DataFrame:
         """Get historical data for MA calculation"""
@@ -377,7 +360,7 @@ class SimpleNiftyTrader:
                 ma = self.calculate_moving_average(df['close'])
                 if ma is None: continue
                 
-                current_price = self.get_current_price(symbol)
+                current_price = self.get_current_price(symbol) # This is the correct call for scanning
                 if current_price <= 0: continue
                 
                 if current_price >= ma: continue
@@ -404,7 +387,7 @@ class SimpleNiftyTrader:
         
         for symbol, position in positions.items():
             try:
-                current_price = self.get_current_price(symbol)
+                current_price = position['current_price']
                 if current_price <= 0: continue
                 
                 profit_pct = ((current_price - position['avg_price']) / position['avg_price']) * 100
@@ -447,7 +430,7 @@ class SimpleNiftyTrader:
                     'action': 'BUY',
                     'price': current_price,
                     'quantity': quantity,
-                    'date': datetime.now(),
+                    'date': datetime.now(UTC),
                     'order_id': order_id,
                     'is_averaging': is_averaging,
                     'comment': 'PENDING FILL'
@@ -489,7 +472,7 @@ class SimpleNiftyTrader:
                     'action': 'SELL',
                     'price': current_price,
                     'quantity': quantity,
-                    'date': datetime.now(),
+                    'date': datetime.now(UTC),
                     'order_id': order_id,
                     'profit': profit,
                     'profit_pct': profit_pct,
@@ -541,7 +524,9 @@ class SimpleNiftyTrader:
                     
                     if total_bought > total_sold:
                         remaining_qty = total_bought - total_sold
-                        current_price = self.get_current_price(symbol)
+                        # For manually closed positions, we might not have current_price from holdings
+                        # If the symbol is still in current_positions, use that, otherwise default to 0
+                        current_price = current_positions.get(symbol, {}).get('current_price', 0.0)
                         avg_buy_price = sum(t['price'] * t['quantity'] for t in buy_trades) / total_bought
                         
                         trade_data = {
@@ -549,7 +534,7 @@ class SimpleNiftyTrader:
                             'action': 'SELL',
                             'price': current_price,
                             'quantity': remaining_qty,
-                            'date': datetime.now(),
+                            'date': datetime.now(UTC),
                             'order_id': 'MANUAL',
                             'profit': (current_price - avg_buy_price) * remaining_qty if current_price > 0 else 0,
                             'comment': 'MANUALLY CLOSED',
@@ -561,20 +546,36 @@ class SimpleNiftyTrader:
         except Exception as e:
             logging.error(f"Error checking for closed positions: {e}")
 
+    def get_current_price(self, symbol: str) -> float:
+        """Get current market price for a given symbol using Fyers quotes API."""
+        def _get_quote():
+            data = {"symbols": symbol}
+            return self.fyers.quotes(data)
+        
+        try:
+            response = self.rate_limiter.retry_with_backoff(_get_quote)
+            if response and response.get('s') == 'ok' and 'd' in response and len(response['d']) > 0:
+                return float(response['d'][0]['v']['lp'])
+        except Exception as e:
+            logging.error(f"Error getting current price for {symbol}: {e}")
+        return 0.0
+
     def try_averaging_down(self, positions: Dict):
         """Try averaging down on worst performer"""
-        if not positions: return
-        
+        if not positions:
+            return
+
         worst_performer = None
         worst_performance = float('inf')
-        
+
         for symbol, position in positions.items():
             try:
-                current_price = self.get_current_price(symbol)
-                if current_price <= 0: continue
-                
+                current_price = position['current_price']
+                if current_price <= 0:
+                    continue
+
                 performance = ((current_price - position['avg_price']) / position['avg_price']) * 100
-                
+
                 if performance <= self.averaging_threshold and performance < worst_performance:
                     worst_performance = performance
                     worst_performer = {
@@ -585,7 +586,7 @@ class SimpleNiftyTrader:
             except Exception as e:
                 logging.warning(f"Could not check averaging for {symbol}: {e}")
                 continue
-        
+
         if worst_performer:
             logging.info(f"🔄 AVERAGING DOWN: {worst_performer['symbol']} at {worst_performer['performance']:.1f}% loss")
             self.execute_buy(worst_performer['symbol'], worst_performer['price'], is_averaging=True)
@@ -607,10 +608,10 @@ class SimpleNiftyTrader:
                 return
 
             for symbol, position in current_positions.items():
-                current_price = self.get_current_price(symbol)
-                position['current_price'] = current_price
-                position['pnl'] = (current_price - position['avg_price']) * position['quantity']
-                position['pnl_pct'] = ((current_price - position['avg_price']) / position['avg_price']) * 100
+                # current_price is already populated from holdings API in get_current_positions
+                # Recalculate P&L based on the current_price from holdings
+                position['pnl'] = (position['current_price'] - position['avg_price']) * position['quantity']
+                position['pnl_pct'] = ((position['current_price'] - position['avg_price']) / position['avg_price']) * 100 if position['avg_price'] > 0 else 0
             
             exit_candidates = self.check_exit_conditions(current_positions)
             
@@ -632,29 +633,28 @@ class SimpleNiftyTrader:
             if not positions_fetch_success:
                 logging.warning("Could not refresh positions before buying. Proceeding with potentially stale data.")
 
-            if len(current_positions) < self.max_stocks_to_buy:
-                entry_candidates = self.scan_for_opportunities()
-                new_candidates = [c for c in entry_candidates if c['symbol'] not in current_positions]
-                for candidate in new_candidates:
-                    logging.info(f"Eligible candidate: {candidate['symbol']} (Deviation: {candidate['deviation']:.2f}%) - Price: ₹{candidate['price']:.2f}, MA: ₹{candidate['ma']:.2f})")
+            entry_candidates = self.scan_for_opportunities()
+            new_candidates = [c for c in entry_candidates if c['symbol'] not in current_positions]
+            for candidate in new_candidates:
+                logging.info(f"Eligible candidate: {candidate['symbol']} (Deviation: {candidate['deviation']:.2f}%) - Price: ₹{candidate['price']:.2f}, MA: ₹{candidate['ma']:.2f})")
+            
+            best_entry = None
+            available_balance = self.get_account_balance()
+            
+            for candidate in new_candidates:
+                quantity = math.floor(self.max_trade_value / candidate['price'])
+                required_amount = candidate['price'] * quantity
                 
-                best_entry = None
-                available_balance = self.get_account_balance()
-                
-                for candidate in new_candidates:
-                    quantity = math.floor(self.max_trade_value / candidate['price'])
-                    required_amount = candidate['price'] * quantity
-                    
-                    if required_amount <= available_balance and quantity > 0:
-                        best_entry = candidate
-                        break
-                
-                if best_entry:
-                    logging.info(f"🎯 ENTRY OPPORTUNITY: {best_entry['symbol']} at {best_entry['deviation']:.1f}% below MA")
-                    self.execute_buy(best_entry['symbol'], best_entry['price'])
-                else:
-                    if not best_entry and current_positions:
-                        self.try_averaging_down(current_positions)
+                if required_amount <= available_balance and quantity > 0:
+                    best_entry = candidate
+                    break
+            
+            if best_entry:
+                logging.info(f"🎯 ENTRY OPPORTUNITY: {best_entry['symbol']} at {best_entry['deviation']:.1f}% below MA")
+                self.execute_buy(best_entry['symbol'], best_entry['price'])
+            else:
+                if not best_entry and current_positions:
+                    self.try_averaging_down(current_positions)
             
             self.print_current_status(current_positions)
             

@@ -252,7 +252,7 @@
                     <summary class="run-summary">
                         <span>
                             <span class="run-status-indicator status-{{ run.status }}"></span>
-                            Run at: {{ run.run_time.strftime('%Y-%m-%d %H:%M:%S') }} ({{ run.run_type }})
+                            Run at: {{ run.run_time.strftime('%Y-%m-%d %H:%M:%S') }} ({{ run.triggered_by }})
                         </span>
                         <div class="run-details">
                             <span>Trades: {{ run.executed_trades_count }}</span>

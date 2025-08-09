@@ -9,6 +9,10 @@ from urllib.parse import urlencode
 from dotenv import load_dotenv
 from config import MONGO_DB_NAME, ACCESS_TOKEN_VALIDITY, REFRESH_TOKEN_VALIDITY, FYERS_REDIRECT_URI
 from pymongo import MongoClient
+import pytz
+
+# Define timezones
+UTC = pytz.utc
 
 load_dotenv()
 
@@ -24,7 +28,7 @@ MONGO_DB_NAME = MONGO_DB_NAME
 
 # Connect to MongoDB
 if MONGO_URI:
-    mongo_client = MongoClient(MONGO_URI)
+    mongo_client = MongoClient(MONGO_URI, tz_aware=True, tzinfo=UTC)
     db = mongo_client[MONGO_DB_NAME]
     fyers_tokens_collection = db['fyers_tokens']
 else:
@@ -72,13 +76,15 @@ def load_tokens():
 
 
 def is_access_token_valid(generated_at):
-    token_time = datetime.fromtimestamp(generated_at)
-    return datetime.now() < token_time + timedelta(seconds=ACCESS_TOKEN_VALIDITY)
+    if generated_at is None:
+        return False
+    return datetime.now(UTC) < generated_at + timedelta(seconds=ACCESS_TOKEN_VALIDITY)
 
 
 def is_refresh_token_valid(generated_at):
-    token_time = datetime.fromtimestamp(generated_at)
-    return datetime.now() < token_time + timedelta(seconds=REFRESH_TOKEN_VALIDITY)
+    if generated_at is None:
+        return False
+    return datetime.now(UTC) < generated_at + timedelta(seconds=REFRESH_TOKEN_VALIDITY)
 
 
 def refresh_access_token_custom(refresh_token, client_id, secret_id, pin):
@@ -107,7 +113,7 @@ def refresh_access_token_custom(refresh_token, client_id, secret_id, pin):
             token_data = {
                 "access_token": data["access_token"],
                 "refresh_token": data.get("refresh_token", refresh_token),  # Fyers may or may not return new refresh token
-                "generated_at": int(time.time())
+                "generated_at": datetime.now(UTC)
             }
             save_tokens(token_data)
             return token_data
@@ -145,7 +151,7 @@ def manual_auth_code_flow():
     token_response = session.generate_token()
 
     if token_response.get("access_token"):
-        token_response["generated_at"] = int(time.time())
+        token_response["generated_at"] = datetime.now(UTC)
         save_tokens(token_response)
         print("[SUCCESS] Tokens generated and saved.")
         return token_response
@@ -158,17 +164,22 @@ def main():
     tokens = load_tokens()
 
     if tokens:
-        gen_time = tokens.get("generated_at", 0)
+        gen_time = tokens.get("generated_at")
+        # Ensure gen_time is a timezone-aware datetime object
+        if isinstance(gen_time, (int, float)):
+            gen_time = datetime.fromtimestamp(gen_time, tz=UTC)
+        elif isinstance(gen_time, datetime) and gen_time.tzinfo is None:
+            gen_time = UTC.localize(gen_time)
+
         if is_access_token_valid(gen_time):
             # manual_auth_code_flow()
             print("[INFO] Access token is valid.")
-            print(f"Access Token: {tokens['access_token']}")
         else:
             print("[INFO] Access token expired. Attempting refresh token flow...")
             if is_refresh_token_valid(gen_time):
                 refreshed = refresh_access_token_custom(tokens["refresh_token"], CLIENT_ID, SECRET_ID, PIN)
                 if refreshed:
-                    print(f"New Access Token: {refreshed['access_token']}")
+                    print(f"New Access Token: ***** ")
                 else:
                     print("[ERROR] Refresh token failed, manual auth code flow required.")
                     manual_auth_code_flow()

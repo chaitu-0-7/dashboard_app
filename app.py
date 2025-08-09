@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 from auth import AuthManager, login_required
 from pymongo import MongoClient
 from datetime import datetime, timedelta
+import pytz
 from collections import defaultdict
 import os
 from dotenv import load_dotenv
@@ -15,6 +16,10 @@ import uuid
 import subprocess
 import random
 from config import MONGO_DB_NAME, MONGO_ENV, APP_LOGS_PER_PAGE_HOME, FYERS_REDIRECT_URI, ACCESS_TOKEN_VALIDITY, REFRESH_TOKEN_VALIDITY
+
+# Define timezones
+UTC = pytz.utc
+IST = pytz.timezone('Asia/Kolkata')
 
 load_dotenv() # Load environment variables from .env file
 
@@ -30,10 +35,10 @@ MONGO_ENV = MONGO_ENV
 print(MONGO_URI, MONGO_DB_NAME, MONGO_ENV)
 
 if MONGO_URI:
-    client = MongoClient(MONGO_URI)
+    client = MongoClient(MONGO_URI, tz_aware=True, tzinfo=UTC)
     db = client[MONGO_DB_NAME]
     # MongoDB Configuration for Fyers tokens
-    mongo_client_fyers = MongoClient(MONGO_URI)
+    mongo_client_fyers = MongoClient(MONGO_URI, tz_aware=True, tzinfo=UTC)
     fyers_tokens_collection = mongo_client_fyers[MONGO_DB_NAME]['fyers_tokens']
     auth_manager = AuthManager(db)
 
@@ -102,14 +107,12 @@ def load_tokens():
 def is_access_token_valid(generated_at):
     if generated_at is None:
         return False
-    token_time = datetime.fromtimestamp(generated_at)
-    return datetime.now() < token_time + timedelta(seconds=ACCESS_TOKEN_VALIDITY)
+    return datetime.now(UTC) < generated_at + timedelta(seconds=ACCESS_TOKEN_VALIDITY)
 
 def is_refresh_token_valid(generated_at):
     if generated_at is None:
         return False
-    token_time = datetime.fromtimestamp(generated_at)
-    return datetime.now() < token_time + timedelta(seconds=REFRESH_TOKEN_VALIDITY)
+    return datetime.now(UTC) < generated_at + timedelta(seconds=REFRESH_TOKEN_VALIDITY)
 
 def refresh_access_token_custom(refresh_token, client_id, secret_id, pin):
     app_id_hash = hashlib.sha256(f"{client_id}:{secret_id}".encode()).hexdigest()
@@ -127,7 +130,7 @@ def refresh_access_token_custom(refresh_token, client_id, secret_id, pin):
             token_data = {
                 "access_token": data["access_token"],
                 "refresh_token": data.get("refresh_token", refresh_token),
-                "generated_at": int(time.time())
+                "generated_at": datetime.now(UTC)
             }
             save_tokens(token_data)
             return token_data
@@ -183,9 +186,23 @@ def dashboard():
     open_positions_count = 0
     recent_trades_count = 0 # This will now be for today's trades only
 
+    token_data = load_tokens()
+    if token_data:
+        generated_at = token_data.get("generated_at")
+        # Ensure generated_at is a timezone-aware datetime object
+        if isinstance(generated_at, (int, float)):
+            generated_at = datetime.fromtimestamp(generated_at, tz=UTC)
+        elif isinstance(generated_at, datetime) and generated_at.tzinfo is None:
+            generated_at = UTC.localize(generated_at)
+        token_data["generated_at"] = generated_at
+
+    access_token = token_data.get("access_token") if token_data else ""
+
+    if not access_token or not is_access_token_valid(token_data.get("generated_at")):
+        flash("Access token is invalid or expired. Please refresh it.", "warning")
+        return redirect(url_for('token_refresh'))
+
     try:
-        token_data = load_tokens()
-        access_token = token_data.get("access_token") if token_data else ""
         if access_token and is_access_token_valid(token_data.get("generated_at")):
             fyers = fyersModel.FyersModel(client_id=CLIENT_ID, token=access_token, log_path='./')
             holdings_response = fyers.holdings()
@@ -195,25 +212,91 @@ def dashboard():
                     if p.get('quantity', 0) != 0:
                         holdings_pnl += p.get('pl', 0)
                         open_positions_count += 1
+            else:
+                flash(f"Failed to fetch holdings for dashboard: {holdings_response.get('message', 'Unknown error')}", "danger")
     except Exception as e:
+        flash(f"An error occurred while fetching holdings for dashboard: {e}", "danger")
         print(f"Error fetching holdings/positions for dashboard: {e}")
 
     # Fetch today's executed trades for the dashboard metric
-    today = datetime.now().date()
-    start_of_today = datetime(today.year, today.month, today.day, 0, 0, 0)
-    end_of_today = datetime(today.year, today.month, today.day, 23, 59, 59)
+    today = datetime.now(IST).date()
+    start_of_today = IST.localize(datetime(today.year, today.month, today.day, 0, 0, 0)).astimezone(UTC)
+    end_of_today = IST.localize(datetime(today.year, today.month, today.day, 23, 59, 59)).astimezone(UTC)
     
     today_trades = list(db[f"trades_{MONGO_ENV}"].find({
         "date": {"$gte": start_of_today, "$lte": end_of_today},
         "filled": True
     }))
+    for trade in today_trades:
+        trade['date'] = trade['date'].astimezone(IST)
     recent_trades_count = len(today_trades)
+
+    # --- Daily activity logic for dashboard ---
+    page = request.args.get('page', 1, type=int)
+    skip_days = (page - 1) * LOGS_PER_PAGE
+
+    distinct_log_dates = db[f"logs_{MONGO_ENV}"].distinct("timestamp", {"timestamp": {"$ne": None}})
+    distinct_trade_dates = db[f"trades_{MONGO_ENV}"].distinct("date", {"date": {"$ne": None}})
+
+    distinct_log_dates_ist = [d.astimezone(IST) for d in distinct_log_dates]
+    distinct_trade_dates_ist = [d.astimezone(IST) for d in distinct_trade_dates]
+
+    all_distinct_dates = sorted(list(set([d.date() for d in distinct_log_dates_ist] + [d.date() for d in distinct_trade_dates_ist])), reverse=True)
+
+    total_days = len(all_distinct_dates)
+    has_more_days = total_days > (skip_days + LOGS_PER_PAGE)
+
+    current_page_dates = all_distinct_dates[skip_days : skip_days + LOGS_PER_PAGE]
+
+    daily_data = {}
+
+    for date_obj in current_page_dates:
+        start_of_day_ist = IST.localize(datetime(date_obj.year, date_obj.month, date_obj.day, 0, 0, 0))
+        end_of_day_ist = IST.localize(datetime(date_obj.year, date_obj.month, date_obj.day, 23, 59, 59))
+        start_of_day_utc = start_of_day_ist.astimezone(UTC)
+        end_of_day_utc = end_of_day_ist.astimezone(UTC)
+
+        logs_for_day = list(db[f"logs_{MONGO_ENV}"].find({
+            "timestamp": {"$gte": start_of_day_utc, "$lte": end_of_day_utc}
+        }).sort("timestamp", -1))
+        for log in logs_for_day:
+            log['timestamp'] = log['timestamp'].astimezone(IST)
+
+        trades_for_day = list(db[f"trades_{MONGO_ENV}"].find({
+            "date": {"$gte": start_of_day_utc, "$lte": end_of_day_utc}
+        }).sort("date", -1))
+        for trade in trades_for_day:
+            trade['date'] = trade['date'].astimezone(IST)
+
+        executed_trades_daily = []
+        cancelled_trades_daily = []
+
+        for trade in trades_for_day:
+            if 'profit' not in trade:
+                trade['profit'] = 0.0
+            if 'profit_pct' not in trade:
+                trade['profit_pct'] = 0.0
+            
+            if trade.get('filled', False):
+                executed_trades_daily.append(trade)
+            else:
+                cancelled_trades_daily.append(trade)
+        
+        daily_data[date_obj.strftime('%Y-%m-%d')] = {
+            'logs': logs_for_day,
+            'executed_trades': executed_trades_daily,
+            'cancelled_trades': cancelled_trades_daily
+        }
 
     return render_template('dashboard.html',
                            active_page='dashboard',
                            holdings_pnl=holdings_pnl,
                            open_positions_count=open_positions_count,
-                           recent_trades_count=recent_trades_count)
+                           recent_trades_count=recent_trades_count,
+                           daily_data=daily_data,
+                           page=page,
+                           has_more_days=has_more_days,
+                           total_days=total_days)
 
 @app.route('/trading-overview')
 @login_required
@@ -223,6 +306,15 @@ def trading_overview():
 
     # --- Existing performance logic ---
     token_data = load_tokens()
+    if token_data:
+        generated_at = token_data.get("generated_at")
+        # Ensure generated_at is a timezone-aware datetime object
+        if isinstance(generated_at, (int, float)):
+            generated_at = datetime.fromtimestamp(generated_at, tz=UTC)
+        elif isinstance(generated_at, datetime) and generated_at.tzinfo is None:
+            generated_at = UTC.localize(generated_at)
+        token_data["generated_at"] = generated_at
+
     access_token = token_data.get("access_token") if token_data else ""
 
     if not access_token or not is_access_token_valid(token_data.get("generated_at")):
@@ -231,12 +323,14 @@ def trading_overview():
 
     fyers = fyersModel.FyersModel(client_id=CLIENT_ID, token=access_token, log_path='./')
 
+    current_positions = []
+    closed_trades = []
+
     try:
         holdings_response = fyers.holdings()
         
         if holdings_response.get('s') == 'ok':
             raw_positions = holdings_response.get('holdings', [])
-            current_positions = []
             for p in raw_positions:
                 if p.get('quantity', 0) != 0:
                     cost_price = p.get('costPrice', 0)
@@ -252,13 +346,13 @@ def trading_overview():
                         'pnl_pct': pnl_pct
                     })
         else:
-            current_positions = []
             flash(f"Failed to fetch holdings: {holdings_response.get('message', 'Unknown error')}", "danger")
     except Exception as e:
-        current_positions = []
         flash(f"An error occurred while fetching holdings: {e}", "danger")
 
     all_filled_trades = list(db[f"trades_{MONGO_ENV}"].find({"filled": True}).sort("date", -1))
+    for trade in all_filled_trades:
+        trade['date'] = trade['date'].astimezone(IST)
 
     open_position_symbols = {pos['symbol'] for pos in current_positions}
 
@@ -300,7 +394,11 @@ def trading_overview():
     distinct_log_dates = db[f"logs_{MONGO_ENV}"].distinct("timestamp", {"timestamp": {"$ne": None}})
     distinct_trade_dates = db[f"trades_{MONGO_ENV}"].distinct("date", {"date": {"$ne": None}})
 
-    all_distinct_dates = sorted(list(set([d.date() for d in distinct_log_dates] + [d.date() for d in distinct_trade_dates])), reverse=True)
+    # Convert to IST for display
+    distinct_log_dates_ist = [d.astimezone(IST) for d in distinct_log_dates]
+    distinct_trade_dates_ist = [d.astimezone(IST) for d in distinct_trade_dates]
+
+    all_distinct_dates = sorted(list(set([d.date() for d in distinct_log_dates_ist] + [d.date() for d in distinct_trade_dates_ist])), reverse=True)
 
     total_days = len(all_distinct_dates)
     has_more_days = total_days > (skip_days + LOGS_PER_PAGE)
@@ -310,16 +408,25 @@ def trading_overview():
     daily_data = {}
 
     for date_obj in current_page_dates:
-        start_of_day = datetime(date_obj.year, date_obj.month, date_obj.day, 0, 0, 0)
-        end_of_day = datetime(date_obj.year, date_obj.month, date_obj.day, 23, 59, 59)
+        # Convert date_obj (which is a date object in IST) to timezone-aware IST datetime, then to UTC for query
+        start_of_day_ist = IST.localize(datetime(date_obj.year, date_obj.month, date_obj.day, 0, 0, 0))
+        end_of_day_ist = IST.localize(datetime(date_obj.year, date_obj.month, date_obj.day, 23, 59, 59))
+        start_of_day_utc = start_of_day_ist.astimezone(UTC)
+        end_of_day_utc = end_of_day_ist.astimezone(UTC)
 
         logs_for_day = list(db[f"logs_{MONGO_ENV}"].find({
-            "timestamp": {"$gte": start_of_day, "$lte": end_of_day}
+            "timestamp": {"$gte": start_of_day_utc, "$lte": end_of_day_utc}
         }).sort("timestamp", -1))
+        # Convert logs to IST for display
+        for log in logs_for_day:
+            log['timestamp'] = log['timestamp'].astimezone(IST)
 
         trades_for_day = list(db[f"trades_{MONGO_ENV}"].find({
-            "date": {"$gte": start_of_day, "$lte": end_of_day}
+            "date": {"$gte": start_of_day_utc, "$lte": end_of_day_utc}
         }).sort("date", -1))
+        # Convert trades to IST for display
+        for trade in trades_for_day:
+            trade['date'] = trade['date'].astimezone(IST)
 
         executed_trades_daily = []
         cancelled_trades_daily = []
@@ -382,9 +489,12 @@ def api_logs():
         query['level'] = log_level
     if log_date:
         try:
-            start_of_day = datetime.strptime(log_date, '%Y-%m-%d')
-            end_of_day = start_of_day + timedelta(days=1) - timedelta(microseconds=1)
-            query['timestamp'] = {'$gte': start_of_day, '$lte': end_of_day}
+            # Parse date as IST, then convert to UTC for query
+            start_of_day_ist = IST.localize(datetime.strptime(log_date, '%Y-%m-%d'))
+            end_of_day_ist = start_of_day_ist + timedelta(days=1) - timedelta(microseconds=1)
+            start_of_day_utc = start_of_day_ist.astimezone(UTC)
+            end_of_day_utc = end_of_day_ist.astimezone(UTC)
+            query['timestamp'] = {'$gte': start_of_day_utc, '$lte': end_of_day_utc}
         except ValueError:
             pass # Invalid date format, ignore filter
 
@@ -396,6 +506,8 @@ def api_logs():
     # Convert ObjectId and datetime objects to strings for JSON serialization
     for log in all_logs:
         log['_id'] = str(log['_id'])
+        # Convert timestamp to IST for display
+        log['timestamp'] = log['timestamp'].astimezone(IST)
         log['timestamp'] = log['timestamp'].strftime('%Y-%m-%d %H:%M:%S')
 
     return jsonify({"logs": all_logs, "has_more": has_more, "next_page": page + 1})
@@ -409,6 +521,12 @@ def token_refresh():
 
     if tokens:
         generated_at = tokens.get("generated_at")
+        # Ensure generated_at is a timezone-aware datetime object
+        if isinstance(generated_at, (int, float)):
+            generated_at = datetime.fromtimestamp(generated_at, tz=UTC)
+        elif isinstance(generated_at, datetime) and generated_at.tzinfo is None:
+            generated_at = UTC.localize(generated_at)
+
         if is_access_token_valid(generated_at):
             token_status = "VALID"
         else:
@@ -466,7 +584,7 @@ def run_executor(run_type="scheduled"):
         if db is not None:
             strategy_runs_collection.insert_one({
                 "run_id": run_id,
-                "run_time": datetime.now(),
+                "run_time": datetime.now(UTC),
                 "run_type": run_type,
                 "stdout": result.stdout,
                 "stderr": result.stderr
@@ -478,7 +596,7 @@ def run_executor(run_type="scheduled"):
         if db is not None:
             strategy_runs_collection.insert_one({
                 "run_id": run_id,
-                "run_time": datetime.now(),
+                "run_time": datetime.now(UTC),
                 "run_type": run_type,
                 "status": "failed",
                 "error": str(e),
@@ -486,25 +604,7 @@ def run_executor(run_type="scheduled"):
                 "stderr": e.stderr
             })
 
-scheduler = BackgroundScheduler(daemon=True)
-scheduler.add_job(run_executor, 'cron', hour=15, minute=20, timezone='Asia/Kolkata')
 
-def self_ping():
-    delay = random.randint(5 * 60, 7 * 60) # Random delay between 5 and 7 minutes
-    print(f"[INFO] Next self-ping in {delay / 60:.2f} minutes.")
-    time.sleep(delay)
-    try:
-        # Use the internal URL for the dashboard endpoint
-        # Assuming the app is accessible at http://localhost:5000 or similar in deployment
-        # For Render, this would be the app's public URL
-        # For simplicity, we'll use the root path, which will hit the dashboard
-        requests.get("http://127.0.0.1:8080/") # Or your deployed app's URL
-        print("[INFO] Self-ping successful.")
-    except requests.exceptions.RequestException as e:
-        print(f"[ERROR] Self-ping failed: {e}")
-
-scheduler.add_job(self_ping, 'interval', minutes=random.randint(5, 7))
-scheduler.start()
 
 @app.route('/run-strategy')
 @login_required
@@ -517,11 +617,17 @@ def run_strategy():
     total_runs = 0
     if db is not None:
         strategy_runs_collection = db[f"strategy_runs_{MONGO_ENV}"]
-        runs = list(strategy_runs_collection.find({}).sort("run_time", -1).skip(skip_runs).limit(runs_per_page))
+        runs = list(strategy_runs_collection.find({"run_time": {"$exists": True}}).sort("run_time", -1).skip(skip_runs).limit(runs_per_page))
         total_runs = strategy_runs_collection.count_documents({})
 
     for run in runs:
         run_id = run['run_id']
+        # Convert run_time and end_time to IST for display
+        run['run_time'] = run['run_time'].astimezone(IST)
+        
+        if 'end_time' in run:
+            run['end_time'] = run['end_time'].astimezone(IST)
+
         # Fetch trades for this run
         trades_for_run = list(db[f"trades_{MONGO_ENV}"].find({"run_id": run_id, "filled": True}))
         run['executed_trades_count'] = len(trades_for_run)

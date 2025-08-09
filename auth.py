@@ -3,6 +3,10 @@ from datetime import datetime, timedelta
 import uuid
 import os
 from functools import wraps
+import pytz
+
+# Define timezones
+UTC = pytz.utc
 
 # Configuration
 SESSION_VALIDITY_DAYS = 2
@@ -22,7 +26,7 @@ class AuthManager:
             "password": hashed_password,
             "failed_login_attempts": 0,
             "locked_until": None,
-            "created_at": datetime.now()
+            "created_at": datetime.now(UTC)
         }
         self.users_collection.insert_one(user_data)
         print(f"User '{username}' created successfully.")
@@ -40,7 +44,7 @@ class AuthManager:
             update_data = {"$set": {"failed_login_attempts": new_attempts}}
             if new_attempts >= MAX_FAILED_LOGIN_ATTEMPTS:
                 # Lock account for a period (e.g., 1 hour)
-                update_data["$set"]["locked_until"] = datetime.now() + timedelta(hours=1)
+                update_data["$set"]["locked_until"] = datetime.now(UTC) + timedelta(hours=1)
                 print(f"User '{username}' locked due to too many failed attempts.")
             self.users_collection.update_one({"username": username}, update_data)
         return new_attempts
@@ -50,7 +54,7 @@ class AuthManager:
 
     def is_account_locked(self, user):
         locked_until = user.get("locked_until")
-        return locked_until and locked_until > datetime.now()
+        return locked_until and locked_until > datetime.now(UTC)
 
     def create_session(self, username):
         # Clean up old sessions if user exceeds MAX_CONCURRENT_SESSIONS
@@ -61,11 +65,11 @@ class AuthManager:
             print(f"Removed oldest session for user '{username}'.")
 
         session_token = str(uuid.uuid4())
-        expires_at = datetime.now() + timedelta(days=SESSION_VALIDITY_DAYS)
+        expires_at = datetime.now(UTC) + timedelta(days=SESSION_VALIDITY_DAYS)
         session_data = {
             "username": username,
             "session_token": session_token,
-            "created_at": datetime.now(),
+            "created_at": datetime.now(UTC),
             "expires_at": expires_at
         }
         self.sessions_collection.insert_one(session_data)
@@ -73,7 +77,7 @@ class AuthManager:
 
     def get_session(self, session_token):
         session = self.sessions_collection.find_one({"session_token": session_token})
-        if session and session["expires_at"] > datetime.now():
+        if session and session["expires_at"] > datetime.now(UTC):
             return session
         # If session is expired or not found, delete it
         if session:

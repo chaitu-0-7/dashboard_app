@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nifty Shop Performance</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --background: #f8fafc; /* slate-50 */
@@ -112,18 +113,22 @@
         .profit-neutral {
             color: var(--foreground);
         }
-        .chart-placeholder {
-            background-color: var(--muted);
-            border: 1px dashed var(--border);
-            border-radius: var(--radius);
-            height: 250px; /* Adjust as needed */
+        .chart-container {
             display: flex;
-            align-items: center;
             justify-content: center;
-            color: var(--muted-foreground);
-            font-size: 1.1em;
-            margin-top: 1.5rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            gap: 1rem;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .chart-card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            flex-basis: 400px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         .container {
             max-width: 1200px;
@@ -207,26 +212,41 @@
             margin-top: 1rem;
         }
 
-        /* Chart Placeholder Styles */
-        .chart-placeholder {
-            background-color: var(--muted);
-            border: 1px dashed var(--border);
-            border-radius: var(--radius);
-            height: 200px; /* Adjust as needed */
+    .navbar .nav-links {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--muted-foreground);
-            font-size: 1.1em;
-            margin-top: 1.5rem;
-            margin-bottom: 1.5rem;
+        }
+
+        .navbar .mobile-nav-toggle {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .navbar .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary);
+                padding: 1rem 0;
+            }
+
+            .navbar .nav-links.active {
+                display: flex;
+            }
+
+            .navbar .mobile-nav-toggle {
+                display: block;
+                cursor: pointer;
+            }
         }
     </style>
 </head>
 <body>
     <div class="navbar">
         <div>Nifty Shop Bot</div>
-        <div>
+        <div class="nav-links">
             <a href="/" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
             <a href="/trading-overview" class="{% if active_page == 'trading_overview' %}active{% endif %}">Trading Overview</a>
             <a href="/logs" class="{% if active_page == 'logs' %}active{% endif %}">Logs</a>
@@ -234,28 +254,39 @@
             <a href="/run-strategy" class="{% if active_page == 'run_strategy' %}active{% endif %}">Strategy</a>
             <a href="/logout" class="logout-button">Logout</a>
         </div>
+        <div class="mobile-nav-toggle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </div>
     </div>
 
     <div class="container">
         <h1>Performance Analysis</h1>
 
         <div class="kpi-metrics">
+            {% if total_pnl is not none %}
             <div class="metric-card">
                 <h3>Total P&L</h3>
                 <p class="{% if total_pnl > 0 %}profit-positive{% elif total_pnl < 0 %}profit-negative{% else %}profit-neutral{% endif %}">₹{{ '%.2f' | format(total_pnl) }}</p>
             </div>
+            {% endif %}
+            {% if win_loss_ratio is not none %}
             <div class="metric-card">
                 <h3>Win/Loss Ratio</h3>
                 <p>{{ '%.2f' | format(win_loss_ratio) }}</p>
             </div>
+            {% endif %}
+            {% if average_winning_trade is not none %}
             <div class="metric-card">
                 <h3>Avg. Winning Trade</h3>
                 <p class="{% if average_winning_trade > 0 %}profit-positive{% else %}profit-neutral{% endif %}">₹{{ '%.2f' | format(average_winning_trade) }}</p>
             </div>
+            {% endif %}
+            {% if average_losing_trade is not none %}
             <div class="metric-card">
                 <h3>Avg. Losing Trade</h3>
                 <p class="{% if average_losing_trade < 0 %}profit-negative{% else %}profit-neutral{% endif %}">₹{{ '%.2f' | format(average_losing_trade) }}</p>
             </div>
+            {% endif %}
         </div>
 
         <h2>Current Positions</h2>
@@ -284,7 +315,12 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <div class="chart-placeholder">Pie Chart: Portfolio Allocation by Symbol (Placeholder)</div>
+            <div class="chart-container">
+            <div class="chart-card">
+                <h3>Portfolio Allocation</h3>
+                <canvas id="portfolioAllocationChart"></canvas>
+            </div>
+        </div>
         {% else %}
             <div class="no-data-message">
                 <p>No current positions to display.</p>
@@ -319,7 +355,12 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <div class="chart-placeholder">Line Chart: Cumulative Profit/Loss Over Time (Placeholder)</div>
+            <div class="chart-container">
+                <div class="chart-card">
+                    <h3>Cumulative P&L</h3>
+                    <canvas id="cumulativePnlChart"></canvas>
+                </div>
+            </div>
         {% else %}
             <div class="no-data-message">
                 <p>No closed trades to display.</p>
@@ -327,5 +368,100 @@
         {% endif %}
 
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+            const navLinks = document.querySelector('.nav-links');
+
+            mobileNavToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+
+            // Portfolio Allocation Chart
+            const portfolioData = {{ portfolio_data | safe }};
+            const portfolioLabels = portfolioData.map(p => `${p.symbol} (${p.percentage.toFixed(2)}%)`);
+            const portfolioValues = portfolioData.map(p => p.value);
+
+            const portfolioAllocationCtx = document.getElementById('portfolioAllocationChart').getContext('2d');
+            const portfolioAllocationChart = new Chart(portfolioAllocationCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: portfolioLabels,
+                    datasets: [{
+                        label: 'Portfolio Allocation',
+                        data: portfolioValues,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)',
+                            'rgba(255, 159, 64, 0.7)'
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+
+            // Cumulative P&L Chart
+            const cumulativePnlData = {{ cumulative_pnl_data | safe }};
+            const cumulativePnlLabels = cumulativePnlData.map(d => d.date);
+            const cumulativePnlValues = cumulativePnlData.map(d => d.pnl);
+            const cumulativePnlCtx = document.getElementById('cumulativePnlChart').getContext('2d');
+            const gradient = cumulativePnlCtx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(75, 192, 192, 0.5)');
+            gradient.addColorStop(1, 'rgba(75, 192, 192, 0)');
+
+            const cumulativePnlChart = new Chart(cumulativePnlCtx, {
+                type: 'line',
+                data: {
+                    labels: cumulativePnlLabels,
+                    datasets: [{
+                        label: 'Cumulative P&L',
+                        data: cumulativePnlValues,
+                        backgroundColor: gradient,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        fill: true,
+                        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(75, 192, 192, 1)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>

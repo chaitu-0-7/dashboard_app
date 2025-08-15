@@ -288,6 +288,35 @@ def dashboard():
             'cancelled_trades': cancelled_trades_daily
         }
 
+    # --- Chart Data ---
+    # Daily P&L for Bar Chart
+    daily_pnl_data = defaultdict(lambda: {'pnl': 0.0, 'trades': 0})
+    all_filled_trades = list(db[f"trades_{MONGO_ENV}"].find({"filled": True, "profit": {"$exists": True}}))
+    for trade in all_filled_trades:
+        if trade.get('action') == 'SELL':
+            trade_date = trade['date'].astimezone(IST).strftime('%Y-%m-%d')
+            daily_pnl_data[trade_date]['pnl'] += trade.get('profit', 0.0)
+            daily_pnl_data[trade_date]['trades'] += 1
+    
+    sorted_daily_pnl = sorted(daily_pnl_data.items())
+    chart_labels = [item[0] for item in sorted_daily_pnl]
+    chart_values = [item[1]['pnl'] for item in sorted_daily_pnl]
+    chart_trades = [item[1]['trades'] for item in sorted_daily_pnl]
+
+    # Portfolio Allocation for Pie Chart
+    portfolio_data = []
+    if 'raw_positions' in locals() and raw_positions:
+        total_investment = sum(p.get('market_value', 0.0) for p in raw_positions if p.get('quantity', 0) != 0)
+        for p in raw_positions:
+            if p.get('quantity', 0) != 0:
+                value = p.get('market_value', 0.0)
+                percentage = (value / total_investment) * 100 if total_investment > 0 else 0
+                portfolio_data.append({
+                    'symbol': p.get('symbol'),
+                    'value': value,
+                    'percentage': percentage
+                })
+
     return render_template('dashboard.html',
                            active_page='dashboard',
                            holdings_pnl=holdings_pnl,
@@ -296,7 +325,11 @@ def dashboard():
                            daily_data=daily_data,
                            page=page,
                            has_more_days=has_more_days,
-                           total_days=total_days)
+                           total_days=total_days,
+                           chart_labels=json.dumps(chart_labels),
+                           chart_values=json.dumps(chart_values),
+                           chart_trades=json.dumps(chart_trades),
+                           portfolio_data=json.dumps(portfolio_data))
 
 @app.route('/trading-overview')
 @login_required
@@ -448,6 +481,31 @@ def trading_overview():
             'cancelled_trades': cancelled_trades_daily
         }
 
+    # --- Chart Data ---
+    # Portfolio Allocation for Pie Chart
+    portfolio_data = []
+    if current_positions:
+        total_investment = sum(p.get('pnl') for p in current_positions)
+        for p in current_positions:
+            value = p.get('pnl')
+            percentage = (value / total_investment) * 100 if total_investment > 0 else 0
+            portfolio_data.append({
+                'symbol': p.get('symbol'),
+                'value': value,
+                'percentage': percentage
+            })
+
+    # Cumulative P&L for Line Chart
+    cumulative_pnl_data = []
+    cumulative_pnl = 0
+    if closed_trades:
+        for trade in reversed(closed_trades):
+            cumulative_pnl += trade.get('profit', 0.0)
+            cumulative_pnl_data.append({
+                'date': trade['date'].strftime('%Y-%m-%d'),
+                'pnl': cumulative_pnl
+            })
+
     return render_template('trading_overview.html',
                            current_positions=current_positions,
                            closed_trades=closed_trades,
@@ -459,7 +517,9 @@ def trading_overview():
                            daily_data=daily_data,
                            page=page,
                            has_more_days=has_more_days,
-                           total_days=total_days)
+                           total_days=total_days,
+                           portfolio_data=json.dumps(portfolio_data),
+                           cumulative_pnl_data=json.dumps(cumulative_pnl_data))
 
 @app.route('/logs')
 @login_required
@@ -537,7 +597,9 @@ def token_refresh():
     else:
         token_status = "NO_TOKENS_FOUND"
     
-    return render_template('token_refresh.html', token_status=token_status, auth_url=auth_url, active_page='token_refresh', generated_at=tokens.get("generated_at") if tokens else None)
+    generated_at_timestamp = int(generated_at.timestamp()) if isinstance(generated_at, datetime) else 0
+
+    return render_template('token_refresh.html', token_status=token_status, auth_url=auth_url, active_page='token_refresh', generated_at=generated_at_timestamp)
 
 @app.route('/token-callback')
 @login_required

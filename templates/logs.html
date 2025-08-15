@@ -202,18 +202,50 @@
             margin-left: 5px;
             cursor: pointer;
         }
+    .navbar .nav-links {
+            display: flex;
+        }
+
+        .navbar .mobile-nav-toggle {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .navbar .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary);
+                padding: 1rem 0;
+            }
+
+            .navbar .nav-links.active {
+                display: flex;
+            }
+
+            .navbar .mobile-nav-toggle {
+                display: block;
+                cursor: pointer;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="navbar">
         <div>Nifty Shop Bot</div>
-        <div>
+        <div class="nav-links">
             <a href="/" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
             <a href="/trading-overview" class="{% if active_page == 'trading_overview' %}active{% endif %}">Trading Overview</a>
             <a href="/logs" class="{% if active_page == 'logs' %}active{% endif %}">Logs</a>
             <a href="/token-refresh" class="{% if active_page == 'token_refresh' %}active{% endif %}">Token Refresh</a>
             <a href="/run-strategy" class="{% if active_page == 'run_strategy' %}active{% endif %}">Strategy</a>
             <a href="/logout" class="logout-button">Logout</a>
+        </div>
+        <div class="mobile-nav-toggle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </div>
     </div>
 
@@ -380,6 +412,16 @@
                 });
 
                 rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+            const navLinks = document.querySelector('.nav-links');
+
+            mobileNavToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
             });
         });
     </script>

@@ -11,7 +11,7 @@ APP_LOGS_PER_PAGE_HOME = 10
 FYERS_REDIRECT_URI = 'https://trade.fyers.in/api-login/redirect-uri/index.html' # Replace with your actual redirect URI
 
 # Strategy Parameters
-MAX_TRADE_VALUE = 2000
+MAX_TRADE_VALUE = 4000
 MA_PERIOD = 30
 
 # Token Validity (in seconds)

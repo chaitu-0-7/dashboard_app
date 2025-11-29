@@ -12,7 +12,9 @@ FYERS_REDIRECT_URI = 'https://trade.fyers.in/api-login/redirect-uri/index.html' 
 
 # Strategy Parameters
 STRATEGY_CAPITAL = 40000 # Total capital allocated for this strategy
-MAX_TRADE_VALUE = 2000
+
+MAX_TRADE_VALUE = 4000
+
 MA_PERIOD = 30
 
 # Token Validity (in seconds)

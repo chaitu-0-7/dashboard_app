@@ -15,7 +15,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import uuid
 import subprocess
 import random
-from config import MONGO_DB_NAME, MONGO_ENV, APP_LOGS_PER_PAGE_HOME, FYERS_REDIRECT_URI, ACCESS_TOKEN_VALIDITY, REFRESH_TOKEN_VALIDITY
+from config import MONGO_DB_NAME, MONGO_ENV, APP_LOGS_PER_PAGE_HOME, FYERS_REDIRECT_URI, ACCESS_TOKEN_VALIDITY, REFRESH_TOKEN_VALIDITY, STRATEGY_CAPITAL
 
 # Define timezones
 UTC = pytz.utc
@@ -104,10 +104,33 @@ def load_tokens():
         print("[ERROR] MongoDB connection not established for Fyers tokens. Cannot load tokens.")
         return None
 
-def is_access_token_valid(generated_at):
-    if generated_at is None:
+def is_access_token_valid(token_data):
+    if not token_data or 'access_token' not in token_data:
         return False
-    return datetime.now(UTC) < generated_at + timedelta(seconds=ACCESS_TOKEN_VALIDITY)
+    
+    generated_at = token_data.get("generated_at")
+    # Ensure generated_at is a timezone-aware datetime object
+    if isinstance(generated_at, (int, float)):
+        generated_at = datetime.fromtimestamp(generated_at, tz=UTC)
+    elif isinstance(generated_at, datetime) and generated_at.tzinfo is None:
+        generated_at = UTC.localize(generated_at)
+        
+    # Check timestamp first (24 hours validity)
+    if generated_at and datetime.now(UTC) > generated_at + timedelta(seconds=ACCESS_TOKEN_VALIDITY):
+        return False
+
+    # Verify with API
+    try:
+        fyers = fyersModel.FyersModel(client_id=CLIENT_ID, token=token_data['access_token'], log_path="")
+        response = fyers.get_profile()
+        if response.get('code') == 200:
+            return True
+        else:
+            print(f"[WARNING] Token validation failed via API: {response}")
+            return False
+    except Exception as e:
+        print(f"[ERROR] Error validating token via API: {e}")
+        return False
 
 def is_refresh_token_valid(generated_at):
     if generated_at is None:
@@ -198,12 +221,13 @@ def dashboard():
 
     access_token = token_data.get("access_token") if token_data else ""
 
-    if not access_token or not is_access_token_valid(token_data.get("generated_at")):
+    if not access_token or not is_access_token_valid(token_data):
         flash("Access token is invalid or expired. Please refresh it.", "warning")
         return redirect(url_for('token_refresh'))
 
+    raw_positions = []  # Initialize here so it's accessible later
     try:
-        if access_token and is_access_token_valid(token_data.get("generated_at")):
+        if access_token and is_access_token_valid(token_data):
             fyers = fyersModel.FyersModel(client_id=CLIENT_ID, token=access_token, log_path='./')
             holdings_response = fyers.holdings()
             if holdings_response.get('s') == 'ok':
@@ -303,19 +327,49 @@ def dashboard():
     chart_values = [item[1]['pnl'] for item in sorted_daily_pnl]
     chart_trades = [item[1]['trades'] for item in sorted_daily_pnl]
 
-    # Portfolio Allocation for Pie Chart
-    portfolio_data = []
-    if 'raw_positions' in locals() and raw_positions:
-        total_investment = sum(p.get('market_value', 0.0) for p in raw_positions if p.get('quantity', 0) != 0)
-        for p in raw_positions:
-            if p.get('quantity', 0) != 0:
-                value = p.get('market_value', 0.0)
-                percentage = (value / total_investment) * 100 if total_investment > 0 else 0
-                portfolio_data.append({
-                    'symbol': p.get('symbol'),
-                    'value': value,
-                    'percentage': percentage
-                })
+    # Cumulative P&L Data
+    all_filled_trades = list(db[f"trades_{MONGO_ENV}"].find({"filled": True}).sort("date", 1))
+    cumulative_pnl_data = []
+    cumulative_pnl = 0
+    for trade in all_filled_trades:
+        cumulative_pnl += trade.get('profit', 0.0)
+        cumulative_pnl_data.append({
+            'date': trade['date'].astimezone(IST).strftime('%Y-%m-%d'),
+            'pnl': cumulative_pnl
+        })
+
+    # Capital Utilization Metrics
+    # Calculate used capital: costPrice * quantity for each position
+    used_capital = 0
+    num_positions = 0
+    for p in raw_positions:
+        qty = p.get('quantity', 0)
+        if qty != 0:
+            cost_price = p.get('costPrice', 0)
+            used_capital += cost_price * abs(qty)
+            num_positions += 1
+    
+    available_capital = max(0, STRATEGY_CAPITAL - used_capital)
+    used_percentage = (used_capital / STRATEGY_CAPITAL * 100) if STRATEGY_CAPITAL > 0 else 0
+    available_percentage = (available_capital / STRATEGY_CAPITAL * 100) if STRATEGY_CAPITAL > 0 else 0
+    
+    # Calculate how many more positions can be opened
+    from config import MAX_TRADE_VALUE
+    positions_can_open = int(available_capital / MAX_TRADE_VALUE) if MAX_TRADE_VALUE > 0 else 0
+    
+    # Calculate average position size
+    avg_position_size = (used_capital / num_positions) if num_positions > 0 else 0
+    
+    capital_utilization = {
+        'used': used_capital,
+        'available': available_capital,
+        'total': STRATEGY_CAPITAL,
+        'used_percentage': used_percentage,
+        'available_percentage': available_percentage,
+        'positions_can_open': positions_can_open,
+        'avg_position_size': avg_position_size,
+        'current_positions': num_positions
+    }
 
     return render_template('dashboard.html',
                            active_page='dashboard',
@@ -329,11 +383,13 @@ def dashboard():
                            chart_labels=json.dumps(chart_labels),
                            chart_values=json.dumps(chart_values),
                            chart_trades=json.dumps(chart_trades),
-                           portfolio_data=json.dumps(portfolio_data))
+                           capital_utilization=capital_utilization,
+                           cumulative_pnl_data=json.dumps(cumulative_pnl_data))
 
 @app.route('/trading-overview')
 @login_required
 def trading_overview():
+    # Trading Overview Route
     if db is None:
         return "Database connection failed. Please check your MongoDB URI in files.txt"
 
@@ -350,7 +406,7 @@ def trading_overview():
 
     access_token = token_data.get("access_token") if token_data else ""
 
-    if not access_token or not is_access_token_valid(token_data.get("generated_at")):
+    if not access_token or not is_access_token_valid(token_data):
         flash("Access token is invalid or expired. Please refresh it.", "warning")
         return redirect(url_for('token_refresh'))
 
@@ -389,36 +445,62 @@ def trading_overview():
 
     open_position_symbols = {pos['symbol'] for pos in current_positions}
 
-    open_trades = []
+    # Closed trades are SELL transactions that have profit/loss (completed round trips)
+    # Open trades count is just the number of current positions
     closed_trades = []
-
-    trades_by_symbol = defaultdict(list)
+    
     for trade in all_filled_trades:
-        trades_by_symbol[trade['symbol']].append(trade)
-
-    for symbol, trades in trades_by_symbol.items():
-        if symbol in open_position_symbols:
-            latest_buy = max((t for t in trades if t.get('action') == 'BUY'), key=lambda x: x['date'], default=None)
-            if latest_buy:
-                open_trades.append(latest_buy)
-        else:
-            closed_trades.extend(trades)
-
-    closed_trades.sort(key=lambda x: x['date'], reverse=True)
-
-    for trade in closed_trades:
+        # A closed trade is a SELL transaction with profit/loss data
+        if trade.get('action') == 'SELL' and 'profit' in trade:
+            closed_trades.append(trade)
+        # Ensure all trades have profit fields for safety
         if 'profit' not in trade:
             trade['profit'] = 0.0
         if 'profit_pct' not in trade:
             trade['profit_pct'] = 0.0
 
+    # Calculate performance metrics based on closed trades only
     total_pnl = sum(trade.get('profit', 0.0) for trade in closed_trades)
     winning_trades = [trade for trade in closed_trades if trade.get('profit', 0.0) > 0]
     losing_trades = [trade for trade in closed_trades if trade.get('profit', 0.0) < 0]
-
     win_loss_ratio = len(winning_trades) / len(losing_trades) if len(losing_trades) > 0 else (1 if len(winning_trades) > 0 else 0)
     average_winning_trade = sum(trade['profit'] for trade in winning_trades) / len(winning_trades) if len(winning_trades) > 0 else 0
     average_losing_trade = sum(trade['profit'] for trade in losing_trades) / len(losing_trades) if len(losing_trades) > 0 else 0
+
+    # New Analytics Metrics
+    closed_trades_count = len(closed_trades)
+    open_trades_count = len(current_positions)
+    total_trades = closed_trades_count + open_trades_count
+    
+    # Calculate drawdown metrics
+    cumulative_pnl_list = []
+    running_total = 0
+    peak = 0
+    drawdowns = []
+    drawdown_dates = []
+    
+    # Sort trades by date for cumulative calculation
+    sorted_trades = sorted(closed_trades, key=lambda x: x['date'])
+    for trade in sorted_trades:
+        running_total += trade.get('profit', 0.0)
+        cumulative_pnl_list.append(running_total)
+        
+        # Track peak and drawdown
+        if running_total > peak:
+            peak = running_total
+        
+        drawdown = ((running_total - peak) / peak * 100) if peak > 0 else 0
+        drawdowns.append(drawdown)
+        drawdown_dates.append(trade['date'].strftime('%Y-%m-%d'))
+    
+    max_drawdown = min(drawdowns) if drawdowns else 0
+    current_drawdown = drawdowns[-1] if drawdowns else 0
+    
+    # Prepare drawdown chart data
+    drawdown_chart_data = {
+        'labels': drawdown_dates[-30:],  # Last 30 trades
+        'values': drawdowns[-30:]
+    }
 
     # --- New daily activity logic from old home route ---
     page = request.args.get('page', 1, type=int)
@@ -485,13 +567,18 @@ def trading_overview():
     # Portfolio Allocation for Pie Chart
     portfolio_data = []
     if current_positions:
-        total_investment = sum(p.get('pnl') for p in current_positions)
         for p in current_positions:
-            value = p.get('pnl')
-            percentage = (value / total_investment) * 100 if total_investment > 0 else 0
+            pnl_value = p.get('pnl', 0)  # P&L value
+            avg_price = p.get('avg_price', 0)
+            quantity = p.get('quantity', 0)
+            invested_amount = avg_price * quantity
+            
+            # Calculate percentage gain/loss: (P&L / invested amount) * 100
+            percentage = (pnl_value / invested_amount * 100) if invested_amount > 0 else 0
+            
             portfolio_data.append({
                 'symbol': p.get('symbol'),
-                'value': value,
+                'value': pnl_value,
                 'percentage': percentage
             })
 
@@ -506,6 +593,31 @@ def trading_overview():
                 'pnl': cumulative_pnl
             })
 
+    manually_closed_trades = list(db[f"trades_{MONGO_ENV}"].find({"order_id": "MANUAL"}).sort("date", -1))
+    for trade in manually_closed_trades:
+        trade['date'] = trade['date'].astimezone(IST)
+
+
+    # Capital Allocation Data
+    capital_data = {
+        'used': 0,
+        'available': 0,
+        'total': STRATEGY_CAPITAL
+    }
+    
+    try:
+        # Calculate used capital from current positions
+        # Assuming avg_price * quantity gives the invested amount
+        used_capital = sum(p.get('avg_price', 0) * p.get('quantity', 0) for p in current_positions)
+        
+        capital_data['used'] = used_capital
+        capital_data['available'] = max(0, STRATEGY_CAPITAL - used_capital)
+            
+    except Exception as e:
+        print(f"Error calculating capital: {e}")
+        capital_data['used'] = 0
+        capital_data['available'] = STRATEGY_CAPITAL
+
     return render_template('trading_overview.html',
                            current_positions=current_positions,
                            closed_trades=closed_trades,
@@ -519,7 +631,15 @@ def trading_overview():
                            has_more_days=has_more_days,
                            total_days=total_days,
                            portfolio_data=json.dumps(portfolio_data),
-                           cumulative_pnl_data=json.dumps(cumulative_pnl_data))
+                           cumulative_pnl_data=json.dumps(cumulative_pnl_data),
+                           manually_closed_trades=manually_closed_trades,
+                           total_trades=total_trades,
+                           open_trades_count=open_trades_count,
+                           closed_trades_count=closed_trades_count,
+                           max_drawdown=max_drawdown,
+                           current_drawdown=current_drawdown,
+                           drawdown_chart_data=json.dumps(drawdown_chart_data),
+                           capital_data=json.dumps(capital_data))
 
 @app.route('/logs')
 @login_required
@@ -587,7 +707,7 @@ def token_refresh():
         elif isinstance(generated_at, datetime) and generated_at.tzinfo is None:
             generated_at = UTC.localize(generated_at)
 
-        if is_access_token_valid(generated_at):
+        if is_access_token_valid(tokens):
             token_status = "VALID"
         else:
             if is_refresh_token_valid(generated_at):
@@ -719,6 +839,85 @@ def api_run_logs(run_id):
 def execute_strategy():
     run_executor(run_type="manual")
     return redirect(url_for('run_strategy', status='success'))
+
+@app.route('/update_manual_trade/<trade_id>', methods=['POST'])
+@login_required
+def update_manual_trade(trade_id):
+    if db is None:
+        return jsonify({"success": False, "message": "Database connection failed."}), 500
+
+    try:
+        from bson.objectid import ObjectId
+
+        close_price = float(request.form['close_price'])
+        close_date_str = request.form['close_date']
+        
+        # Parse date and make it timezone-aware (assuming user inputs in IST)
+        close_date = IST.localize(datetime.strptime(close_date_str, '%Y-%m-%dT%H:%M'))
+        close_date_utc = close_date.astimezone(UTC)
+
+        trades_collection = db[f"trades_{MONGO_ENV}"]
+        
+        # Find the sell trade to update
+        sell_trade = trades_collection.find_one({'_id': ObjectId(trade_id)})
+
+        if not sell_trade:
+            return jsonify({"success": False, "message": "Trade not found."}), 404
+
+        # Find the corresponding buy trades to calculate profit
+        buy_trades = list(trades_collection.find({
+            'symbol': sell_trade['symbol'],
+            'action': 'BUY',
+            'filled': True,
+            'date': {'$lt': sell_trade['created_at']} # Buy trades before this sell was created
+        }))
+
+        if not buy_trades:
+            return jsonify({"success": False, "message": "Corresponding buy trade not found."}), 404
+
+        total_bought_qty = sum(t['quantity'] for t in buy_trades)
+        avg_buy_price = sum(t['price'] * t['quantity'] for t in buy_trades) / total_bought_qty
+        
+        profit = (close_price - avg_buy_price) * sell_trade['quantity']
+        profit_pct = ((close_price - avg_buy_price) / avg_buy_price) * 100 if avg_buy_price > 0 else 0
+
+        trades_collection.update_one(
+            {'_id': ObjectId(trade_id)},
+            {'$set': {
+                'price': close_price,
+                'date': close_date_utc,
+                'profit': profit,
+                'profit_pct': profit_pct,
+                'status': 'CLOSED',
+                'comment': 'Manually updated.'
+            }}
+        )
+
+        return jsonify({"success": True, "message": "Trade updated successfully."})
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+@app.route('/delete_manual_trade/<trade_id>', methods=['POST'])
+@login_required
+def delete_manual_trade(trade_id):
+    if db is None:
+        return jsonify({"success": False, "message": "Database connection failed."}), 500
+
+    try:
+        from bson.objectid import ObjectId
+
+        trades_collection = db[f"trades_{MONGO_ENV}"]
+        result = trades_collection.delete_one({'_id': ObjectId(trade_id)})
+
+        if result.deleted_count == 1:
+            return jsonify({"success": True, "message": "Trade deleted successfully."})
+        else:
+            return jsonify({"success": False, "message": "Trade not found."}), 404
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

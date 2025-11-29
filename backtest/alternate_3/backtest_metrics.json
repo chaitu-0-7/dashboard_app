@@ -1,0 +1,1497 @@
+{
+    "summary": {
+        "initial_balance": 40000,
+        "final_balance": 42452.06188964844,
+        "total_return_pct": 6.130154724121094,
+        "max_drawdown_pct": 2.2676040649414064,
+        "total_trades": 1,
+        "win_rate": 0
+    },
+    "daily_data": [
+        {
+            "date": "2023-01-02",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-03",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-04",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-05",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-06",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-09",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-10",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-11",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-12",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-13",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-16",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-17",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-18",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-19",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-20",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-23",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-24",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-25",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-27",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-30",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-31",
+            "portfolio_value": 39980.0,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3618.15087890625
+        },
+        {
+            "date": "2023-02-01",
+            "portfolio_value": 39286.07568359375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 2924.2265625
+        },
+        {
+            "date": "2023-02-02",
+            "portfolio_value": 39092.95837402344,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 2731.109252929688
+        },
+        {
+            "date": "2023-02-03",
+            "portfolio_value": 39307.92694091797,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 2946.0778198242188
+        },
+        {
+            "date": "2023-02-06",
+            "portfolio_value": 39583.13427734375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3221.28515625
+        },
+        {
+            "date": "2023-02-07",
+            "portfolio_value": 39628.60888671875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3266.759765625
+        },
+        {
+            "date": "2023-02-08",
+            "portfolio_value": 39900.86291503906,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3539.0137939453125
+        },
+        {
+            "date": "2023-02-09",
+            "portfolio_value": 39800.76062011719,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3438.9114990234375
+        },
+        {
+            "date": "2023-02-10",
+            "portfolio_value": 39810.505126953125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3448.656005859375
+        },
+        {
+            "date": "2023-02-13",
+            "portfolio_value": 39631.85681152344,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3270.0076904296875
+        },
+        {
+            "date": "2023-02-14",
+            "portfolio_value": 39699.18212890625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3337.3330078125
+        },
+        {
+            "date": "2023-02-15",
+            "portfolio_value": 39722.509765625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3360.66064453125
+        },
+        {
+            "date": "2023-02-16",
+            "portfolio_value": 39770.6416015625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3408.79248046875
+        },
+        {
+            "date": "2023-02-17",
+            "portfolio_value": 39779.205078125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3417.35595703125
+        },
+        {
+            "date": "2023-02-20",
+            "portfolio_value": 39785.40612792969,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3423.5570068359375
+        },
+        {
+            "date": "2023-02-21",
+            "portfolio_value": 39806.076171875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3444.22705078125
+        },
+        {
+            "date": "2023-02-22",
+            "portfolio_value": 39592.879150390625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3231.030029296875
+        },
+        {
+            "date": "2023-02-23",
+            "portfolio_value": 39620.930908203125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3259.081787109375
+        },
+        {
+            "date": "2023-02-24",
+            "portfolio_value": 39662.56689453125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3300.7177734375
+        },
+        {
+            "date": "2023-02-27",
+            "portfolio_value": 39680.87451171875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3319.025390625
+        },
+        {
+            "date": "2023-02-28",
+            "portfolio_value": 39860.70422363281,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3498.8551025390625
+        },
+        {
+            "date": "2023-03-01",
+            "portfolio_value": 39917.6943359375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3555.84521484375
+        },
+        {
+            "date": "2023-03-02",
+            "portfolio_value": 40040.533935546875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3678.684814453125
+        },
+        {
+            "date": "2023-03-03",
+            "portfolio_value": 40405.21337890625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4043.3642578125
+        },
+        {
+            "date": "2023-03-06",
+            "portfolio_value": 40441.23828125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4079.38916015625
+        },
+        {
+            "date": "2023-03-08",
+            "portfolio_value": 40567.03063964844,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4205.1815185546875
+        },
+        {
+            "date": "2023-03-09",
+            "portfolio_value": 40479.62561035156,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4117.7764892578125
+        },
+        {
+            "date": "2023-03-10",
+            "portfolio_value": 40482.87353515625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4121.0244140625
+        },
+        {
+            "date": "2023-03-13",
+            "portfolio_value": 40384.83850097656,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4022.9893798828125
+        },
+        {
+            "date": "2023-03-14",
+            "portfolio_value": 40227.155029296875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3865.305908203125
+        },
+        {
+            "date": "2023-03-15",
+            "portfolio_value": 40373.91296386719,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4012.0638427734375
+        },
+        {
+            "date": "2023-03-16",
+            "portfolio_value": 40375.38916015625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4013.5400390625
+        },
+        {
+            "date": "2023-03-17",
+            "portfolio_value": 40379.81848144531,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4017.9693603515625
+        },
+        {
+            "date": "2023-03-20",
+            "portfolio_value": 40299.500732421875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3937.651611328125
+        },
+        {
+            "date": "2023-03-21",
+            "portfolio_value": 40287.984130859375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3926.135009765625
+        },
+        {
+            "date": "2023-03-22",
+            "portfolio_value": 40242.80578613281,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3880.9566650390625
+        },
+        {
+            "date": "2023-03-23",
+            "portfolio_value": 40229.81298828125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3867.9638671875
+        },
+        {
+            "date": "2023-03-24",
+            "portfolio_value": 40129.710693359375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3767.861572265625
+        },
+        {
+            "date": "2023-03-27",
+            "portfolio_value": 40077.14953613281,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3715.3004150390625
+        },
+        {
+            "date": "2023-03-28",
+            "portfolio_value": 39866.31494140625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3504.4658203125
+        },
+        {
+            "date": "2023-03-29",
+            "portfolio_value": 40121.73791503906,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3759.8887939453125
+        },
+        {
+            "date": "2023-03-31",
+            "portfolio_value": 40093.685791015625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3731.836669921875
+        },
+        {
+            "date": "2023-04-03",
+            "portfolio_value": 40069.471923828125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3707.622802734375
+        },
+        {
+            "date": "2023-04-05",
+            "portfolio_value": 40122.32824707031,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3760.4791259765625
+        },
+        {
+            "date": "2023-04-06",
+            "portfolio_value": 40150.970703125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3789.12158203125
+        },
+        {
+            "date": "2023-04-10",
+            "portfolio_value": 40212.390869140625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3850.541748046875
+        },
+        {
+            "date": "2023-04-11",
+            "portfolio_value": 40223.90710449219,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3862.0579833984375
+        },
+        {
+            "date": "2023-04-12",
+            "portfolio_value": 40246.348876953125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3884.499755859375
+        },
+        {
+            "date": "2023-04-13",
+            "portfolio_value": 40269.38171386719,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3907.5325927734375
+        },
+        {
+            "date": "2023-04-17",
+            "portfolio_value": 40287.393798828125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3925.544677734375
+        },
+        {
+            "date": "2023-04-18",
+            "portfolio_value": 40251.07373046875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3889.224609375
+        },
+        {
+            "date": "2023-04-19",
+            "portfolio_value": 40250.1875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3888.33837890625
+        },
+        {
+            "date": "2023-04-20",
+            "portfolio_value": 40295.661376953125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3933.812255859375
+        },
+        {
+            "date": "2023-04-21",
+            "portfolio_value": 40269.08581542969,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3907.2366943359375
+        },
+        {
+            "date": "2023-04-24",
+            "portfolio_value": 40326.37109375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3964.52197265625
+        },
+        {
+            "date": "2023-04-25",
+            "portfolio_value": 40327.25769042969,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3965.4085693359375
+        },
+        {
+            "date": "2023-04-26",
+            "portfolio_value": 40287.393798828125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3925.544677734375
+        },
+        {
+            "date": "2023-04-27",
+            "portfolio_value": 40258.16064453125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3896.3115234375
+        },
+        {
+            "date": "2023-04-28",
+            "portfolio_value": 40385.42883300781,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4023.5797119140625
+        },
+        {
+            "date": "2023-05-02",
+            "portfolio_value": 40386.61022949219,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4024.7611083984375
+        },
+        {
+            "date": "2023-05-03",
+            "portfolio_value": 40316.62731933594,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3954.7781982421875
+        },
+        {
+            "date": "2023-05-04",
+            "portfolio_value": 40376.27502441406,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4014.4259033203125
+        },
+        {
+            "date": "2023-05-05",
+            "portfolio_value": 40400.78369140625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4038.9345703125
+        },
+        {
+            "date": "2023-05-08",
+            "portfolio_value": 40407.87023925781,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4046.0211181640625
+        },
+        {
+            "date": "2023-05-09",
+            "portfolio_value": 40439.76171875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4077.91259765625
+        },
+        {
+            "date": "2023-05-10",
+            "portfolio_value": 40442.71447753906,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4080.8653564453125
+        },
+        {
+            "date": "2023-05-11",
+            "portfolio_value": 40547.83679199219,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4185.9876708984375
+        },
+        {
+            "date": "2023-05-12",
+            "portfolio_value": 40495.86633300781,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4134.0172119140625
+        },
+        {
+            "date": "2023-05-15",
+            "portfolio_value": 40460.727294921875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4098.878173828125
+        },
+        {
+            "date": "2023-05-16",
+            "portfolio_value": 40419.09130859375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4057.2421875
+        },
+        {
+            "date": "2023-05-17",
+            "portfolio_value": 40404.91784667969,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4043.0687255859375
+        },
+        {
+            "date": "2023-05-18",
+            "portfolio_value": 40288.870361328125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 3927.021240234375
+        },
+        {
+            "date": "2023-05-19",
+            "portfolio_value": 40425.587890625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4063.73876953125
+        },
+        {
+            "date": "2023-05-22",
+            "portfolio_value": 40671.26708984375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4309.41796875
+        },
+        {
+            "date": "2023-05-23",
+            "portfolio_value": 40696.95642089844,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4335.1072998046875
+        },
+        {
+            "date": "2023-05-24",
+            "portfolio_value": 40603.64587402344,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4241.7967529296875
+        },
+        {
+            "date": "2023-05-25",
+            "portfolio_value": 40640.55700683594,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4278.7078857421875
+        },
+        {
+            "date": "2023-05-26",
+            "portfolio_value": 40654.435302734375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4292.586181640625
+        },
+        {
+            "date": "2023-05-29",
+            "portfolio_value": 40717.33166503906,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4355.4825439453125
+        },
+        {
+            "date": "2023-05-30",
+            "portfolio_value": 40696.95642089844,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4335.1072998046875
+        },
+        {
+            "date": "2023-05-31",
+            "portfolio_value": 40725.30407714844,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4363.4549560546875
+        },
+        {
+            "date": "2023-06-01",
+            "portfolio_value": 40685.14501953125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4323.2958984375
+        },
+        {
+            "date": "2023-06-02",
+            "portfolio_value": 40712.01647949219,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4350.1673583984375
+        },
+        {
+            "date": "2023-06-05",
+            "portfolio_value": 40725.00927734375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4363.16015625
+        },
+        {
+            "date": "2023-06-06",
+            "portfolio_value": 40763.9873046875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4402.13818359375
+        },
+        {
+            "date": "2023-06-07",
+            "portfolio_value": 40754.242431640625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4392.393310546875
+        },
+        {
+            "date": "2023-06-08",
+            "portfolio_value": 40710.83544921875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4348.986328125
+        },
+        {
+            "date": "2023-06-09",
+            "portfolio_value": 40702.27197265625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4340.4228515625
+        },
+        {
+            "date": "2023-06-12",
+            "portfolio_value": 40744.49792480469,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4382.6488037109375
+        },
+        {
+            "date": "2023-06-13",
+            "portfolio_value": 40719.39855957031,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4357.5494384765625
+        },
+        {
+            "date": "2023-06-14",
+            "portfolio_value": 40728.2568359375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4366.40771484375
+        },
+        {
+            "date": "2023-06-15",
+            "portfolio_value": 40729.14343261719,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4367.2943115234375
+        },
+        {
+            "date": "2023-06-16",
+            "portfolio_value": 40775.79870605469,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4413.9495849609375
+        },
+        {
+            "date": "2023-06-19",
+            "portfolio_value": 40706.40612792969,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4344.5570068359375
+        },
+        {
+            "date": "2023-06-20",
+            "portfolio_value": 40719.10339355469,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4357.2542724609375
+        },
+        {
+            "date": "2023-06-21",
+            "portfolio_value": 40787.9052734375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4426.05615234375
+        },
+        {
+            "date": "2023-06-22",
+            "portfolio_value": 40765.16796875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4403.31884765625
+        },
+        {
+            "date": "2023-06-23",
+            "portfolio_value": 40580.31823730469,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4218.4691162109375
+        },
+        {
+            "date": "2023-06-26",
+            "portfolio_value": 40639.96667480469,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4278.1175537109375
+        },
+        {
+            "date": "2023-06-27",
+            "portfolio_value": 40615.45764160156,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4253.6085205078125
+        },
+        {
+            "date": "2023-06-28",
+            "portfolio_value": 40829.54089355469,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4467.6917724609375
+        },
+        {
+            "date": "2023-06-30",
+            "portfolio_value": 40727.66650390625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4365.8173828125
+        },
+        {
+            "date": "2023-07-03",
+            "portfolio_value": 40716.740966796875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4354.891845703125
+        },
+        {
+            "date": "2023-07-04",
+            "portfolio_value": 40742.13586425781,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4380.2867431640625
+        },
+        {
+            "date": "2023-07-05",
+            "portfolio_value": 40748.33654785156,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4386.4874267578125
+        },
+        {
+            "date": "2023-07-06",
+            "portfolio_value": 40732.39099121094,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4370.5418701171875
+        },
+        {
+            "date": "2023-07-07",
+            "portfolio_value": 40606.30419921875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4244.455078125
+        },
+        {
+            "date": "2023-07-10",
+            "portfolio_value": 40614.57177734375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4252.72265625
+        },
+        {
+            "date": "2023-07-11",
+            "portfolio_value": 40672.44812011719,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4310.5989990234375
+        },
+        {
+            "date": "2023-07-12",
+            "portfolio_value": 40638.78527832031,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4276.9361572265625
+        },
+        {
+            "date": "2023-07-13",
+            "portfolio_value": 40597.44519042969,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4235.5960693359375
+        },
+        {
+            "date": "2023-07-14",
+            "portfolio_value": 40650.00598144531,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4288.1568603515625
+        },
+        {
+            "date": "2023-07-17",
+            "portfolio_value": 40679.239501953125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4317.390380859375
+        },
+        {
+            "date": "2023-07-18",
+            "portfolio_value": 40662.11291503906,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4300.2637939453125
+        },
+        {
+            "date": "2023-07-19",
+            "portfolio_value": 40681.30676269531,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4319.4576416015625
+        },
+        {
+            "date": "2023-07-20",
+            "portfolio_value": 40687.50744628906,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4325.6583251953125
+        },
+        {
+            "date": "2023-07-21",
+            "portfolio_value": 40663.88464355469,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4302.0355224609375
+        },
+        {
+            "date": "2023-07-24",
+            "portfolio_value": 40704.3388671875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4342.48974609375
+        },
+        {
+            "date": "2023-07-25",
+            "portfolio_value": 40786.72424316406,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4424.8751220703125
+        },
+        {
+            "date": "2023-07-26",
+            "portfolio_value": 40806.80358886719,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4444.9544677734375
+        },
+        {
+            "date": "2023-07-27",
+            "portfolio_value": 40783.77111816406,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4421.9219970703125
+        },
+        {
+            "date": "2023-07-28",
+            "portfolio_value": 40854.8193359375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4492.97021484375
+        },
+        {
+            "date": "2023-07-31",
+            "portfolio_value": 40986.51062011719,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4624.6614990234375
+        },
+        {
+            "date": "2023-08-01",
+            "portfolio_value": 40912.19250488281,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4550.3433837890625
+        },
+        {
+            "date": "2023-08-02",
+            "portfolio_value": 40889.00549316406,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4527.1563720703125
+        },
+        {
+            "date": "2023-08-03",
+            "portfolio_value": 40959.75598144531,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4597.9068603515625
+        },
+        {
+            "date": "2023-08-04",
+            "portfolio_value": 40971.052490234375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4609.203369140625
+        },
+        {
+            "date": "2023-08-07",
+            "portfolio_value": 41067.071533203125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4705.222412109375
+        },
+        {
+            "date": "2023-08-08",
+            "portfolio_value": 41024.264404296875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4662.415283203125
+        },
+        {
+            "date": "2023-08-09",
+            "portfolio_value": 41065.28771972656,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4703.4385986328125
+        },
+        {
+            "date": "2023-08-10",
+            "portfolio_value": 41134.84948730469,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4773.0003662109375
+        },
+        {
+            "date": "2023-08-11",
+            "portfolio_value": 41124.44470214844,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4762.5955810546875
+        },
+        {
+            "date": "2023-08-14",
+            "portfolio_value": 41041.80334472656,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4679.9542236328125
+        },
+        {
+            "date": "2023-08-16",
+            "portfolio_value": 40976.106201171875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4614.257080078125
+        },
+        {
+            "date": "2023-08-17",
+            "portfolio_value": 41175.57580566406,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4813.7266845703125
+        },
+        {
+            "date": "2023-08-18",
+            "portfolio_value": 41331.6435546875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4969.79443359375
+        },
+        {
+            "date": "2023-08-21",
+            "portfolio_value": 41463.929931640625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 5102.080810546875
+        },
+        {
+            "date": "2023-08-22",
+            "portfolio_value": 41442.22863769531,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 5080.3795166015625
+        },
+        {
+            "date": "2023-08-23",
+            "portfolio_value": 41271.00012207031,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4909.1510009765625
+        },
+        {
+            "date": "2023-08-24",
+            "portfolio_value": 41251.0830078125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4889.23388671875
+        },
+        {
+            "date": "2023-08-25",
+            "portfolio_value": 41157.442138671875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4795.593017578125
+        },
+        {
+            "date": "2023-08-28",
+            "portfolio_value": 41162.495849609375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4800.646728515625
+        },
+        {
+            "date": "2023-08-29",
+            "portfolio_value": 41258.217529296875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4896.368408203125
+        },
+        {
+            "date": "2023-08-30",
+            "portfolio_value": 41229.382080078125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4867.532958984375
+        },
+        {
+            "date": "2023-08-31",
+            "portfolio_value": 41071.827880859375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4709.978759765625
+        },
+        {
+            "date": "2023-09-01",
+            "portfolio_value": 41115.22937011719,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4753.3802490234375
+        },
+        {
+            "date": "2023-09-04",
+            "portfolio_value": 41124.44470214844,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4762.5955810546875
+        },
+        {
+            "date": "2023-09-05",
+            "portfolio_value": 41147.632080078125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4785.782958984375
+        },
+        {
+            "date": "2023-09-06",
+            "portfolio_value": 41160.11730957031,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4798.2681884765625
+        },
+        {
+            "date": "2023-09-07",
+            "portfolio_value": 41177.062255859375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4815.213134765625
+        },
+        {
+            "date": "2023-09-08",
+            "portfolio_value": 41266.838134765625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4904.989013671875
+        },
+        {
+            "date": "2023-09-11",
+            "portfolio_value": 41608.40417480469,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 5246.5550537109375
+        },
+        {
+            "date": "2023-09-12",
+            "portfolio_value": 41467.49719238281,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 5105.6480712890625
+        },
+        {
+            "date": "2023-09-13",
+            "portfolio_value": 41413.69055175781,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 5051.8414306640625
+        },
+        {
+            "date": "2023-09-14",
+            "portfolio_value": 41414.284912109375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 5052.435791015625
+        },
+        {
+            "date": "2023-09-15",
+            "portfolio_value": 41389.61181640625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 5027.7626953125
+        },
+        {
+            "date": "2023-09-18",
+            "portfolio_value": 41303.99755859375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4942.1484375
+        },
+        {
+            "date": "2023-09-20",
+            "portfolio_value": 41225.51708984375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4863.66796875
+        },
+        {
+            "date": "2023-09-21",
+            "portfolio_value": 41303.10510253906,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4941.2559814453125
+        },
+        {
+            "date": "2023-09-22",
+            "portfolio_value": 41279.0263671875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4917.17724609375
+        },
+        {
+            "date": "2023-09-25",
+            "portfolio_value": 41270.703125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4908.85400390625
+        },
+        {
+            "date": "2023-09-26",
+            "portfolio_value": 41245.13757324219,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4883.2884521484375
+        },
+        {
+            "date": "2023-09-27",
+            "portfolio_value": 41300.727294921875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4938.878173828125
+        },
+        {
+            "date": "2023-09-28",
+            "portfolio_value": 41255.54162597656,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4893.6925048828125
+        },
+        {
+            "date": "2023-09-29",
+            "portfolio_value": 41267.730224609375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4905.881103515625
+        },
+        {
+            "date": "2023-10-03",
+            "portfolio_value": 41304.88928222656,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4943.0401611328125
+        },
+        {
+            "date": "2023-10-04",
+            "portfolio_value": 41264.4599609375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4902.61083984375
+        },
+        {
+            "date": "2023-10-05",
+            "portfolio_value": 41268.027587890625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4906.178466796875
+        },
+        {
+            "date": "2023-10-06",
+            "portfolio_value": 41301.024658203125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4939.175537109375
+        },
+        {
+            "date": "2023-10-09",
+            "portfolio_value": 41059.044921875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4697.19580078125
+        },
+        {
+            "date": "2023-10-10",
+            "portfolio_value": 41234.138427734375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4872.289306640625
+        },
+        {
+            "date": "2023-10-11",
+            "portfolio_value": 41206.49169921875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4844.642578125
+        },
+        {
+            "date": "2023-10-12",
+            "portfolio_value": 41207.08642578125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4845.2373046875
+        },
+        {
+            "date": "2023-10-13",
+            "portfolio_value": 41199.951904296875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4838.102783203125
+        },
+        {
+            "date": "2023-10-16",
+            "portfolio_value": 41151.79406738281,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4789.9449462890625
+        },
+        {
+            "date": "2023-10-17",
+            "portfolio_value": 41148.52380371094,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4786.6746826171875
+        },
+        {
+            "date": "2023-10-18",
+            "portfolio_value": 41109.878662109375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4748.029541015625
+        },
+        {
+            "date": "2023-10-19",
+            "portfolio_value": 41075.692138671875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4713.843017578125
+        },
+        {
+            "date": "2023-10-20",
+            "portfolio_value": 41080.44885253906,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4718.5997314453125
+        },
+        {
+            "date": "2023-10-23",
+            "portfolio_value": 40948.45983886719,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4586.6107177734375
+        },
+        {
+            "date": "2023-10-25",
+            "portfolio_value": 40934.48815917969,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4572.6390380859375
+        },
+        {
+            "date": "2023-10-26",
+            "portfolio_value": 40941.919677734375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4580.070556640625
+        },
+        {
+            "date": "2023-10-27",
+            "portfolio_value": 41013.56262207031,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4651.7135009765625
+        },
+        {
+            "date": "2023-10-30",
+            "portfolio_value": 41029.020751953125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4667.171630859375
+        },
+        {
+            "date": "2023-10-31",
+            "portfolio_value": 41027.533935546875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4665.684814453125
+        },
+        {
+            "date": "2023-11-01",
+            "portfolio_value": 40934.48815917969,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4572.6390380859375
+        },
+        {
+            "date": "2023-11-02",
+            "portfolio_value": 40965.40441894531,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4603.5552978515625
+        },
+        {
+            "date": "2023-11-03",
+            "portfolio_value": 41090.853271484375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4729.004150390625
+        },
+        {
+            "date": "2023-11-06",
+            "portfolio_value": 41133.065673828125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4771.216552734375
+        },
+        {
+            "date": "2023-11-07",
+            "portfolio_value": 41103.635498046875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4741.786376953125
+        },
+        {
+            "date": "2023-11-08",
+            "portfolio_value": 41229.382080078125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4867.532958984375
+        },
+        {
+            "date": "2023-11-09",
+            "portfolio_value": 41155.06396484375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4793.21484375
+        },
+        {
+            "date": "2023-11-10",
+            "portfolio_value": 41169.3330078125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4807.48388671875
+        },
+        {
+            "date": "2023-11-13",
+            "portfolio_value": 41176.76452636719,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4814.9154052734375
+        },
+        {
+            "date": "2023-11-15",
+            "portfolio_value": 41182.11560058594,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4820.2664794921875
+        },
+        {
+            "date": "2023-11-16",
+            "portfolio_value": 41199.06018066406,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4837.2110595703125
+        },
+        {
+            "date": "2023-11-17",
+            "portfolio_value": 41177.95361328125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4816.1044921875
+        },
+        {
+            "date": "2023-11-20",
+            "portfolio_value": 41139.60583496094,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4777.7567138671875
+        },
+        {
+            "date": "2023-11-21",
+            "portfolio_value": 41126.22814941406,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4764.3790283203125
+        },
+        {
+            "date": "2023-11-22",
+            "portfolio_value": 41070.04443359375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4708.1953125
+        },
+        {
+            "date": "2023-11-23",
+            "portfolio_value": 41077.17858886719,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4715.3294677734375
+        },
+        {
+            "date": "2023-11-24",
+            "portfolio_value": 41091.74462890625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4729.8955078125
+        },
+        {
+            "date": "2023-11-28",
+            "portfolio_value": 41342.34533691406,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4980.4962158203125
+        },
+        {
+            "date": "2023-11-29",
+            "portfolio_value": 41329.562744140625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4967.713623046875
+        },
+        {
+            "date": "2023-11-30",
+            "portfolio_value": 41269.81103515625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4907.9619140625
+        },
+        {
+            "date": "2023-12-01",
+            "portfolio_value": 41283.4853515625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 4921.63623046875
+        },
+        {
+            "date": "2023-12-04",
+            "portfolio_value": 41585.8115234375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 5223.96240234375
+        },
+        {
+            "date": "2023-12-05",
+            "portfolio_value": 42385.17565917969,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6023.3265380859375
+        },
+        {
+            "date": "2023-12-06",
+            "portfolio_value": 42414.01110839844,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6052.1619873046875
+        },
+        {
+            "date": "2023-12-07",
+            "portfolio_value": 42543.027587890625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6181.178466796875
+        },
+        {
+            "date": "2023-12-08",
+            "portfolio_value": 42443.73828125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6081.88916015625
+        },
+        {
+            "date": "2023-12-11",
+            "portfolio_value": 42496.9501953125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6135.10107421875
+        },
+        {
+            "date": "2023-12-12",
+            "portfolio_value": 42556.701171875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6194.85205078125
+        },
+        {
+            "date": "2023-12-13",
+            "portfolio_value": 42684.825927734375,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6322.976806640625
+        },
+        {
+            "date": "2023-12-14",
+            "portfolio_value": 42751.414794921875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6389.565673828125
+        },
+        {
+            "date": "2023-12-15",
+            "portfolio_value": 42774.30517578125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6412.4560546875
+        },
+        {
+            "date": "2023-12-18",
+            "portfolio_value": 42867.946044921875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6506.096923828125
+        },
+        {
+            "date": "2023-12-19",
+            "portfolio_value": 42747.253173828125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6385.404052734375
+        },
+        {
+            "date": "2023-12-20",
+            "portfolio_value": 42379.527587890625,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6017.678466796874
+        },
+        {
+            "date": "2023-12-21",
+            "portfolio_value": 42419.95654296875,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6058.107421875
+        },
+        {
+            "date": "2023-12-22",
+            "portfolio_value": 42470.790283203125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6108.941162109374
+        },
+        {
+            "date": "2023-12-26",
+            "portfolio_value": 42478.22180175781,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6116.3726806640625
+        },
+        {
+            "date": "2023-12-27",
+            "portfolio_value": 42452.35925292969,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6090.5101318359375
+        },
+        {
+            "date": "2023-12-28",
+            "portfolio_value": 42408.065673828125,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6046.216552734374
+        },
+        {
+            "date": "2023-12-29",
+            "portfolio_value": 42452.06188964844,
+            "cash_balance": 36361.84912109375,
+            "capital_deployed": 6090.2127685546875
+        }
+    ],
+    "trades": [
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "BUY",
+            "price": 603.025146484375,
+            "quantity": 6,
+            "date": "2025-11-29 01:54:18",
+            "order_id": "ORD_1",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:24:18",
+            "filled": true,
+            "status": "OPEN"
+        }
+    ]
+}

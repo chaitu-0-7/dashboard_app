@@ -1,0 +1,2812 @@
+{
+    "summary": {
+        "initial_balance": 40000,
+        "final_balance": 47179.233489990234,
+        "total_return_pct": 17.948083724975586,
+        "max_drawdown_pct": 9.463450603485107,
+        "total_trades": 99,
+        "win_rate": 100.0
+    },
+    "daily_data": [
+        {
+            "date": "2023-01-02",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-03",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-04",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-05",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-06",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-09",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-10",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-11",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-12",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-13",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-16",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-17",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-18",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-19",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-20",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-23",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-24",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-25",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-27",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-30",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-31",
+            "portfolio_value": 39980.0,
+            "cash_balance": 38170.924560546875,
+            "capital_deployed": 1809.075439453125
+        },
+        {
+            "date": "2023-02-01",
+            "portfolio_value": 39613.037841796875,
+            "cash_balance": 36018.499755859375,
+            "capital_deployed": 3594.5380859375
+        },
+        {
+            "date": "2023-02-02",
+            "portfolio_value": 38927.16033935547,
+            "cash_balance": 34046.23034667969,
+            "capital_deployed": 4880.929992675781
+        },
+        {
+            "date": "2023-02-03",
+            "portfolio_value": 39021.10787963867,
+            "cash_balance": 31195.327026367188,
+            "capital_deployed": 7825.780853271484
+        },
+        {
+            "date": "2023-02-06",
+            "portfolio_value": 38993.10876464844,
+            "cash_balance": 30043.7841796875,
+            "capital_deployed": 8949.324584960938
+        },
+        {
+            "date": "2023-02-07",
+            "portfolio_value": 39196.09020996094,
+            "cash_balance": 28338.817260742188,
+            "capital_deployed": 10857.27294921875
+        },
+        {
+            "date": "2023-02-08",
+            "portfolio_value": 39901.581604003906,
+            "cash_balance": 28338.817260742188,
+            "capital_deployed": 11562.764343261719
+        },
+        {
+            "date": "2023-02-09",
+            "portfolio_value": 39684.411682128906,
+            "cash_balance": 28812.59063720703,
+            "capital_deployed": 10871.821044921875
+        },
+        {
+            "date": "2023-02-10",
+            "portfolio_value": 39549.859924316406,
+            "cash_balance": 26874.983978271484,
+            "capital_deployed": 12674.875946044922
+        },
+        {
+            "date": "2023-02-13",
+            "portfolio_value": 39222.517669677734,
+            "cash_balance": 25139.686981201172,
+            "capital_deployed": 14082.830688476562
+        },
+        {
+            "date": "2023-02-14",
+            "portfolio_value": 39330.38771057129,
+            "cash_balance": 23372.383880615234,
+            "capital_deployed": 15958.003829956055
+        },
+        {
+            "date": "2023-02-15",
+            "portfolio_value": 39495.119537353516,
+            "cash_balance": 21672.05355834961,
+            "capital_deployed": 17823.065979003906
+        },
+        {
+            "date": "2023-02-16",
+            "portfolio_value": 39642.04708099365,
+            "cash_balance": 19857.914642333984,
+            "capital_deployed": 19784.132438659668
+        },
+        {
+            "date": "2023-02-17",
+            "portfolio_value": 39218.47987365723,
+            "cash_balance": 18117.57455444336,
+            "capital_deployed": 21100.905319213867
+        },
+        {
+            "date": "2023-02-20",
+            "portfolio_value": 38808.65129852295,
+            "cash_balance": 16221.209075927734,
+            "capital_deployed": 22587.442222595215
+        },
+        {
+            "date": "2023-02-21",
+            "portfolio_value": 38574.183853149414,
+            "cash_balance": 16221.209075927734,
+            "capital_deployed": 22352.97477722168
+        },
+        {
+            "date": "2023-02-22",
+            "portfolio_value": 37445.16268157959,
+            "cash_balance": 16221.209075927734,
+            "capital_deployed": 21223.953605651855
+        },
+        {
+            "date": "2023-02-23",
+            "portfolio_value": 37335.49343109131,
+            "cash_balance": 16221.209075927734,
+            "capital_deployed": 21114.284355163574
+        },
+        {
+            "date": "2023-02-24",
+            "portfolio_value": 36937.87558746338,
+            "cash_balance": 16221.209075927734,
+            "capital_deployed": 20716.666511535645
+        },
+        {
+            "date": "2023-02-27",
+            "portfolio_value": 36214.61975860596,
+            "cash_balance": 16221.209075927734,
+            "capital_deployed": 19993.410682678223
+        },
+        {
+            "date": "2023-02-28",
+            "portfolio_value": 37032.36585235596,
+            "cash_balance": 16221.209075927734,
+            "capital_deployed": 20811.156776428223
+        },
+        {
+            "date": "2023-03-01",
+            "portfolio_value": 38177.96955871582,
+            "cash_balance": 16221.209075927734,
+            "capital_deployed": 21956.760482788086
+        },
+        {
+            "date": "2023-03-02",
+            "portfolio_value": 38402.87159729004,
+            "cash_balance": 18509.744842529297,
+            "capital_deployed": 19893.126754760742
+        },
+        {
+            "date": "2023-03-03",
+            "portfolio_value": 39858.60193634033,
+            "cash_balance": 18509.744842529297,
+            "capital_deployed": 21348.857093811035
+        },
+        {
+            "date": "2023-03-06",
+            "portfolio_value": 40328.396659851074,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13950.975242614746
+        },
+        {
+            "date": "2023-03-08",
+            "portfolio_value": 40303.10005187988,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13925.678634643555
+        },
+        {
+            "date": "2023-03-09",
+            "portfolio_value": 40281.153968811035,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13903.732551574707
+        },
+        {
+            "date": "2023-03-10",
+            "portfolio_value": 40229.24057006836,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13851.819152832031
+        },
+        {
+            "date": "2023-03-13",
+            "portfolio_value": 40058.909896850586,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13681.488479614258
+        },
+        {
+            "date": "2023-03-14",
+            "portfolio_value": 39993.772888183594,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13616.351470947266
+        },
+        {
+            "date": "2023-03-15",
+            "portfolio_value": 40077.565017700195,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13700.143600463867
+        },
+        {
+            "date": "2023-03-16",
+            "portfolio_value": 39884.082359313965,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13506.660942077637
+        },
+        {
+            "date": "2023-03-17",
+            "portfolio_value": 40031.13367462158,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13653.712257385254
+        },
+        {
+            "date": "2023-03-20",
+            "portfolio_value": 39882.98426055908,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13505.562843322754
+        },
+        {
+            "date": "2023-03-21",
+            "portfolio_value": 39914.752685546875,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13537.331268310547
+        },
+        {
+            "date": "2023-03-22",
+            "portfolio_value": 40003.833099365234,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13626.411682128906
+        },
+        {
+            "date": "2023-03-23",
+            "portfolio_value": 40064.36543273926,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13686.94401550293
+        },
+        {
+            "date": "2023-03-24",
+            "portfolio_value": 39944.79475402832,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13567.373336791992
+        },
+        {
+            "date": "2023-03-27",
+            "portfolio_value": 39999.5876083374,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13622.166191101074
+        },
+        {
+            "date": "2023-03-28",
+            "portfolio_value": 39968.106369018555,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13590.684951782227
+        },
+        {
+            "date": "2023-03-29",
+            "portfolio_value": 40108.934883117676,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13731.513465881348
+        },
+        {
+            "date": "2023-03-31",
+            "portfolio_value": 40257.43399810791,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13880.012580871582
+        },
+        {
+            "date": "2023-04-03",
+            "portfolio_value": 40255.12258148193,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13877.701164245605
+        },
+        {
+            "date": "2023-04-05",
+            "portfolio_value": 40332.75983428955,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13955.338417053223
+        },
+        {
+            "date": "2023-04-06",
+            "portfolio_value": 40376.25944519043,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 13998.838027954102
+        },
+        {
+            "date": "2023-04-10",
+            "portfolio_value": 40425.70561218262,
+            "cash_balance": 26377.421417236328,
+            "capital_deployed": 14048.284194946289
+        },
+        {
+            "date": "2023-04-11",
+            "portfolio_value": 40543.60678100586,
+            "cash_balance": 25775.824676513672,
+            "capital_deployed": 14767.782104492188
+        },
+        {
+            "date": "2023-04-12",
+            "portfolio_value": 40882.20017242432,
+            "cash_balance": 27101.672576904297,
+            "capital_deployed": 13780.52759552002
+        },
+        {
+            "date": "2023-04-13",
+            "portfolio_value": 40902.95233154297,
+            "cash_balance": 25211.471145629883,
+            "capital_deployed": 15691.481185913086
+        },
+        {
+            "date": "2023-04-17",
+            "portfolio_value": 40838.03342437744,
+            "cash_balance": 25211.471145629883,
+            "capital_deployed": 15626.562278747559
+        },
+        {
+            "date": "2023-04-18",
+            "portfolio_value": 40930.41997528076,
+            "cash_balance": 25211.471145629883,
+            "capital_deployed": 15718.948829650879
+        },
+        {
+            "date": "2023-04-19",
+            "portfolio_value": 40824.75730895996,
+            "cash_balance": 25211.471145629883,
+            "capital_deployed": 15613.286163330078
+        },
+        {
+            "date": "2023-04-20",
+            "portfolio_value": 40835.93892669678,
+            "cash_balance": 25211.471145629883,
+            "capital_deployed": 15624.467781066895
+        },
+        {
+            "date": "2023-04-21",
+            "portfolio_value": 40799.13693237305,
+            "cash_balance": 25211.471145629883,
+            "capital_deployed": 15587.665786743164
+        },
+        {
+            "date": "2023-04-24",
+            "portfolio_value": 40854.10789489746,
+            "cash_balance": 22766.728958129883,
+            "capital_deployed": 18087.378936767578
+        },
+        {
+            "date": "2023-04-25",
+            "portfolio_value": 40867.62471008301,
+            "cash_balance": 23719.788040161133,
+            "capital_deployed": 17147.836669921875
+        },
+        {
+            "date": "2023-04-26",
+            "portfolio_value": 40806.832946777344,
+            "cash_balance": 1979.7208557128906,
+            "capital_deployed": 38827.11209106445
+        },
+        {
+            "date": "2023-04-27",
+            "portfolio_value": 40844.08713531494,
+            "cash_balance": 1979.7208557128906,
+            "capital_deployed": 38864.36627960205
+        },
+        {
+            "date": "2023-04-28",
+            "portfolio_value": 41530.70227813721,
+            "cash_balance": 3873.3163146972656,
+            "capital_deployed": 37657.38596343994
+        },
+        {
+            "date": "2023-05-02",
+            "portfolio_value": 41550.44644165039,
+            "cash_balance": 4582.646270751953,
+            "capital_deployed": 36967.80017089844
+        },
+        {
+            "date": "2023-05-03",
+            "portfolio_value": 41585.61615753174,
+            "cash_balance": 2676.7709045410156,
+            "capital_deployed": 38908.84525299072
+        },
+        {
+            "date": "2023-05-04",
+            "portfolio_value": 41945.87604522705,
+            "cash_balance": 2676.7709045410156,
+            "capital_deployed": 39269.105140686035
+        },
+        {
+            "date": "2023-05-05",
+            "portfolio_value": 41851.72868347168,
+            "cash_balance": 2676.7709045410156,
+            "capital_deployed": 39174.957778930664
+        },
+        {
+            "date": "2023-05-08",
+            "portfolio_value": 42015.98693084717,
+            "cash_balance": 2676.7709045410156,
+            "capital_deployed": 39339.21602630615
+        },
+        {
+            "date": "2023-05-09",
+            "portfolio_value": 41661.71300506592,
+            "cash_balance": 2676.7709045410156,
+            "capital_deployed": 38984.9421005249
+        },
+        {
+            "date": "2023-05-10",
+            "portfolio_value": 41874.729721069336,
+            "cash_balance": 2676.7709045410156,
+            "capital_deployed": 39197.95881652832
+        },
+        {
+            "date": "2023-05-11",
+            "portfolio_value": 42261.25299835205,
+            "cash_balance": 3313.5707092285156,
+            "capital_deployed": 38947.682289123535
+        },
+        {
+            "date": "2023-05-12",
+            "portfolio_value": 41963.931869506836,
+            "cash_balance": 3313.5707092285156,
+            "capital_deployed": 38650.36116027832
+        },
+        {
+            "date": "2023-05-15",
+            "portfolio_value": 41831.26348114014,
+            "cash_balance": 3313.5707092285156,
+            "capital_deployed": 38517.69277191162
+        },
+        {
+            "date": "2023-05-16",
+            "portfolio_value": 41616.21733093262,
+            "cash_balance": 3313.5707092285156,
+            "capital_deployed": 38302.6466217041
+        },
+        {
+            "date": "2023-05-17",
+            "portfolio_value": 41527.56295776367,
+            "cash_balance": 3313.5707092285156,
+            "capital_deployed": 38213.992248535156
+        },
+        {
+            "date": "2023-05-18",
+            "portfolio_value": 40995.93379211426,
+            "cash_balance": 3313.5707092285156,
+            "capital_deployed": 37682.36308288574
+        },
+        {
+            "date": "2023-05-19",
+            "portfolio_value": 41436.90675354004,
+            "cash_balance": 3313.5707092285156,
+            "capital_deployed": 38123.33604431152
+        },
+        {
+            "date": "2023-05-22",
+            "portfolio_value": 41628.88439941406,
+            "cash_balance": 3313.5707092285156,
+            "capital_deployed": 38315.31369018555
+        },
+        {
+            "date": "2023-05-23",
+            "portfolio_value": 41982.06111907959,
+            "cash_balance": 3313.5707092285156,
+            "capital_deployed": 38668.490409851074
+        },
+        {
+            "date": "2023-05-24",
+            "portfolio_value": 41296.27571105957,
+            "cash_balance": 3313.5707092285156,
+            "capital_deployed": 37982.705001831055
+        },
+        {
+            "date": "2023-05-25",
+            "portfolio_value": 41554.28192901611,
+            "cash_balance": 3313.5707092285156,
+            "capital_deployed": 38240.7112197876
+        },
+        {
+            "date": "2023-05-26",
+            "portfolio_value": 42423.552001953125,
+            "cash_balance": 2308.6354064941406,
+            "capital_deployed": 40114.916595458984
+        },
+        {
+            "date": "2023-05-29",
+            "portfolio_value": 42751.89974975586,
+            "cash_balance": 25257.278717041016,
+            "capital_deployed": 17494.621032714844
+        },
+        {
+            "date": "2023-05-30",
+            "portfolio_value": 42684.722427368164,
+            "cash_balance": 25257.278717041016,
+            "capital_deployed": 17427.44371032715
+        },
+        {
+            "date": "2023-05-31",
+            "portfolio_value": 42567.95919799805,
+            "cash_balance": 25257.278717041016,
+            "capital_deployed": 17310.68048095703
+        },
+        {
+            "date": "2023-06-01",
+            "portfolio_value": 42650.97341918945,
+            "cash_balance": 25257.278717041016,
+            "capital_deployed": 17393.694702148438
+        },
+        {
+            "date": "2023-06-02",
+            "portfolio_value": 42827.4174118042,
+            "cash_balance": 25257.278717041016,
+            "capital_deployed": 17570.138694763184
+        },
+        {
+            "date": "2023-06-05",
+            "portfolio_value": 42949.66940307617,
+            "cash_balance": 25257.278717041016,
+            "capital_deployed": 17692.390686035156
+        },
+        {
+            "date": "2023-06-06",
+            "portfolio_value": 42838.91490936279,
+            "cash_balance": 25316.192840576172,
+            "capital_deployed": 17522.72206878662
+        },
+        {
+            "date": "2023-06-07",
+            "portfolio_value": 42961.47839355469,
+            "cash_balance": 25316.192840576172,
+            "capital_deployed": 17645.285552978516
+        },
+        {
+            "date": "2023-06-08",
+            "portfolio_value": 42926.84136199951,
+            "cash_balance": 25670.185638427734,
+            "capital_deployed": 17256.655723571777
+        },
+        {
+            "date": "2023-06-09",
+            "portfolio_value": 42824.15064239502,
+            "cash_balance": 25670.185638427734,
+            "capital_deployed": 17153.965003967285
+        },
+        {
+            "date": "2023-06-12",
+            "portfolio_value": 42885.64212799072,
+            "cash_balance": 25670.185638427734,
+            "capital_deployed": 17215.45648956299
+        },
+        {
+            "date": "2023-06-13",
+            "portfolio_value": 43034.51879119873,
+            "cash_balance": 25670.185638427734,
+            "capital_deployed": 17364.333152770996
+        },
+        {
+            "date": "2023-06-14",
+            "portfolio_value": 43110.968269348145,
+            "cash_balance": 25670.185638427734,
+            "capital_deployed": 17440.78263092041
+        },
+        {
+            "date": "2023-06-15",
+            "portfolio_value": 43117.40879821777,
+            "cash_balance": 26102.51547241211,
+            "capital_deployed": 17014.893325805664
+        },
+        {
+            "date": "2023-06-16",
+            "portfolio_value": 43173.7529296875,
+            "cash_balance": 26160.182006835938,
+            "capital_deployed": 17013.570922851562
+        },
+        {
+            "date": "2023-06-19",
+            "portfolio_value": 43091.54023742676,
+            "cash_balance": 26160.182006835938,
+            "capital_deployed": 16931.35823059082
+        },
+        {
+            "date": "2023-06-20",
+            "portfolio_value": 43170.56524658203,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17448.21206665039
+        },
+        {
+            "date": "2023-06-21",
+            "portfolio_value": 43193.09051513672,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17470.737335205078
+        },
+        {
+            "date": "2023-06-22",
+            "portfolio_value": 43083.7532043457,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17361.400024414062
+        },
+        {
+            "date": "2023-06-23",
+            "portfolio_value": 42772.72790527344,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17050.374725341797
+        },
+        {
+            "date": "2023-06-26",
+            "portfolio_value": 42866.71603393555,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17144.362854003906
+        },
+        {
+            "date": "2023-06-27",
+            "portfolio_value": 42917.12463378906,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17194.771453857422
+        },
+        {
+            "date": "2023-06-28",
+            "portfolio_value": 43096.855407714844,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17374.502227783203
+        },
+        {
+            "date": "2023-06-30",
+            "portfolio_value": 43292.57766723633,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17570.224487304688
+        },
+        {
+            "date": "2023-07-03",
+            "portfolio_value": 43400.70065307617,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17678.34747314453
+        },
+        {
+            "date": "2023-07-04",
+            "portfolio_value": 43222.43814086914,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17500.0849609375
+        },
+        {
+            "date": "2023-07-05",
+            "portfolio_value": 43141.810607910156,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17419.457427978516
+        },
+        {
+            "date": "2023-07-06",
+            "portfolio_value": 43155.864349365234,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17433.511169433594
+        },
+        {
+            "date": "2023-07-07",
+            "portfolio_value": 43003.87219238281,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17281.519012451172
+        },
+        {
+            "date": "2023-07-10",
+            "portfolio_value": 43015.96310424805,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17293.609924316406
+        },
+        {
+            "date": "2023-07-11",
+            "portfolio_value": 43163.27557373047,
+            "cash_balance": 25722.35317993164,
+            "capital_deployed": 17440.922393798828
+        },
+        {
+            "date": "2023-07-12",
+            "portfolio_value": 43149.31246948242,
+            "cash_balance": 25866.396392822266,
+            "capital_deployed": 17282.916076660156
+        },
+        {
+            "date": "2023-07-13",
+            "portfolio_value": 43118.47653198242,
+            "cash_balance": 25866.396392822266,
+            "capital_deployed": 17252.080139160156
+        },
+        {
+            "date": "2023-07-14",
+            "portfolio_value": 43423.96270751953,
+            "cash_balance": 25834.90707397461,
+            "capital_deployed": 17589.055633544922
+        },
+        {
+            "date": "2023-07-17",
+            "portfolio_value": 43495.10336303711,
+            "cash_balance": 25834.90707397461,
+            "capital_deployed": 17660.1962890625
+        },
+        {
+            "date": "2023-07-18",
+            "portfolio_value": 43517.388732910156,
+            "cash_balance": 4834.884124755859,
+            "capital_deployed": 38682.5046081543
+        },
+        {
+            "date": "2023-07-19",
+            "portfolio_value": 43597.413024902344,
+            "cash_balance": 4834.884124755859,
+            "capital_deployed": 38762.528900146484
+        },
+        {
+            "date": "2023-07-20",
+            "portfolio_value": 43045.59680175781,
+            "cash_balance": 4834.884124755859,
+            "capital_deployed": 38210.71267700195
+        },
+        {
+            "date": "2023-07-21",
+            "portfolio_value": 42687.756256103516,
+            "cash_balance": 4834.884124755859,
+            "capital_deployed": 37852.872131347656
+        },
+        {
+            "date": "2023-07-24",
+            "portfolio_value": 42786.16973876953,
+            "cash_balance": 4834.884124755859,
+            "capital_deployed": 37951.28561401367
+        },
+        {
+            "date": "2023-07-25",
+            "portfolio_value": 43339.34405517578,
+            "cash_balance": 4834.884124755859,
+            "capital_deployed": 38504.45993041992
+        },
+        {
+            "date": "2023-07-26",
+            "portfolio_value": 43994.92044067383,
+            "cash_balance": 4834.884124755859,
+            "capital_deployed": 39160.03631591797
+        },
+        {
+            "date": "2023-07-27",
+            "portfolio_value": 43445.41622924805,
+            "cash_balance": 5536.471038818359,
+            "capital_deployed": 37908.94519042969
+        },
+        {
+            "date": "2023-07-28",
+            "portfolio_value": 43677.66339111328,
+            "cash_balance": 2872.167694091797,
+            "capital_deployed": 40805.495697021484
+        },
+        {
+            "date": "2023-07-31",
+            "portfolio_value": 43841.671478271484,
+            "cash_balance": 2872.167694091797,
+            "capital_deployed": 40969.50378417969
+        },
+        {
+            "date": "2023-08-01",
+            "portfolio_value": 44030.76333618164,
+            "cash_balance": 127.29782104492188,
+            "capital_deployed": 43903.46551513672
+        },
+        {
+            "date": "2023-08-02",
+            "portfolio_value": 43727.15463256836,
+            "cash_balance": 127.29782104492188,
+            "capital_deployed": 43599.85681152344
+        },
+        {
+            "date": "2023-08-03",
+            "portfolio_value": 43863.53982543945,
+            "cash_balance": 127.29782104492188,
+            "capital_deployed": 43736.24200439453
+        },
+        {
+            "date": "2023-08-04",
+            "portfolio_value": 44066.156646728516,
+            "cash_balance": 1206.8396911621094,
+            "capital_deployed": 42859.316955566406
+        },
+        {
+            "date": "2023-08-07",
+            "portfolio_value": 44031.44595336914,
+            "cash_balance": 2208.364715576172,
+            "capital_deployed": 41823.08123779297
+        },
+        {
+            "date": "2023-08-08",
+            "portfolio_value": 44021.4801940918,
+            "cash_balance": 329.0096130371094,
+            "capital_deployed": 43692.47058105469
+        },
+        {
+            "date": "2023-08-09",
+            "portfolio_value": 44147.28659057617,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 40559.686096191406
+        },
+        {
+            "date": "2023-08-10",
+            "portfolio_value": 43902.92739868164,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 40315.326904296875
+        },
+        {
+            "date": "2023-08-11",
+            "portfolio_value": 43727.00680541992,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 40139.406311035156
+        },
+        {
+            "date": "2023-08-14",
+            "portfolio_value": 43226.310455322266,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 39638.7099609375
+        },
+        {
+            "date": "2023-08-16",
+            "portfolio_value": 43410.60916137695,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 39823.00866699219
+        },
+        {
+            "date": "2023-08-17",
+            "portfolio_value": 43244.35989379883,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 39656.75939941406
+        },
+        {
+            "date": "2023-08-18",
+            "portfolio_value": 43005.80062866211,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 39418.200134277344
+        },
+        {
+            "date": "2023-08-21",
+            "portfolio_value": 43110.746002197266,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 39523.1455078125
+        },
+        {
+            "date": "2023-08-22",
+            "portfolio_value": 43290.59786987305,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 39702.99737548828
+        },
+        {
+            "date": "2023-08-23",
+            "portfolio_value": 43153.51950073242,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 39565.919006347656
+        },
+        {
+            "date": "2023-08-24",
+            "portfolio_value": 43389.64437866211,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 39802.043884277344
+        },
+        {
+            "date": "2023-08-25",
+            "portfolio_value": 43363.5378112793,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 39775.93731689453
+        },
+        {
+            "date": "2023-08-28",
+            "portfolio_value": 43570.60568237305,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 39983.00518798828
+        },
+        {
+            "date": "2023-08-29",
+            "portfolio_value": 43752.378814697266,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 40164.7783203125
+        },
+        {
+            "date": "2023-08-30",
+            "portfolio_value": 43689.28921508789,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 40101.688720703125
+        },
+        {
+            "date": "2023-08-31",
+            "portfolio_value": 43164.62423706055,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 39577.02374267578
+        },
+        {
+            "date": "2023-09-01",
+            "portfolio_value": 43693.769927978516,
+            "cash_balance": 3587.6004943847656,
+            "capital_deployed": 40106.16943359375
+        },
+        {
+            "date": "2023-09-04",
+            "portfolio_value": 45245.3655090332,
+            "cash_balance": 27758.991119384766,
+            "capital_deployed": 17486.374389648438
+        },
+        {
+            "date": "2023-09-05",
+            "portfolio_value": 45261.82473754883,
+            "cash_balance": 27758.991119384766,
+            "capital_deployed": 17502.833618164062
+        },
+        {
+            "date": "2023-09-06",
+            "portfolio_value": 45324.4235534668,
+            "cash_balance": 27758.991119384766,
+            "capital_deployed": 17565.43243408203
+        },
+        {
+            "date": "2023-09-07",
+            "portfolio_value": 45360.59274291992,
+            "cash_balance": 27758.991119384766,
+            "capital_deployed": 17601.601623535156
+        },
+        {
+            "date": "2023-09-08",
+            "portfolio_value": 45408.014556884766,
+            "cash_balance": 27758.991119384766,
+            "capital_deployed": 17649.0234375
+        },
+        {
+            "date": "2023-09-11",
+            "portfolio_value": 45571.021087646484,
+            "cash_balance": 27758.991119384766,
+            "capital_deployed": 17812.02996826172
+        },
+        {
+            "date": "2023-09-12",
+            "portfolio_value": 45355.95669555664,
+            "cash_balance": 27758.991119384766,
+            "capital_deployed": 17596.965576171875
+        },
+        {
+            "date": "2023-09-13",
+            "portfolio_value": 45477.84591674805,
+            "cash_balance": 27758.991119384766,
+            "capital_deployed": 17718.85479736328
+        },
+        {
+            "date": "2023-09-14",
+            "portfolio_value": 45589.24685668945,
+            "cash_balance": 27758.991119384766,
+            "capital_deployed": 17830.255737304688
+        },
+        {
+            "date": "2023-09-15",
+            "portfolio_value": 45554.162200927734,
+            "cash_balance": 27758.991119384766,
+            "capital_deployed": 17795.17108154297
+        },
+        {
+            "date": "2023-09-18",
+            "portfolio_value": 45619.97073364258,
+            "cash_balance": 27671.56900024414,
+            "capital_deployed": 17948.401733398438
+        },
+        {
+            "date": "2023-09-20",
+            "portfolio_value": 45427.32229614258,
+            "cash_balance": 26129.508087158203,
+            "capital_deployed": 19297.814208984375
+        },
+        {
+            "date": "2023-09-21",
+            "portfolio_value": 45361.050201416016,
+            "cash_balance": 26129.508087158203,
+            "capital_deployed": 19231.542114257812
+        },
+        {
+            "date": "2023-09-22",
+            "portfolio_value": 45284.48080444336,
+            "cash_balance": 26129.508087158203,
+            "capital_deployed": 19154.972717285156
+        },
+        {
+            "date": "2023-09-25",
+            "portfolio_value": 45357.15219116211,
+            "cash_balance": 26129.508087158203,
+            "capital_deployed": 19227.644104003906
+        },
+        {
+            "date": "2023-09-26",
+            "portfolio_value": 45427.72103881836,
+            "cash_balance": 26129.508087158203,
+            "capital_deployed": 19298.212951660156
+        },
+        {
+            "date": "2023-09-27",
+            "portfolio_value": 45443.14138793945,
+            "cash_balance": 26129.508087158203,
+            "capital_deployed": 19313.63330078125
+        },
+        {
+            "date": "2023-09-28",
+            "portfolio_value": 45137.83572387695,
+            "cash_balance": 26129.508087158203,
+            "capital_deployed": 19008.32763671875
+        },
+        {
+            "date": "2023-09-29",
+            "portfolio_value": 45217.44186401367,
+            "cash_balance": 26129.508087158203,
+            "capital_deployed": 19087.93377685547
+        },
+        {
+            "date": "2023-10-03",
+            "portfolio_value": 45000.9094543457,
+            "cash_balance": 26129.508087158203,
+            "capital_deployed": 18871.4013671875
+        },
+        {
+            "date": "2023-10-04",
+            "portfolio_value": 45054.11508178711,
+            "cash_balance": 26129.508087158203,
+            "capital_deployed": 18924.606994628906
+        },
+        {
+            "date": "2023-10-05",
+            "portfolio_value": 45157.511138916016,
+            "cash_balance": 26129.508087158203,
+            "capital_deployed": 19028.003051757812
+        },
+        {
+            "date": "2023-10-06",
+            "portfolio_value": 45277.863372802734,
+            "cash_balance": 26581.29898071289,
+            "capital_deployed": 18696.564392089844
+        },
+        {
+            "date": "2023-10-09",
+            "portfolio_value": 45133.62649536133,
+            "cash_balance": 26581.29898071289,
+            "capital_deployed": 18552.327514648438
+        },
+        {
+            "date": "2023-10-10",
+            "portfolio_value": 45273.47122192383,
+            "cash_balance": 26581.29898071289,
+            "capital_deployed": 18692.172241210938
+        },
+        {
+            "date": "2023-10-11",
+            "portfolio_value": 45433.63571166992,
+            "cash_balance": 26581.29898071289,
+            "capital_deployed": 18852.33673095703
+        },
+        {
+            "date": "2023-10-12",
+            "portfolio_value": 45441.08499145508,
+            "cash_balance": 26581.29898071289,
+            "capital_deployed": 18859.786010742188
+        },
+        {
+            "date": "2023-10-13",
+            "portfolio_value": 45431.513092041016,
+            "cash_balance": 26581.29898071289,
+            "capital_deployed": 18850.214111328125
+        },
+        {
+            "date": "2023-10-16",
+            "portfolio_value": 45437.28829956055,
+            "cash_balance": 26581.29898071289,
+            "capital_deployed": 18855.989318847656
+        },
+        {
+            "date": "2023-10-17",
+            "portfolio_value": 45555.602630615234,
+            "cash_balance": 26581.29898071289,
+            "capital_deployed": 18974.303649902344
+        },
+        {
+            "date": "2023-10-18",
+            "portfolio_value": 45485.366302490234,
+            "cash_balance": 26581.29898071289,
+            "capital_deployed": 18904.067321777344
+        },
+        {
+            "date": "2023-10-19",
+            "portfolio_value": 45411.94094848633,
+            "cash_balance": 26644.80484008789,
+            "capital_deployed": 18767.136108398438
+        },
+        {
+            "date": "2023-10-20",
+            "portfolio_value": 45366.8645324707,
+            "cash_balance": 26644.80484008789,
+            "capital_deployed": 18722.059692382812
+        },
+        {
+            "date": "2023-10-23",
+            "portfolio_value": 45110.88198852539,
+            "cash_balance": 26644.80484008789,
+            "capital_deployed": 18466.0771484375
+        },
+        {
+            "date": "2023-10-25",
+            "portfolio_value": 44968.895904541016,
+            "cash_balance": 26644.80484008789,
+            "capital_deployed": 18324.091064453125
+        },
+        {
+            "date": "2023-10-26",
+            "portfolio_value": 44665.62210083008,
+            "cash_balance": 26644.80484008789,
+            "capital_deployed": 18020.817260742188
+        },
+        {
+            "date": "2023-10-27",
+            "portfolio_value": 44776.55221557617,
+            "cash_balance": 26644.80484008789,
+            "capital_deployed": 18131.74737548828
+        },
+        {
+            "date": "2023-10-30",
+            "portfolio_value": 44766.490325927734,
+            "cash_balance": 26644.80484008789,
+            "capital_deployed": 18121.685485839844
+        },
+        {
+            "date": "2023-10-31",
+            "portfolio_value": 44718.46170043945,
+            "cash_balance": 26644.80484008789,
+            "capital_deployed": 18073.656860351562
+        },
+        {
+            "date": "2023-11-01",
+            "portfolio_value": 44657.44253540039,
+            "cash_balance": 26644.80484008789,
+            "capital_deployed": 18012.6376953125
+        },
+        {
+            "date": "2023-11-02",
+            "portfolio_value": 44926.10104370117,
+            "cash_balance": 26644.80484008789,
+            "capital_deployed": 18281.29620361328
+        },
+        {
+            "date": "2023-11-03",
+            "portfolio_value": 45073.329681396484,
+            "cash_balance": 26644.80484008789,
+            "capital_deployed": 18428.524841308594
+        },
+        {
+            "date": "2023-11-06",
+            "portfolio_value": 45316.70120239258,
+            "cash_balance": 26644.80484008789,
+            "capital_deployed": 18671.896362304688
+        },
+        {
+            "date": "2023-11-07",
+            "portfolio_value": 45345.96450805664,
+            "cash_balance": 26332.071197509766,
+            "capital_deployed": 19013.893310546875
+        },
+        {
+            "date": "2023-11-08",
+            "portfolio_value": 45429.70053100586,
+            "cash_balance": 26332.071197509766,
+            "capital_deployed": 19097.629333496094
+        },
+        {
+            "date": "2023-11-09",
+            "portfolio_value": 45307.19027709961,
+            "cash_balance": 26332.071197509766,
+            "capital_deployed": 18975.119079589844
+        },
+        {
+            "date": "2023-11-10",
+            "portfolio_value": 45338.246978759766,
+            "cash_balance": 26332.071197509766,
+            "capital_deployed": 19006.17578125
+        },
+        {
+            "date": "2023-11-13",
+            "portfolio_value": 45475.74856567383,
+            "cash_balance": 26332.071197509766,
+            "capital_deployed": 19143.677368164062
+        },
+        {
+            "date": "2023-11-15",
+            "portfolio_value": 45805.23892211914,
+            "cash_balance": 28620.652374267578,
+            "capital_deployed": 17184.586547851562
+        },
+        {
+            "date": "2023-11-16",
+            "portfolio_value": 45846.056243896484,
+            "cash_balance": 28620.652374267578,
+            "capital_deployed": 17225.403869628906
+        },
+        {
+            "date": "2023-11-17",
+            "portfolio_value": 45813.0432434082,
+            "cash_balance": 28620.652374267578,
+            "capital_deployed": 17192.390869140625
+        },
+        {
+            "date": "2023-11-20",
+            "portfolio_value": 45720.330657958984,
+            "cash_balance": 28620.652374267578,
+            "capital_deployed": 17099.678283691406
+        },
+        {
+            "date": "2023-11-21",
+            "portfolio_value": 45794.31820678711,
+            "cash_balance": 28620.652374267578,
+            "capital_deployed": 17173.66583251953
+        },
+        {
+            "date": "2023-11-22",
+            "portfolio_value": 45745.04000854492,
+            "cash_balance": 28620.652374267578,
+            "capital_deployed": 17124.387634277344
+        },
+        {
+            "date": "2023-11-23",
+            "portfolio_value": 45743.33395385742,
+            "cash_balance": 28620.652374267578,
+            "capital_deployed": 17122.681579589844
+        },
+        {
+            "date": "2023-11-24",
+            "portfolio_value": 45709.0964050293,
+            "cash_balance": 28620.652374267578,
+            "capital_deployed": 17088.44403076172
+        },
+        {
+            "date": "2023-11-28",
+            "portfolio_value": 45966.96127319336,
+            "cash_balance": 29832.225128173828,
+            "capital_deployed": 16134.736145019531
+        },
+        {
+            "date": "2023-11-29",
+            "portfolio_value": 46117.13589477539,
+            "cash_balance": 29255.885650634766,
+            "capital_deployed": 16861.250244140625
+        },
+        {
+            "date": "2023-11-30",
+            "portfolio_value": 46149.47817993164,
+            "cash_balance": 27542.394073486328,
+            "capital_deployed": 18607.084106445312
+        },
+        {
+            "date": "2023-12-01",
+            "portfolio_value": 46300.50131225586,
+            "cash_balance": 25775.824249267578,
+            "capital_deployed": 20524.67706298828
+        },
+        {
+            "date": "2023-12-04",
+            "portfolio_value": 46610.76858520508,
+            "cash_balance": 25775.824249267578,
+            "capital_deployed": 20834.9443359375
+        },
+        {
+            "date": "2023-12-05",
+            "portfolio_value": 46692.02389526367,
+            "cash_balance": 25775.824249267578,
+            "capital_deployed": 20916.199645996094
+        },
+        {
+            "date": "2023-12-06",
+            "portfolio_value": 46799.90744018555,
+            "cash_balance": 25775.824249267578,
+            "capital_deployed": 21024.08319091797
+        },
+        {
+            "date": "2023-12-07",
+            "portfolio_value": 46821.6711730957,
+            "cash_balance": 25775.824249267578,
+            "capital_deployed": 21045.846923828125
+        },
+        {
+            "date": "2023-12-08",
+            "portfolio_value": 46753.799713134766,
+            "cash_balance": 27365.001983642578,
+            "capital_deployed": 19388.797729492188
+        },
+        {
+            "date": "2023-12-11",
+            "portfolio_value": 46887.96029663086,
+            "cash_balance": 26263.604888916016,
+            "capital_deployed": 20624.355407714844
+        },
+        {
+            "date": "2023-12-12",
+            "portfolio_value": 46743.51968383789,
+            "cash_balance": 26263.604888916016,
+            "capital_deployed": 20479.914794921875
+        },
+        {
+            "date": "2023-12-13",
+            "portfolio_value": 46802.340240478516,
+            "cash_balance": 26263.604888916016,
+            "capital_deployed": 20538.7353515625
+        },
+        {
+            "date": "2023-12-14",
+            "portfolio_value": 46951.09799194336,
+            "cash_balance": 26263.604888916016,
+            "capital_deployed": 20687.493103027344
+        },
+        {
+            "date": "2023-12-15",
+            "portfolio_value": 47022.89651489258,
+            "cash_balance": 16162.565826416016,
+            "capital_deployed": 30860.330688476562
+        },
+        {
+            "date": "2023-12-18",
+            "portfolio_value": 46989.49630737305,
+            "cash_balance": 17643.245880126953,
+            "capital_deployed": 29346.250427246094
+        },
+        {
+            "date": "2023-12-19",
+            "portfolio_value": 46893.00637817383,
+            "cash_balance": 18892.89859008789,
+            "capital_deployed": 28000.107788085938
+        },
+        {
+            "date": "2023-12-20",
+            "portfolio_value": 46457.04489135742,
+            "cash_balance": 16952.456024169922,
+            "capital_deployed": 29504.5888671875
+        },
+        {
+            "date": "2023-12-21",
+            "portfolio_value": 46558.49154663086,
+            "cash_balance": 20443.867279052734,
+            "capital_deployed": 26114.624267578125
+        },
+        {
+            "date": "2023-12-22",
+            "portfolio_value": 46825.46725463867,
+            "cash_balance": 20443.867279052734,
+            "capital_deployed": 26381.599975585938
+        },
+        {
+            "date": "2023-12-26",
+            "portfolio_value": 46981.920989990234,
+            "cash_balance": 18780.405364990234,
+            "capital_deployed": 28201.515625
+        },
+        {
+            "date": "2023-12-27",
+            "portfolio_value": 47078.53042602539,
+            "cash_balance": 24454.64193725586,
+            "capital_deployed": 22623.88848876953
+        },
+        {
+            "date": "2023-12-28",
+            "portfolio_value": 47185.17922973633,
+            "cash_balance": 25592.113372802734,
+            "capital_deployed": 21593.065856933594
+        },
+        {
+            "date": "2023-12-29",
+            "portfolio_value": 47179.233489990234,
+            "cash_balance": 25592.113372802734,
+            "capital_deployed": 21587.1201171875
+        }
+    ],
+    "trades": [
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "BUY",
+            "price": 603.025146484375,
+            "quantity": 3,
+            "date": "2025-11-29 01:39:58",
+            "order_id": "ORD_1",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:09:58",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 2132.4248046875,
+            "quantity": 1,
+            "date": "2025-11-29 01:39:58",
+            "order_id": "ORD_2",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:09:58",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCLIFE-EQ",
+            "action": "BUY",
+            "price": 488.0673522949219,
+            "quantity": 4,
+            "date": "2025-11-29 01:39:58",
+            "order_id": "ORD_3",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:09:58",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:DIVISLAB-EQ",
+            "action": "BUY",
+            "price": 2830.9033203125,
+            "quantity": 1,
+            "date": "2025-11-29 01:39:59",
+            "order_id": "ORD_4",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:09:59",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBILIFE-EQ",
+            "action": "BUY",
+            "price": 1131.5428466796875,
+            "quantity": 1,
+            "date": "2025-11-29 01:39:59",
+            "order_id": "ORD_5",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:09:59",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDALCO-EQ",
+            "action": "BUY",
+            "price": 421.2417297363281,
+            "quantity": 4,
+            "date": "2025-11-29 01:39:59",
+            "order_id": "ORD_6",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:09:59",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCLIFE-EQ",
+            "action": "SELL",
+            "price": 513.7733764648438,
+            "quantity": 4,
+            "date": "2025-11-28 20:09:59",
+            "order_id": "ORD_7",
+            "profit": 102.8240966796875,
+            "profit_pct": 5.266900981811345,
+            "comment": "PROFIT EXIT: 5.3%",
+            "created_at": "2025-11-28 20:09:59",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCLIFE-EQ",
+            "action": "BUY",
+            "price": 513.7733764648438,
+            "quantity": 3,
+            "date": "2025-11-29 01:40:00",
+            "order_id": "ORD_8",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:00",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TATASTEEL-EQ",
+            "action": "BUY",
+            "price": 100.92666625976562,
+            "quantity": 19,
+            "date": "2025-11-29 01:40:00",
+            "order_id": "ORD_9",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:00",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1715.2969970703125,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:01",
+            "order_id": "ORD_10",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 20:10:01",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1747.3031005859375,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:01",
+            "order_id": "ORD_11",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 20:10:01",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "BUY",
+            "price": 560.110107421875,
+            "quantity": 3,
+            "date": "2025-11-29 01:40:01",
+            "order_id": "ORD_12",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 20:10:01",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1794.138916015625,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:01",
+            "order_id": "ORD_13",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 20:10:01",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1720.340087890625,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:02",
+            "order_id": "ORD_14",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 20:10:02",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "BUY",
+            "price": 938.1827392578124,
+            "quantity": 2,
+            "date": "2025-11-29 01:40:02",
+            "order_id": "ORD_15",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:02",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "SELL",
+            "price": 613.1141357421875,
+            "quantity": 6,
+            "date": "2025-11-28 20:10:02",
+            "order_id": "ORD_16",
+            "profit": 189.279052734375,
+            "profit_pct": 5.4243921647318905,
+            "comment": "PROFIT EXIT: 5.4%",
+            "created_at": "2025-11-28 20:10:02",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INFY-EQ",
+            "action": "BUY",
+            "price": 1350.1490478515625,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:02",
+            "order_id": "ORD_17",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:02",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "SELL",
+            "price": 1980.1837158203125,
+            "quantity": 5,
+            "date": "2025-11-28 20:10:02",
+            "order_id": "ORD_18",
+            "profit": 791.414672851563,
+            "profit_pct": 8.687791135459925,
+            "comment": "PROFIT EXIT: 8.7%",
+            "created_at": "2025-11-28 20:10:02",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:JSWSTEEL-EQ",
+            "action": "BUY",
+            "price": 664.4140014648438,
+            "quantity": 3,
+            "date": "2025-11-29 01:40:03",
+            "order_id": "ORD_19",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:03",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:JSWSTEEL-EQ",
+            "action": "SELL",
+            "price": 703.1900024414062,
+            "quantity": 3,
+            "date": "2025-11-28 20:10:03",
+            "order_id": "ORD_20",
+            "profit": 116.3280029296875,
+            "profit_pct": 5.836120384439891,
+            "comment": "PROFIT EXIT: 5.8%",
+            "created_at": "2025-11-28 20:10:03",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ASIANPAINT-EQ",
+            "action": "BUY",
+            "price": 2671.166748046875,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:03",
+            "order_id": "ORD_21",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:03",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:DIVISLAB-EQ",
+            "action": "SELL",
+            "price": 3152.580078125,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:04",
+            "order_id": "ORD_22",
+            "profit": 321.6767578125,
+            "profit_pct": 11.36304286707292,
+            "comment": "PROFIT EXIT: 11.4%",
+            "created_at": "2025-11-28 20:10:04",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "BUY",
+            "price": 893.3660888671875,
+            "quantity": 2,
+            "date": "2025-11-29 01:40:04",
+            "order_id": "ORD_23",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 20:10:04",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "BUY",
+            "price": 143.8616485595703,
+            "quantity": 13,
+            "date": "2025-11-29 01:40:04",
+            "order_id": "ORD_24",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:04",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCLIFE-EQ",
+            "action": "SELL",
+            "price": 542.401611328125,
+            "quantity": 3,
+            "date": "2025-11-28 20:10:04",
+            "order_id": "ORD_25",
+            "profit": 85.88470458984375,
+            "profit_pct": 5.572152270766838,
+            "comment": "PROFIT EXIT: 5.6%",
+            "created_at": "2025-11-28 20:10:04",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:LTIM-EQ",
+            "action": "BUY",
+            "price": 4031.947021484375,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:05",
+            "order_id": "ORD_26",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:05",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ASIANPAINT-EQ",
+            "action": "SELL",
+            "price": 2811.039794921875,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:05",
+            "order_id": "ORD_27",
+            "profit": 139.873046875,
+            "profit_pct": 5.236402668507067,
+            "comment": "PROFIT EXIT: 5.2%",
+            "created_at": "2025-11-28 20:10:05",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "BUY",
+            "price": 908.9903564453124,
+            "quantity": 2,
+            "date": "2025-11-29 01:40:05",
+            "order_id": "ORD_28",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:05",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "SELL",
+            "price": 151.11427307128906,
+            "quantity": 13,
+            "date": "2025-11-28 20:10:05",
+            "order_id": "ORD_29",
+            "profit": 94.28411865234375,
+            "profit_pct": 5.041388434191048,
+            "comment": "PROFIT EXIT: 5.0%",
+            "created_at": "2025-11-28 20:10:05",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SHREECEM-EQ",
+            "action": "BUY",
+            "price": 23664.552734375,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:06",
+            "order_id": "ORD_30",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:06",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:LTIM-EQ",
+            "action": "SELL",
+            "price": 4259.400390625,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:06",
+            "order_id": "ORD_31",
+            "profit": 227.453369140625,
+            "profit_pct": 5.641278715435286,
+            "comment": "PROFIT EXIT: 5.6%",
+            "created_at": "2025-11-28 20:10:06",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDUNILVR-EQ",
+            "action": "BUY",
+            "price": 2325.804931640625,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:06",
+            "order_id": "ORD_32",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:06",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "SELL",
+            "price": 960.4571533203124,
+            "quantity": 2,
+            "date": "2025-11-28 20:10:06",
+            "order_id": "ORD_33",
+            "profit": 102.93359375,
+            "profit_pct": 5.661973915352137,
+            "comment": "PROFIT EXIT: 5.7%",
+            "created_at": "2025-11-28 20:10:06",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INFY-EQ",
+            "action": "BUY",
+            "price": 1171.5843505859375,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:07",
+            "order_id": "ORD_34",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 20:10:07",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SUNPHARMA-EQ",
+            "action": "BUY",
+            "price": 942.9376831054688,
+            "quantity": 2,
+            "date": "2025-11-29 01:40:07",
+            "order_id": "ORD_35",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:07",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDUNILVR-EQ",
+            "action": "SELL",
+            "price": 2453.67529296875,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:07",
+            "order_id": "ORD_36",
+            "profit": 127.870361328125,
+            "profit_pct": 5.497897075913634,
+            "comment": "PROFIT EXIT: 5.5%",
+            "created_at": "2025-11-28 20:10:07",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:DRREDDY-EQ",
+            "action": "BUY",
+            "price": 888.437744140625,
+            "quantity": 2,
+            "date": "2025-11-29 01:40:08",
+            "order_id": "ORD_37",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:08",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBILIFE-EQ",
+            "action": "SELL",
+            "price": 1191.338623046875,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:08",
+            "order_id": "ORD_38",
+            "profit": 59.7957763671875,
+            "profit_pct": 5.284446500868053,
+            "comment": "PROFIT EXIT: 5.3%",
+            "created_at": "2025-11-28 20:10:08",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:LT-EQ",
+            "action": "BUY",
+            "price": 2156.27392578125,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:09",
+            "order_id": "ORD_39",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:09",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SHREECEM-EQ",
+            "action": "SELL",
+            "price": 24947.25390625,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:09",
+            "order_id": "ORD_40",
+            "profit": 1282.701171875,
+            "profit_pct": 5.4203482578893425,
+            "comment": "PROFIT EXIT: 5.4%",
+            "created_at": "2025-11-28 20:10:09",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ONGC-EQ",
+            "action": "BUY",
+            "price": 139.9007568359375,
+            "quantity": 14,
+            "date": "2025-11-29 01:40:09",
+            "order_id": "ORD_41",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:09",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SUNPHARMA-EQ",
+            "action": "SELL",
+            "price": 992.061279296875,
+            "quantity": 2,
+            "date": "2025-11-28 20:10:09",
+            "order_id": "ORD_42",
+            "profit": 98.2471923828125,
+            "profit_pct": 5.209633369367816,
+            "comment": "PROFIT EXIT: 5.2%",
+            "created_at": "2025-11-28 20:10:09",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:COALINDIA-EQ",
+            "action": "BUY",
+            "price": 188.52084350585935,
+            "quantity": 10,
+            "date": "2025-11-29 01:40:10",
+            "order_id": "ORD_43",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:10",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:LT-EQ",
+            "action": "SELL",
+            "price": 2274.708740234375,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:10",
+            "order_id": "ORD_44",
+            "profit": 118.434814453125,
+            "profit_pct": 5.492568130471379,
+            "comment": "PROFIT EXIT: 5.5%",
+            "created_at": "2025-11-28 20:10:10",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:KOTAKBANK-EQ",
+            "action": "BUY",
+            "price": 1880.7159423828125,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:11",
+            "order_id": "ORD_45",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:11",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "SELL",
+            "price": 971.466796875,
+            "quantity": 4,
+            "date": "2025-11-28 20:10:11",
+            "order_id": "ORD_46",
+            "profit": 222.76953125,
+            "profit_pct": 6.08145215211255,
+            "comment": "PROFIT EXIT: 6.1%",
+            "created_at": "2025-11-28 20:10:11",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:EICHERMOT-EQ",
+            "action": "BUY",
+            "price": 3413.537353515625,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:11",
+            "order_id": "ORD_47",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:11",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:DRREDDY-EQ",
+            "action": "SELL",
+            "price": 963.529541015625,
+            "quantity": 2,
+            "date": "2025-11-28 20:10:11",
+            "order_id": "ORD_48",
+            "profit": 150.18359375,
+            "profit_pct": 8.452116917616483,
+            "comment": "PROFIT EXIT: 8.5%",
+            "created_at": "2025-11-28 20:10:11",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:WIPRO-EQ",
+            "action": "BUY",
+            "price": 182.9392547607422,
+            "quantity": 10,
+            "date": "2025-11-29 01:40:12",
+            "order_id": "ORD_49",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:12",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TATASTEEL-EQ",
+            "action": "SELL",
+            "price": 105.98226928710938,
+            "quantity": 19,
+            "date": "2025-11-28 20:10:12",
+            "order_id": "ORD_50",
+            "profit": 96.05645751953125,
+            "profit_pct": 5.009184603731595,
+            "comment": "PROFIT EXIT: 5.0%",
+            "created_at": "2025-11-28 20:10:12",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 2411.491943359375,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:13",
+            "order_id": "ORD_51",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:13",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ONGC-EQ",
+            "action": "SELL",
+            "price": 147.51171875,
+            "quantity": 14,
+            "date": "2025-11-28 20:10:13",
+            "order_id": "ORD_52",
+            "profit": 106.553466796875,
+            "profit_pct": 5.4402578557798105,
+            "comment": "PROFIT EXIT: 5.4%",
+            "created_at": "2025-11-28 20:10:13",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 627.040283203125,
+            "quantity": 3,
+            "date": "2025-11-29 01:40:14",
+            "order_id": "ORD_53",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:14",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:WIPRO-EQ",
+            "action": "SELL",
+            "price": 194.333984375,
+            "quantity": 10,
+            "date": "2025-11-28 20:10:14",
+            "order_id": "ORD_54",
+            "profit": 113.94729614257812,
+            "profit_pct": 6.22869576524757,
+            "comment": "PROFIT EXIT: 6.2%",
+            "created_at": "2025-11-28 20:10:14",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:POWERGRID-EQ",
+            "action": "BUY",
+            "price": 161.2357635498047,
+            "quantity": 12,
+            "date": "2025-11-29 01:40:14",
+            "order_id": "ORD_55",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:14",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INFY-EQ",
+            "action": "SELL",
+            "price": 1371.131103515625,
+            "quantity": 2,
+            "date": "2025-11-28 20:10:14",
+            "order_id": "ORD_56",
+            "profit": 220.52880859375,
+            "profit_pct": 8.745127804961168,
+            "comment": "PROFIT EXIT: 8.7%",
+            "created_at": "2025-11-28 20:10:14",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SHREECEM-EQ",
+            "action": "BUY",
+            "price": 23702.28515625,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:15",
+            "order_id": "ORD_57",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:15",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDALCO-EQ",
+            "action": "SELL",
+            "price": 442.6691284179688,
+            "quantity": 4,
+            "date": "2025-11-28 20:10:15",
+            "order_id": "ORD_58",
+            "profit": 85.70959472656273,
+            "profit_pct": 5.086722698402397,
+            "comment": "PROFIT EXIT: 5.1%",
+            "created_at": "2025-11-28 20:10:15",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "BUY",
+            "price": 1029.089599609375,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:16",
+            "order_id": "ORD_59",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:16",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:POWERGRID-EQ",
+            "action": "SELL",
+            "price": 173.42666625976562,
+            "quantity": 12,
+            "date": "2025-11-28 20:10:16",
+            "order_id": "ORD_60",
+            "profit": 146.29083251953125,
+            "profit_pct": 7.560917281354422,
+            "comment": "PROFIT EXIT: 7.6%",
+            "created_at": "2025-11-28 20:10:16",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:LTIM-EQ",
+            "action": "BUY",
+            "price": 4705.42333984375,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:17",
+            "order_id": "ORD_61",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:17",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:COALINDIA-EQ",
+            "action": "SELL",
+            "price": 198.9068603515625,
+            "quantity": 10,
+            "date": "2025-11-28 20:10:17",
+            "order_id": "ORD_62",
+            "profit": 103.86016845703153,
+            "profit_pct": 5.509214075514334,
+            "comment": "PROFIT EXIT: 5.5%",
+            "created_at": "2025-11-28 20:10:17",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BRITANNIA-EQ",
+            "action": "BUY",
+            "price": 4693.9384765625,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:18",
+            "order_id": "ORD_63",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:18",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "SELL",
+            "price": 1099.5418701171875,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:18",
+            "order_id": "ORD_64",
+            "profit": 70.4522705078125,
+            "profit_pct": 6.846077400311401,
+            "comment": "PROFIT EXIT: 6.8%",
+            "created_at": "2025-11-28 20:10:18",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "SELL",
+            "price": 2548.239990234375,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:19",
+            "order_id": "ORD_65",
+            "profit": 136.748046875,
+            "profit_pct": 5.670682303192791,
+            "comment": "PROFIT EXIT: 5.7%",
+            "created_at": "2025-11-28 20:10:19",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJAJFINSV-EQ",
+            "action": "BUY",
+            "price": 1506.7149658203125,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:19",
+            "order_id": "ORD_66",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:19",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "BUY",
+            "price": 154.94625854492188,
+            "quantity": 12,
+            "date": "2025-11-29 01:40:20",
+            "order_id": "ORD_67",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:20",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:LTIM-EQ",
+            "action": "SELL",
+            "price": 4958.12939453125,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:20",
+            "order_id": "ORD_68",
+            "profit": 252.7060546875,
+            "profit_pct": 5.370527504883151,
+            "comment": "PROFIT EXIT: 5.4%",
+            "created_at": "2025-11-28 20:10:20",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBIN-EQ",
+            "action": "BUY",
+            "price": 553.1795043945312,
+            "quantity": 3,
+            "date": "2025-11-29 01:40:21",
+            "order_id": "ORD_69",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:21",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SHREECEM-EQ",
+            "action": "SELL",
+            "price": 25407.884765625,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:21",
+            "order_id": "ORD_70",
+            "profit": 1705.599609375,
+            "profit_pct": 7.195928992210502,
+            "comment": "PROFIT EXIT: 7.2%",
+            "created_at": "2025-11-28 20:10:21",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:RELIANCE-EQ",
+            "action": "BUY",
+            "price": 1196.494140625,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:22",
+            "order_id": "ORD_71",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:22",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBIN-EQ",
+            "action": "SELL",
+            "price": 582.2967529296875,
+            "quantity": 3,
+            "date": "2025-11-28 20:10:22",
+            "order_id": "ORD_72",
+            "profit": 87.35174560546875,
+            "profit_pct": 5.263616656771441,
+            "comment": "PROFIT EXIT: 5.3%",
+            "created_at": "2025-11-28 20:10:22",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:KOTAKBANK-EQ",
+            "action": "BUY",
+            "price": 1794.3123779296875,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:23",
+            "order_id": "ORD_73",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 20:10:23",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCBANK-EQ",
+            "action": "BUY",
+            "price": 761.0304565429688,
+            "quantity": 2,
+            "date": "2025-11-29 01:40:24",
+            "order_id": "ORD_74",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:24",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJAJFINSV-EQ",
+            "action": "SELL",
+            "price": 1632.8238525390625,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:24",
+            "order_id": "ORD_75",
+            "profit": 126.10888671875,
+            "profit_pct": 8.369790542970518,
+            "comment": "PROFIT EXIT: 8.4%",
+            "created_at": "2025-11-28 20:10:24",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "BUY",
+            "price": 1141.032958984375,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:25",
+            "order_id": "ORD_76",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:25",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "SELL",
+            "price": 1200.194091796875,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:26",
+            "order_id": "ORD_77",
+            "profit": 59.1611328125,
+            "profit_pct": 5.184875015806632,
+            "comment": "PROFIT EXIT: 5.2%",
+            "created_at": "2025-11-28 20:10:26",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "BUY",
+            "price": 1096.688232421875,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:27",
+            "order_id": "ORD_78",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:27",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "SELL",
+            "price": 163.21978759765625,
+            "quantity": 12,
+            "date": "2025-11-28 20:10:27",
+            "order_id": "ORD_79",
+            "profit": 99.2823486328125,
+            "profit_pct": 5.339612024472163,
+            "comment": "PROFIT EXIT: 5.3%",
+            "created_at": "2025-11-28 20:10:27",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 2231.37109375,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:28",
+            "order_id": "ORD_80",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:28",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:EICHERMOT-EQ",
+            "action": "SELL",
+            "price": 3757.407470703125,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:28",
+            "order_id": "ORD_81",
+            "profit": 343.8701171875,
+            "profit_pct": 10.073717717878372,
+            "comment": "PROFIT EXIT: 10.1%",
+            "created_at": "2025-11-28 20:10:28",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJFINANCE-EQ",
+            "action": "BUY",
+            "price": 714.4131469726562,
+            "quantity": 2,
+            "date": "2025-11-29 01:40:29",
+            "order_id": "ORD_82",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:29",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "SELL",
+            "price": 2421.352294921875,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:29",
+            "order_id": "ORD_83",
+            "profit": 189.981201171875,
+            "profit_pct": 8.514101563115448,
+            "comment": "PROFIT EXIT: 8.5%",
+            "created_at": "2025-11-28 20:10:29",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "BUY",
+            "price": 1169.779541015625,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:30",
+            "order_id": "ORD_84",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:30",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "SELL",
+            "price": 1155.3712158203125,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:30",
+            "order_id": "ORD_85",
+            "profit": 58.6829833984375,
+            "profit_pct": 5.350926695807134,
+            "comment": "PROFIT EXIT: 5.4%",
+            "created_at": "2025-11-28 20:10:30",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 563.903564453125,
+            "quantity": 3,
+            "date": "2025-11-29 01:40:32",
+            "order_id": "ORD_86",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 20:10:32",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 564.4971923828125,
+            "quantity": 3,
+            "date": "2025-11-29 01:40:33",
+            "order_id": "ORD_87",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 20:10:33",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:KOTAKBANK-EQ",
+            "action": "BUY",
+            "price": 1746.56982421875,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:34",
+            "order_id": "ORD_88",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 20:10:34",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCBANK-EQ",
+            "action": "SELL",
+            "price": 804.5888671875,
+            "quantity": 2,
+            "date": "2025-11-28 20:10:38",
+            "order_id": "ORD_89",
+            "profit": 87.1168212890625,
+            "profit_pct": 5.723609386462432,
+            "comment": "PROFIT EXIT: 5.7%",
+            "created_at": "2025-11-28 20:10:38",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:DRREDDY-EQ",
+            "action": "BUY",
+            "price": 1081.3970947265625,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:41",
+            "order_id": "ORD_90",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:41",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:MARUTI-EQ",
+            "action": "BUY",
+            "price": 10081.0390625,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:46",
+            "order_id": "ORD_91",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:46",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJFINANCE-EQ",
+            "action": "SELL",
+            "price": 750.3400268554688,
+            "quantity": 2,
+            "date": "2025-11-28 20:10:46",
+            "order_id": "ORD_92",
+            "profit": 71.853759765625,
+            "profit_pct": 5.02886600492356,
+            "comment": "PROFIT EXIT: 5.0%",
+            "created_at": "2025-11-28 20:10:46",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:RELIANCE-EQ",
+            "action": "SELL",
+            "price": 1269.6527099609375,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:48",
+            "order_id": "ORD_93",
+            "profit": 73.1585693359375,
+            "profit_pct": 6.114410998930795,
+            "comment": "PROFIT EXIT: 6.1%",
+            "created_at": "2025-11-28 20:10:48",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCLIFE-EQ",
+            "action": "BUY",
+            "price": 640.1475219726562,
+            "quantity": 3,
+            "date": "2025-11-29 01:40:51",
+            "order_id": "ORD_94",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:51",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BRITANNIA-EQ",
+            "action": "SELL",
+            "price": 4929.982421875,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:51",
+            "order_id": "ORD_95",
+            "profit": 236.0439453125,
+            "profit_pct": 5.028697041750778,
+            "comment": "PROFIT EXIT: 5.0%",
+            "created_at": "2025-11-28 20:10:51",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBILIFE-EQ",
+            "action": "BUY",
+            "price": 1398.5711669921875,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:53",
+            "order_id": "ORD_96",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:53",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJAJFINSV-EQ",
+            "action": "BUY",
+            "price": 1643.4619140625,
+            "quantity": 1,
+            "date": "2025-11-29 01:40:56",
+            "order_id": "ORD_97",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 20:10:56",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:KOTAKBANK-EQ",
+            "action": "SELL",
+            "price": 1898.078857421875,
+            "quantity": 3,
+            "date": "2025-11-28 20:10:56",
+            "order_id": "ORD_98",
+            "profit": 272.6384277343748,
+            "profit_pct": 5.028746514704052,
+            "comment": "PROFIT EXIT: 5.0%",
+            "created_at": "2025-11-28 20:10:56",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:DRREDDY-EQ",
+            "action": "SELL",
+            "price": 1157.471435546875,
+            "quantity": 1,
+            "date": "2025-11-28 20:10:58",
+            "order_id": "ORD_99",
+            "profit": 76.0743408203125,
+            "profit_pct": 7.034820159152392,
+            "comment": "PROFIT EXIT: 7.0%",
+            "created_at": "2025-11-28 20:10:58",
+            "filled": true,
+            "status": "OPEN"
+        }
+    ]
+}

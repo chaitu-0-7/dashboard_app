@@ -153,7 +153,10 @@ class SimpleNiftyTrader:
         try:
             trades_collection = self.db_handler.get_trades_collection()
             trade_data['created_at'] = datetime.now(UTC)
-            trade_data['filled'] = False  # Default to not filled
+            if 'filled' not in trade_data:
+                trade_data['filled'] = False  # Default to not filled
+            if 'status' not in trade_data:
+                trade_data['status'] = 'OPEN' # Default status
             result = trades_collection.insert_one(trade_data)
             return result.inserted_id
         except Exception as e:
@@ -203,6 +206,22 @@ class SimpleNiftyTrader:
             {'$set': {'comment': 'FAILED TO CONFIRM FILL'}}
         )
         return False
+
+    def get_order_book(self) -> List:
+        """Get order book from Fyers API."""
+        def _get_orders():
+            return self.fyers.orderbook()
+
+        try:
+            response = self.rate_limiter.retry_with_backoff(_get_orders)
+            if response and response.get('s') == 'ok':
+                return response.get('orderBook', [])
+            else:
+                logging.error(f"Failed to get orderbook, API response: {response}")
+                return []
+        except Exception as e:
+            logging.error(f"Error getting orderbook: {e}")
+            return []
 
     def get_current_positions(self):
         """Get current holdings from Fyers API. Returns a tuple: (positions, is_successful)"""
@@ -501,50 +520,80 @@ class SimpleNiftyTrader:
             return False
 
     def check_for_closed_positions(self, current_positions: Dict, positions_fetch_success: bool):
-        """Check for manually closed positions and record them"""
-        # If fetching positions failed, we can't reliably check for closed ones.
+        """Check for manually closed positions and create a placeholder sell trade for manual update."""
         if not positions_fetch_success:
             logging.warning("Skipping check for closed positions because fetching positions failed.")
             return
+
         try:
-            # self.trades only contains filled trades now
-            recent_buys = {}
-            for trade in self.trades:
-                if trade['action'] == 'BUY' and trade['date'] >= datetime.now() - timedelta(days=30):
-                    symbol = trade['symbol']
-                    if symbol not in recent_buys:
-                        recent_buys[symbol] = []
-                    recent_buys[symbol].append(trade)
-            
-            for symbol, buy_trades in recent_buys.items():
-                if symbol not in current_positions:
-                    sell_trades = [t for t in self.trades if t['symbol'] == symbol and t['action'] == 'SELL']
-                    total_bought = sum(t['quantity'] for t in buy_trades)
-                    total_sold = sum(t['quantity'] for t in sell_trades)
-                    
-                    if total_bought > total_sold:
-                        remaining_qty = total_bought - total_sold
-                        # For manually closed positions, we might not have current_price from holdings
-                        # If the symbol is still in current_positions, use that, otherwise default to 0
-                        current_price = current_positions.get(symbol, {}).get('current_price', 0.0)
-                        avg_buy_price = sum(t['price'] * t['quantity'] for t in buy_trades) / total_bought
-                        
-                        trade_data = {
-                            'symbol': symbol,
-                            'action': 'SELL',
-                            'price': current_price,
-                            'quantity': remaining_qty,
-                            'date': datetime.now(UTC),
-                            'order_id': 'MANUAL',
-                            'profit': (current_price - avg_buy_price) * remaining_qty if current_price > 0 else 0,
-                            'comment': 'MANUALLY CLOSED',
-                            'filled': True # Manually closed is considered filled
+            # Get all filled buy trades that don't have a corresponding sell trade yet.
+            # This is a simplified view of open positions from our DB's perspective.
+            pipeline = [
+                {'$match': {'filled': True}},
+                {'$group': {
+                    '_id': '$symbol',
+                    'total_bought': {'$sum': {'$cond': [{'$eq': ['$action', 'BUY']}, '$quantity', 0]}},
+                    'total_sold': {'$sum': {'$cond': [{'$eq': ['$action', 'SELL']}, '$quantity', 0]}},
+                    'buy_trades': {'$push': {'$cond': [{'$eq': ['$action', 'BUY']}, '$ROOT', None]}}
+                }},
+                {'$project': {
+                    'symbol': '$_id',
+                    'balance': {'$subtract': ['$total_bought', '$total_sold']},
+                    'buy_trades': {
+                        '$filter': {
+                            'input': '$buy_trades',
+                            'as': 'trade',
+                            'cond': {'$ne': ['$trade', None]}
                         }
-                        self.save_trade(trade_data)
-                        logging.info(f"📝 NOTED: {symbol} position manually closed")
-                        
+                    }
+                }},
+                {'$match': {'balance': {'$gt': 0}}}
+            ]
+            open_positions_db = list(self.db_handler.get_trades_collection().aggregate(pipeline))
+
+            for pos in open_positions_db:
+                symbol = pos['symbol']
+                if symbol not in current_positions:
+                    # Position is closed on Fyers, but we think it's open.
+                    # Create a placeholder SELL trade.
+                    
+                    # Check if a placeholder already exists
+                    if self.db_handler.get_trades_collection().find_one({'symbol': symbol, 'status': 'PENDING_MANUAL_PRICE'}):
+                        continue
+
+                    remaining_qty = pos['balance']
+                    buy_trades = pos['buy_trades']
+                    
+                    # Safety check: filter out None values that might slip through the aggregation
+                    buy_trades = [t for t in buy_trades if t is not None]
+                    
+                    if not buy_trades:
+                        logging.warning(f"No valid buy trades found for {symbol}, skipping placeholder creation.")
+                        continue
+                    
+                    total_bought_qty = sum(t['quantity'] for t in buy_trades)
+                    avg_buy_price = sum(t['price'] * t['quantity'] for t in buy_trades) / total_bought_qty
+
+                    trade_data = {
+                        'symbol': symbol,
+                        'action': 'SELL',
+                        'price': 0, # To be updated by user
+                        'quantity': remaining_qty,
+                        'date': datetime.now(UTC), # To be updated by user
+                        'order_id': 'MANUAL',
+                        'profit': 0, # Will be recalculated on update
+                        'comment': 'Manually closed position. Please update price and date.',
+                        'status': 'PENDING_MANUAL_PRICE',
+                        'filled': True 
+                    }
+                    
+                    trade_doc_id = self.save_trade(trade_data)
+                    if trade_doc_id:
+                        logging.info(f"📝 Created placeholder SELL for manually closed position {symbol}.")
+                        self.trades = self.load_trades()
+
         except Exception as e:
-            logging.error(f"Error checking for closed positions: {e}")
+            logging.error(f"Error checking for closed positions: {e}", exc_info=True)
 
     def get_current_price(self, symbol: str) -> float:
         """Get current market price for a given symbol using Fyers quotes API."""

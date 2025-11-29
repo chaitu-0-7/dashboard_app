@@ -1,399 +1,178 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nifty Shop Token Refresh</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --background: #f8fafc; /* slate-50 */
-            --foreground: #0f172a; /* slate-900 */
-            --card: #ffffff;
-            --card-foreground: #0f172a;
-            --popover: #ffffff;
-            --popover-foreground: #0f172a;
-            --primary: #0f172a; /* slate-900 */
-            --primary-foreground: #f8fafc; /* slate-50 */
-            --secondary: #e2e8f0; /* slate-200 */
-            --secondary-foreground: #1e293b; /* slate-800 */
-            --muted: #e2e8f0; /* slate-200 */
-            --muted-foreground: #64748b; /* slate-500 */
-            --accent: #e2e8f0; /* slate-200 */
-            --accent-foreground: #1e293b; /* slate-800 */
-            --destructive: #ef4444; /* red-500 */
-            --destructive-foreground: #f8fafc; /* slate-50 */
-            --border: #e2e8f0; /* slate-200 */
-            --input: #e2e8f0; /* slate-200 */
-            --ring: #0f172a; /* slate-900 */
-            --radius: 0.5rem;
-        }
+{% extends "base.html" %}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: var(--foreground);
-            margin: 0;
-            padding: 0;
-            line-height: 1.5;
-        }
-        .navbar {
-            background-color: var(--primary);
-            padding: 1rem 1.5rem;
-            color: var(--primary-foreground);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .navbar a {
-            color: var(--primary-foreground);
-            text-decoration: none;
-            margin-left: 1.5rem;
-            font-weight: 500;
-            transition: color 0.2s ease;
-            padding: 0.5rem 0;
-        }
-        .navbar a:hover {
-            color: var(--accent);
-        }
-        .navbar a.active {
-            border-bottom: 2px solid var(--accent);
-        }
-        .logout-button {
-            background-color: #dc2626; /* red-700 */
-            color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: var(--radius);
-            margin-left: 1.5rem;
-            font-weight: 500;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            border: 1px solid transparent;
-        }
-        .logout-button:hover {
-            background-color: #b91c1c; /* red-800 */
-            color: white;
-            border-color: #b91c1c;
-            transform: translateY(-1px);
-        }
-        .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            background-color: var(--card);
-            padding: 2rem;
-            border-radius: var(--radius);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 1px solid var(--border);
-        }
-        h1 {
-            color: var(--primary);
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.4rem;
-            margin-top: 0;
-            font-size: 1.5em;
-            text-align: center;
-            margin-bottom: 0.8rem;
-            font-weight: 600;
-        }
-        .status-message {
-            padding: 1rem;
-            border-radius: var(--radius);
-            margin-bottom: 1.5rem;
-            font-size: 1.1em;
-            font-weight: 500;
-            text-align: center;
-        }
-        .status-valid {
-            background-color: #dcfce7; /* green-100 */
-            color: #16a34a; /* green-600 */
-            border: 1px solid #86efac; /* green-300 */
-        }
-        .status-expired-refreshable {
-            background-color: #fefce8; /* yellow-100 */
-            color: #ca8a04; /* yellow-600 */
-            border: 1px solid #fde047; /* yellow-300 */
-        }
-        .status-manual-required, .status-no-tokens {
-            background-color: #fee2e2; /* red-100 */
-            color: #dc2626; /* red-600 */
-            border: 1px solid #fca5a5; /* red-300 */
-        }
-        .status-success {
-            background-color: #dcfce7; /* green-100 */
-            color: #16a34a; /* green-600 */
-            border: 1px solid #86efac; /* green-300 */
-        }
-        .status-failed {
-            background-color: #fee2e2; /* red-100 */
-            color: #dc2626; /* red-600 */
-            border: 1px solid #fca5a5; /* red-300 */
-        }
-        .action-section {
-            text-align: center;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-        }
-        .action-section button, .action-section a {
-            background-color: var(--primary);
-            color: var(--primary-foreground);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            text-decoration: none;
-            display: inline-block;
-            margin: 0.5rem;
-        }
-        .action-section button:hover, .action-section a:hover {
-            background-color: var(--primary-foreground);
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            transform: translateY(-1px);
-        }
-        .instructions {
-            background-color: var(--muted);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            margin-top: 2rem;
-            font-size: 0.95em;
-            line-height: 1.6;
-        }
-        .instructions ol {
-            margin-left: 1.5rem;
-            padding-left: 0;
-        }
-        .instructions li {
-            margin-bottom: 0.5rem;
-        }
-        .error-message {
-            color: var(--destructive);
-            font-weight: 500;
-            margin-top: 1rem;
-            text-align: center;
-        }
-        .token-timer-bar-container {
-            width: 100%;
-            background-color: var(--muted);
-            border-radius: var(--radius);
-            height: 10px;
-            margin-top: 1rem;
-            overflow: hidden;
-        }
-        .token-timer-bar {
-            height: 100%;
-            width: 100%;
-            background-color: #22c55e; /* green-500 */
-            border-radius: var(--radius);
-            transition: width 1s linear;
-        }
-    .navbar .nav-links {
-            display: flex;
-        }
+{% block title %}Token Management - Nifty Shop{% endblock %}
+{% block page_title %}API Connection{% endblock %}
+{% block page_subtitle %}Manage your Fyers API authentication tokens{% endblock %}
 
-        .navbar .mobile-nav-toggle {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            .navbar .nav-links {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background-color: var(--primary);
-                padding: 1rem 0;
-            }
-
-            .navbar .nav-links.active {
-                display: flex;
-            }
-
-            .navbar .mobile-nav-toggle {
-                display: block;
-                cursor: pointer;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="navbar">
-        <div>Nifty Shop Bot</div>
-        <div class="nav-links">
-            <a href="/" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
-            <a href="/trading-overview" class="{% if active_page == 'trading_overview' %}active{% endif %}">Trading Overview</a>
-            <a href="/logs" class="{% if active_page == 'logs' %}active{% endif %}">Logs</a>
-            <a href="/token-refresh" class="{% if active_page == 'token_refresh' %}active{% endif %}">Token Refresh</a>
-            <a href="/run-strategy" class="{% if active_page == 'run_strategy' %}active{% endif %}">Strategy</a>
-            <a href="/logout" class="logout-button">Logout</a>
-        </div>
-        <div class="mobile-nav-toggle">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </div>
-    </div>
-
-    <div class="container">
-        <h1>Fyers API Token Management</h1>
-
-        <div class="action-section">
-            <form action="/refresh-token-action" method="post">
-                <button type="submit">Refresh Token</button>
-            </form>
-        </div>
-
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <h3 class="card-title">Connection Status</h3>
         {% if token_status == 'VALID' %}
-            <div class="status-message status-valid">
-                Fyers API Access Token is VALID.
-                <span id="token-expires-in"></span>
-            </div>
-            <div class="token-timer-bar-container">
-                <div class="token-timer-bar" id="token-timer-bar"></div>
-            </div>
+        <span class="badge badge-success">Connected</span>
         {% elif token_status == 'EXPIRED_ACCESS_TOKEN_REFRESHABLE' %}
-            <div class="status-message status-expired-refreshable">
-                Access Token Expired. Attempting to refresh using Refresh Token.
-            </div>
-        {% elif token_status == 'EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED' or token_status == 'NO_TOKENS_FOUND' %}
-            <div class="status-message status-manual-required">
-                {% if token_status == 'EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED' %}
-                    Refresh Token Expired or Invalid. Manual Authorization Required.
-                {% else %}
-                    No Fyers API tokens found. Manual Authorization Required.
-                {% endif %}
-            </div>
-        {% endif %}
-
-        <div class="action-section">
-            <button id="manual-auth-button">Manually Generate New Token</button>
-        </div>
-
-        <div id="manual-auth-section" class="instructions" style="display:none;">
-            <h3>Manual Authorization Steps:</h3>
-            <ol>
-                <li>Click the "Generate New Auth Code" button below.</li>
-                <li>A new tab will open. Log in with your Fyers credentials, enter PIN and TOTP as needed.</li>
-                <li>After successful login, you will be redirected to a blank page with a URL like: <br><code>{{ request.base_url.replace('token-refresh', 'token-callback') }}?code=YOUR_AUTH_CODE_HERE&state=...</code></li>
-                <li>Copy only the 'code' parameter value from the URL (e.g., if the URL is `...code=YOUR_AUTH_CODE_HERE&...`, copy `YOUR_AUTH_CODE_HERE`).</li>
-                <li>Paste the copied code into the input field below and click "Submit Auth Code".</li>
-            </ol>
-            <div class="action-section">
-                <a href="{{ auth_url }}" target="_blank" class="action-section button">Generate New Auth Code</a>
-            </div>
-            <form id="auth-code-form" action="/token-callback" method="get" class="action-section">
-                <input type="text" name="code" placeholder="Paste your Auth Code here" style="width: 70%; padding: 0.75rem; margin-right: 0.5rem; border: 1px solid var(--border); border-radius: var(--radius);">
-                <button type="submit">Submit Auth Code</button>
-            </form>
-            <p class="error-message" id="auth-code-error" style="display:none;">Please enter the Auth Code.</p>
-        </div>
-
-        {% if request.args.get('status') == 'success' %}
-            <div class="status-message status-success">
-                Token refreshed/generated successfully!
-            </div>
-        {% elif request.args.get('status') == 'failed' %}
-            <div class="status-message status-failed">
-                Token operation failed: {{ request.args.get('message', 'Unknown error.') }}
-            </div>
-        {% elif request.args.get('status') == 'refreshed' %}
-            <div class="status-message status-valid">
-                Access token refreshed successfully!
-            </div>
-        {% elif request.args.get('status') == 'refresh_failed' %}
-            <div class="status-message status-failed">
-                Failed to refresh token: {{ request.args.get('message', 'Unknown error.') }}
-            </div>
+        <span class="badge badge-warning">Refresh Required</span>
+        {% else %}
+        <span class="badge badge-danger">Disconnected</span>
         {% endif %}
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const manualAuthButton = document.getElementById('manual-auth-button');
-            const manualAuthSection = document.getElementById('manual-auth-section');
-            const authCodeForm = document.getElementById('auth-code-form');
-            const initialTokenStatus = "{{ token_status }}";
+    <div class="p-4">
+        {% if token_status == 'VALID' %}
+        <div class="flex-center flex-column p-4 mb-4"
+            style="background: rgba(16, 185, 129, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(16, 185, 129, 0.2);">
+            <i data-feather="check-circle" class="text-success mb-2" style="width: 32px; height: 32px;"></i>
+            <h3 class="text-success m-0">System Operational</h3>
+            <p class="text-muted text-center mt-2">Your API token is valid and active.</p>
+        </div>
 
-            if (manualAuthButton) {
-                manualAuthButton.addEventListener('click', function() {
-                    manualAuthSection.style.display = 'block';
-                });
-            }
+        <div class="mt-4 text-center">
+            <form action="/refresh-token-action" method="post">
+                <button type="submit" class="btn btn-outline">
+                    <i data-feather="refresh-cw" style="width: 16px; margin-right: 6px;"></i> Force Refresh Token
+                </button>
+            </form>
+        </div>
 
-            // Show manual auth section if token status requires it on page load
-            if (initialTokenStatus === 'EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED' || initialTokenStatus === 'NO_TOKENS_FOUND') {
+        {% elif token_status == 'EXPIRED_ACCESS_TOKEN_REFRESHABLE' %}
+        <div class="flex-center flex-column p-4 mb-4"
+            style="background: rgba(245, 158, 11, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(245, 158, 11, 0.2);">
+            <i data-feather="alert-triangle" class="text-warning mb-2" style="width: 32px; height: 32px;"></i>
+            <h3 class="text-warning m-0">Token Expired</h3>
+            <p class="text-muted text-center mt-2">The access token has expired but can be refreshed automatically.</p>
+        </div>
+
+        <div class="text-center">
+            <form action="/refresh-token-action" method="post">
+                <button type="submit" class="btn btn-primary">
+                    <i data-feather="refresh-cw" style="width: 16px; margin-right: 6px;"></i> Refresh Token Now
+                </button>
+            </form>
+        </div>
+
+        {% else %}
+        <div class="flex-center flex-column p-4 mb-4"
+            style="background: rgba(239, 68, 68, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(239, 68, 68, 0.2);">
+            <i data-feather="x-circle" class="text-danger mb-2" style="width: 32px; height: 32px;"></i>
+            <h3 class="text-danger m-0">Connection Lost</h3>
+            <p class="text-muted text-center mt-2">
+                {% if token_status == 'EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED' %}
+                Refresh token expired. Manual re-authorization required.
+                {% else %}
+                No tokens found. Please authorize the application.
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="text-center">
+            <button id="manual-auth-button" class="btn btn-primary">
+                <i data-feather="key" style="width: 16px; margin-right: 6px;"></i> Start Authorization
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div id="manual-auth-section" class="card" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Manual Authorization</h3>
+    </div>
+    <div class="p-4">
+        <div class="mb-4">
+            <h4 class="text-main mb-2" style="font-size: 1rem;">Step 1: Generate Auth Code</h4>
+            <p class="text-muted text-sm mb-3">Click the button below to log in to Fyers and generate an authorization
+                code. Copy the code from the URL after redirection.</p>
+            <a href="{{ auth_url }}" target="_blank" class="btn btn-outline">
+                <i data-feather="external-link" style="width: 16px; margin-right: 6px;"></i> Open Fyers Login
+            </a>
+        </div>
+
+        <div class="mb-4">
+            <h4 class="text-main mb-2" style="font-size: 1rem;">Step 2: Enter Code</h4>
+            <p class="text-muted text-sm mb-3">Paste the <code>auth_code</code> from the redirected URL here.</p>
+
+            <form id="auth-code-form" action="/token-callback" method="get" class="flex-center gap-2"
+                style="align-items: stretch;">
+                <input type="text" name="code" placeholder="Paste Auth Code here..."
+                    style="flex: 1; padding: 0.75rem; background: var(--bg-app); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius-md);">
+                <button type="submit" class="btn btn-primary">Connect</button>
+            </form>
+            <p class="text-danger mt-2 text-sm" id="auth-code-error" style="display:none;">Please enter a valid Auth
+                Code.</p>
+        </div>
+    </div>
+</div>
+
+{% if request.args.get('status') %}
+<div class="fixed-bottom-right p-4" style="position: fixed; bottom: 20px; right: 20px; z-index: 100;">
+    {% if request.args.get('status') == 'success' or request.args.get('status') == 'refreshed' %}
+    <div class="alert alert-success animate-fade-in shadow-lg">
+        <i data-feather="check" style="width: 16px; margin-right: 6px;"></i> Token updated successfully!
+    </div>
+    {% else %}
+    <div class="alert alert-danger animate-fade-in shadow-lg">
+        <i data-feather="alert-circle" style="width: 16px; margin-right: 6px;"></i>
+        Operation failed: {{ request.args.get('message', 'Unknown error') }}
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const manualAuthButton = document.getElementById('manual-auth-button');
+        const manualAuthSection = document.getElementById('manual-auth-section');
+        const authCodeForm = document.getElementById('auth-code-form');
+        const initialTokenStatus = "{{ token_status }}";
+
+        if (manualAuthButton) {
+            manualAuthButton.addEventListener('click', function () {
                 manualAuthSection.style.display = 'block';
-            }
-
-            if (authCodeForm) {
-                authCodeForm.addEventListener('submit', function(event) {
-                    const input = authCodeForm.querySelector('input[name="code"]');
-                    const errorMessage = document.getElementById('auth-code-error');
-                    
-                    if (!input.value.trim()) {
-                        errorMessage.textContent = "Auth Code cannot be empty.";
-                        errorMessage.style.display = 'block';
-                        event.preventDefault();
-                    } else {
-                        errorMessage.style.display = 'none';
-                    }
-                });
-            }
-
-            // Token timer logic
-            const generatedAt = {{ generated_at | default(0) }};
-            const accessTokenValidity = 24 * 60 * 60; // 1 day in seconds
-
-            function updateTokenTimer() {
-                if (generatedAt === 0) return;
-
-                const now = Math.floor(Date.now() / 1000); // current time in seconds
-                const expiresAt = generatedAt + accessTokenValidity;
-                const timeLeft = expiresAt - now;
-
-                const tokenExpiresInElement = document.getElementById('token-expires-in');
-                const tokenTimerBar = document.getElementById('token-timer-bar');
-
-                if (timeLeft > 0) {
-                    const hours = Math.floor(timeLeft / 3600);
-                    const minutes = Math.floor((timeLeft % 3600) / 60);
-                    const seconds = timeLeft % 60;
-                    tokenExpiresInElement.textContent = `Expires in: ${hours}h ${minutes}m ${seconds}s`;
-
-                    const percentageLeft = (timeLeft / accessTokenValidity) * 100;
-                    tokenTimerBar.style.width = `${percentageLeft}%`;
-
-                    if (percentageLeft < 25) {
-                        tokenTimerBar.style.backgroundColor = '#ef4444'; // red
-                    } else if (percentageLeft < 50) {
-                        tokenTimerBar.style.backgroundColor = '#f59e0b'; // amber
-                    } else {
-                        tokenTimerBar.style.backgroundColor = '#22c55e'; // green
-                    }
-
-                } else {
-                    tokenExpiresInElement.textContent = 'Expired';
-                    tokenTimerBar.style.width = '0%';
-                    tokenTimerBar.style.backgroundColor = '#ef4444'; // red
-                }
-            }
-
-            setInterval(updateTokenTimer, 1000);
-            updateTokenTimer(); // Initial call
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-            const navLinks = document.querySelector('.nav-links');
-
-            mobileNavToggle.addEventListener('click', function() {
-                navLinks.classList.toggle('active');
+                manualAuthSection.scrollIntoView({ behavior: 'smooth' });
             });
-        });
-    </script>
-</body>
-</html>
+        }
+
+        if (initialTokenStatus === 'EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED' || initialTokenStatus === 'NO_TOKENS_FOUND') {
+            manualAuthSection.style.display = 'block';
+        }
+
+        if (authCodeForm) {
+            authCodeForm.addEventListener('submit', function (event) {
+                const input = authCodeForm.querySelector('input[name="code"]');
+                const errorMessage = document.getElementById('auth-code-error');
+
+                if (!input.value.trim()) {
+                    errorMessage.style.display = 'block';
+                    event.preventDefault();
+                } else {
+                    errorMessage.style.display = 'none';
+                }
+            });
+        }
+    });
+</script>
+<style>
+    .bg-success {
+        background-color: var(--success);
+    }
+
+    .bg-warning {
+        background-color: var(--warning);
+    }
+
+    .bg-danger {
+        background-color: var(--danger);
+    }
+
+    .bg-panel {
+        background-color: var(--bg-panel);
+    }
+
+    .shadow-lg {
+        box-shadow: var(--shadow-lg);
+    }
+</style>
+{% endblock %}

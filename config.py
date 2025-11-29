@@ -11,6 +11,7 @@ APP_LOGS_PER_PAGE_HOME = 10
 FYERS_REDIRECT_URI = 'https://trade.fyers.in/api-login/redirect-uri/index.html' # Replace with your actual redirect URI
 
 # Strategy Parameters
+STRATEGY_CAPITAL = 40000 # Total capital allocated for this strategy
 MAX_TRADE_VALUE = 2000
 MA_PERIOD = 30
 

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Nifty Shop{% endblock %}</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <!-- Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">Nifty Shop</div>
+                <button class="btn-icon mobile-close d-md-none" onclick="toggleSidebar()">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('dashboard') }}"
+                    class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+                    <i data-feather="grid" class="nav-icon"></i>
+                    Dashboard
+                </a>
+                <a href="{{ url_for('trading_overview') }}"
+                    class="nav-item {% if active_page == 'trading_overview' %}active{% endif %}">
+                    <i data-feather="activity" class="nav-icon"></i>
+                    Trading Overview
+                </a>
+                <a href="{{ url_for('run_strategy') }}"
+                    class="nav-item {% if active_page == 'run_strategy' %}active{% endif %}">
+                    <i data-feather="play-circle" class="nav-icon"></i>
+                    Strategy
+                </a>
+                <a href="{{ url_for('logs_page') }}" class="nav-item {% if active_page == 'logs' %}active{% endif %}">
+                    <i data-feather="file-text" class="nav-icon"></i>
+                    Logs
+                </a>
+                <a href="{{ url_for('token_refresh') }}"
+                    class="nav-item {% if active_page == 'token_refresh' %}active{% endif %}">
+                    <i data-feather="key" class="nav-icon"></i>
+                    Tokens & API
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="{{ url_for('logout') }}" class="nav-item text-danger">
+                    <i data-feather="log-out" class="nav-icon"></i>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <div>
+                    <h1 class="page-title">{% block page_title %}Dashboard{% endblock %}</h1>
+                    <p class="page-subtitle">{% block page_subtitle %}Overview of your trading activity{% endblock %}
+                    </p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline d-md-none mobile-toggle" id="sidebar-toggle"
+                        onclick="toggleSidebar()">
+                        <i data-feather="menu"></i>
+                    </button>
+                    {% block header_actions %}{% endblock %}
+                </div>
+            </header>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages mb-4">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} animate-fade-in">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <div class="content-wrapper animate-fade-in">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <script>
+        feather.replace();
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Mobile menu toggle logic
+        function checkMobile() {
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            if (window.innerWidth <= 768) {
+                if (toggleBtn) toggleBtn.style.display = 'flex';
+            } else {
+                if (toggleBtn) toggleBtn.style.display = 'none';
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebar-overlay').classList.remove('show');
+            }
+        }
+
+        window.addEventListener('resize', checkMobile);
+        document.addEventListener('DOMContentLoaded', checkMobile);
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

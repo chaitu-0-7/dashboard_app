@@ -1,0 +1,4783 @@
+{
+    "summary": {
+        "initial_balance": 40000,
+        "final_balance": 45739.54522705078,
+        "total_return_pct": 14.348863067626953,
+        "max_drawdown_pct": 8.26421152466557,
+        "total_trades": 248,
+        "win_rate": 100.0
+    },
+    "daily_data": [
+        {
+            "date": "2023-01-02",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-03",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-04",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-05",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-06",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-09",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-10",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-11",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-12",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-13",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-16",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-17",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-18",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-19",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-20",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-23",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-24",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-25",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-27",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-30",
+            "portfolio_value": 40000,
+            "cash_balance": 40000,
+            "capital_deployed": 0
+        },
+        {
+            "date": "2023-01-31",
+            "portfolio_value": 39980.0,
+            "cash_balance": 38170.924560546875,
+            "capital_deployed": 1809.075439453125
+        },
+        {
+            "date": "2023-02-01",
+            "portfolio_value": 39613.037841796875,
+            "cash_balance": 36618.371337890625,
+            "capital_deployed": 2994.66650390625
+        },
+        {
+            "date": "2023-02-02",
+            "portfolio_value": 39428.128021240234,
+            "cash_balance": 35035.265380859375,
+            "capital_deployed": 4392.862640380859
+        },
+        {
+            "date": "2023-02-03",
+            "portfolio_value": 39525.83984375,
+            "cash_balance": 33884.0703125,
+            "capital_deployed": 5641.76953125
+        },
+        {
+            "date": "2023-02-06",
+            "portfolio_value": 39609.35372924805,
+            "cash_balance": 33327.189453125,
+            "capital_deployed": 6282.164276123047
+        },
+        {
+            "date": "2023-02-07",
+            "portfolio_value": 39825.66946411133,
+            "cash_balance": 33287.189453125,
+            "capital_deployed": 6538.480010986328
+        },
+        {
+            "date": "2023-02-08",
+            "portfolio_value": 40436.608001708984,
+            "cash_balance": 33696.24560546875,
+            "capital_deployed": 6740.362396240234
+        },
+        {
+            "date": "2023-02-09",
+            "portfolio_value": 40427.319396972656,
+            "cash_balance": 31753.18359375,
+            "capital_deployed": 8674.135803222656
+        },
+        {
+            "date": "2023-02-10",
+            "portfolio_value": 40306.07116699219,
+            "cash_balance": 29815.576934814453,
+            "capital_deployed": 10490.494232177734
+        },
+        {
+            "date": "2023-02-13",
+            "portfolio_value": 39986.299407958984,
+            "cash_balance": 28080.27993774414,
+            "capital_deployed": 11906.019470214844
+        },
+        {
+            "date": "2023-02-14",
+            "portfolio_value": 40087.28218078613,
+            "cash_balance": 27504.05776977539,
+            "capital_deployed": 12583.224411010742
+        },
+        {
+            "date": "2023-02-15",
+            "portfolio_value": 40200.10238647461,
+            "cash_balance": 26923.947662353516,
+            "capital_deployed": 13276.154724121094
+        },
+        {
+            "date": "2023-02-16",
+            "portfolio_value": 40296.50539398193,
+            "cash_balance": 26923.947662353516,
+            "capital_deployed": 13372.557731628418
+        },
+        {
+            "date": "2023-02-17",
+            "portfolio_value": 40066.46870422363,
+            "cash_balance": 25183.60757446289,
+            "capital_deployed": 14882.861129760742
+        },
+        {
+            "date": "2023-02-20",
+            "portfolio_value": 39789.374504089355,
+            "cash_balance": 23287.242095947266,
+            "capital_deployed": 16502.13240814209
+        },
+        {
+            "date": "2023-02-21",
+            "portfolio_value": 39617.80256652832,
+            "cash_balance": 21286.99185180664,
+            "capital_deployed": 18330.81071472168
+        },
+        {
+            "date": "2023-02-22",
+            "portfolio_value": 38772.05214691162,
+            "cash_balance": 19864.066314697266,
+            "capital_deployed": 18907.985832214355
+        },
+        {
+            "date": "2023-02-23",
+            "portfolio_value": 38728.61666107178,
+            "cash_balance": 18791.819854736328,
+            "capital_deployed": 19936.79680633545
+        },
+        {
+            "date": "2023-02-24",
+            "portfolio_value": 38340.34745025635,
+            "cash_balance": 17421.80532836914,
+            "capital_deployed": 20918.542121887207
+        },
+        {
+            "date": "2023-02-27",
+            "portfolio_value": 37793.7515335083,
+            "cash_balance": 16209.940216064453,
+            "capital_deployed": 21583.811317443848
+        },
+        {
+            "date": "2023-02-28",
+            "portfolio_value": 38574.88092803955,
+            "cash_balance": 14827.958404541016,
+            "capital_deployed": 23746.922523498535
+        },
+        {
+            "date": "2023-03-01",
+            "portfolio_value": 39974.8888092041,
+            "cash_balance": 13932.450958251953,
+            "capital_deployed": 26042.43785095215
+        },
+        {
+            "date": "2023-03-02",
+            "portfolio_value": 40201.579666137695,
+            "cash_balance": 16220.986724853516,
+            "capital_deployed": 23980.59294128418
+        },
+        {
+            "date": "2023-03-03",
+            "portfolio_value": 42034.0034866333,
+            "cash_balance": 26587.419952392578,
+            "capital_deployed": 15446.583534240723
+        },
+        {
+            "date": "2023-03-06",
+            "portfolio_value": 41975.77111053467,
+            "cash_balance": 28265.890014648438,
+            "capital_deployed": 13709.88109588623
+        },
+        {
+            "date": "2023-03-08",
+            "portfolio_value": 41960.17448425293,
+            "cash_balance": 27603.08154296875,
+            "capital_deployed": 14357.09294128418
+        },
+        {
+            "date": "2023-03-09",
+            "portfolio_value": 41918.95886993408,
+            "cash_balance": 27182.139404296875,
+            "capital_deployed": 14736.819465637207
+        },
+        {
+            "date": "2023-03-10",
+            "portfolio_value": 41854.74578857422,
+            "cash_balance": 26764.335388183594,
+            "capital_deployed": 15090.410400390625
+        },
+        {
+            "date": "2023-03-13",
+            "portfolio_value": 41653.826095581055,
+            "cash_balance": 25450.764709472656,
+            "capital_deployed": 16203.061386108398
+        },
+        {
+            "date": "2023-03-14",
+            "portfolio_value": 41532.666900634766,
+            "cash_balance": 24964.639099121094,
+            "capital_deployed": 16568.027801513672
+        },
+        {
+            "date": "2023-03-15",
+            "portfolio_value": 41586.65263366699,
+            "cash_balance": 23922.964294433594,
+            "capital_deployed": 17663.6883392334
+        },
+        {
+            "date": "2023-03-16",
+            "portfolio_value": 41291.86183929443,
+            "cash_balance": 23525.459869384766,
+            "capital_deployed": 17766.401969909668
+        },
+        {
+            "date": "2023-03-17",
+            "portfolio_value": 41468.455909729004,
+            "cash_balance": 22490.622161865234,
+            "capital_deployed": 18977.83374786377
+        },
+        {
+            "date": "2023-03-20",
+            "portfolio_value": 41099.02536773682,
+            "cash_balance": 22092.333221435547,
+            "capital_deployed": 19006.69214630127
+        },
+        {
+            "date": "2023-03-21",
+            "portfolio_value": 41288.530822753906,
+            "cash_balance": 20138.636917114258,
+            "capital_deployed": 21149.89390563965
+        },
+        {
+            "date": "2023-03-22",
+            "portfolio_value": 41450.26885986328,
+            "cash_balance": 19278.359939575195,
+            "capital_deployed": 22171.908920288086
+        },
+        {
+            "date": "2023-03-23",
+            "portfolio_value": 41463.99969482422,
+            "cash_balance": 17997.722366333008,
+            "capital_deployed": 23466.27732849121
+        },
+        {
+            "date": "2023-03-24",
+            "portfolio_value": 41171.53776550293,
+            "cash_balance": 17596.834701538086,
+            "capital_deployed": 23574.703063964844
+        },
+        {
+            "date": "2023-03-27",
+            "portfolio_value": 41234.18991851807,
+            "cash_balance": 17026.07664489746,
+            "capital_deployed": 24208.113273620605
+        },
+        {
+            "date": "2023-03-28",
+            "portfolio_value": 41170.124435424805,
+            "cash_balance": 15253.843734741211,
+            "capital_deployed": 25916.280700683594
+        },
+        {
+            "date": "2023-03-29",
+            "portfolio_value": 41497.14687347412,
+            "cash_balance": 16997.685173034668,
+            "capital_deployed": 24499.461700439453
+        },
+        {
+            "date": "2023-03-31",
+            "portfolio_value": 41837.15943145752,
+            "cash_balance": 15111.76683807373,
+            "capital_deployed": 26725.39259338379
+        },
+        {
+            "date": "2023-04-03",
+            "portfolio_value": 41783.802085876465,
+            "cash_balance": 13376.669548034668,
+            "capital_deployed": 28407.132537841797
+        },
+        {
+            "date": "2023-04-05",
+            "portfolio_value": 41872.87708282471,
+            "cash_balance": 11368.06649017334,
+            "capital_deployed": 30504.810592651367
+        },
+        {
+            "date": "2023-04-06",
+            "portfolio_value": 42049.83489227295,
+            "cash_balance": 12300.131690979004,
+            "capital_deployed": 29749.703201293945
+        },
+        {
+            "date": "2023-04-10",
+            "portfolio_value": 42231.77257537842,
+            "cash_balance": 12182.776420593262,
+            "capital_deployed": 30048.996154785156
+        },
+        {
+            "date": "2023-04-11",
+            "portfolio_value": 42408.34532928467,
+            "cash_balance": 11161.473930358887,
+            "capital_deployed": 31246.87139892578
+        },
+        {
+            "date": "2023-04-12",
+            "portfolio_value": 42572.16149139404,
+            "cash_balance": 11006.129020690918,
+            "capital_deployed": 31566.032470703125
+        },
+        {
+            "date": "2023-04-13",
+            "portfolio_value": 42538.74044036865,
+            "cash_balance": 10126.249992370605,
+            "capital_deployed": 32412.490447998047
+        },
+        {
+            "date": "2023-04-17",
+            "portfolio_value": 42165.67060089111,
+            "cash_balance": 11045.767448425293,
+            "capital_deployed": 31119.90315246582
+        },
+        {
+            "date": "2023-04-18",
+            "portfolio_value": 42275.961738586426,
+            "cash_balance": 11268.49535369873,
+            "capital_deployed": 31007.466384887695
+        },
+        {
+            "date": "2023-04-19",
+            "portfolio_value": 42024.72154998779,
+            "cash_balance": 10118.411003112793,
+            "capital_deployed": 31906.310546875
+        },
+        {
+            "date": "2023-04-20",
+            "portfolio_value": 41942.77498626709,
+            "cash_balance": 10923.303337097168,
+            "capital_deployed": 31019.471649169922
+        },
+        {
+            "date": "2023-04-21",
+            "portfolio_value": 41882.65566253662,
+            "cash_balance": 12071.343925476074,
+            "capital_deployed": 29811.311737060547
+        },
+        {
+            "date": "2023-04-24",
+            "portfolio_value": 41946.94358062744,
+            "cash_balance": 10926.6703414917,
+            "capital_deployed": 31020.273239135742
+        },
+        {
+            "date": "2023-04-25",
+            "portfolio_value": 42034.90637969971,
+            "cash_balance": 9003.376518249512,
+            "capital_deployed": 33031.529861450195
+        },
+        {
+            "date": "2023-04-26",
+            "portfolio_value": 41977.84670257568,
+            "cash_balance": 7857.556816101074,
+            "capital_deployed": 34120.28988647461
+        },
+        {
+            "date": "2023-04-27",
+            "portfolio_value": 42313.56345367432,
+            "cash_balance": 9345.081413269043,
+            "capital_deployed": 32968.48204040527
+        },
+        {
+            "date": "2023-04-28",
+            "portfolio_value": 42529.53360748291,
+            "cash_balance": 13601.732109069824,
+            "capital_deployed": 28927.801498413086
+        },
+        {
+            "date": "2023-05-02",
+            "portfolio_value": 42907.758796691895,
+            "cash_balance": 15631.270820617676,
+            "capital_deployed": 27276.48797607422
+        },
+        {
+            "date": "2023-05-03",
+            "portfolio_value": 42769.253746032715,
+            "cash_balance": 15631.270820617676,
+            "capital_deployed": 27137.98292541504
+        },
+        {
+            "date": "2023-05-04",
+            "portfolio_value": 42980.15340423584,
+            "cash_balance": 16983.462104797363,
+            "capital_deployed": 25996.691299438477
+        },
+        {
+            "date": "2023-05-05",
+            "portfolio_value": 42693.38040924072,
+            "cash_balance": 15913.465766906738,
+            "capital_deployed": 26779.914642333984
+        },
+        {
+            "date": "2023-05-08",
+            "portfolio_value": 42911.61193084717,
+            "cash_balance": 14500.0210647583,
+            "capital_deployed": 28411.590866088867
+        },
+        {
+            "date": "2023-05-09",
+            "portfolio_value": 42909.36547088623,
+            "cash_balance": 13993.295234680176,
+            "capital_deployed": 28916.070236206055
+        },
+        {
+            "date": "2023-05-10",
+            "portfolio_value": 42836.96945953369,
+            "cash_balance": 13311.34088897705,
+            "capital_deployed": 29525.62857055664
+        },
+        {
+            "date": "2023-05-11",
+            "portfolio_value": 42807.57070159912,
+            "cash_balance": 11514.4654006958,
+            "capital_deployed": 31293.10530090332
+        },
+        {
+            "date": "2023-05-12",
+            "portfolio_value": 42575.69895172119,
+            "cash_balance": 9509.85831451416,
+            "capital_deployed": 33065.84063720703
+        },
+        {
+            "date": "2023-05-15",
+            "portfolio_value": 42716.08400726318,
+            "cash_balance": 8099.343421936035,
+            "capital_deployed": 34616.74058532715
+        },
+        {
+            "date": "2023-05-16",
+            "portfolio_value": 42661.70853424072,
+            "cash_balance": 7424.060218811035,
+            "capital_deployed": 35237.64831542969
+        },
+        {
+            "date": "2023-05-17",
+            "portfolio_value": 42371.74225616455,
+            "cash_balance": 6488.179542541504,
+            "capital_deployed": 35883.56271362305
+        },
+        {
+            "date": "2023-05-18",
+            "portfolio_value": 42193.54941558838,
+            "cash_balance": 5812.409400939941,
+            "capital_deployed": 36381.14001464844
+        },
+        {
+            "date": "2023-05-19",
+            "portfolio_value": 42369.80091094971,
+            "cash_balance": 4886.412208557129,
+            "capital_deployed": 37483.38870239258
+        },
+        {
+            "date": "2023-05-22",
+            "portfolio_value": 42796.31775665283,
+            "cash_balance": 7214.380409240723,
+            "capital_deployed": 35581.93734741211
+        },
+        {
+            "date": "2023-05-23",
+            "portfolio_value": 42906.892723083496,
+            "cash_balance": 9217.223182678223,
+            "capital_deployed": 33689.66954040527
+        },
+        {
+            "date": "2023-05-24",
+            "portfolio_value": 43003.40842437744,
+            "cash_balance": 9217.223182678223,
+            "capital_deployed": 33786.18524169922
+        },
+        {
+            "date": "2023-05-25",
+            "portfolio_value": 42961.89415740967,
+            "cash_balance": 9099.960678100586,
+            "capital_deployed": 33861.93347930908
+        },
+        {
+            "date": "2023-05-26",
+            "portfolio_value": 43339.6319732666,
+            "cash_balance": 8591.314315795898,
+            "capital_deployed": 34748.3176574707
+        },
+        {
+            "date": "2023-05-29",
+            "portfolio_value": 43476.128494262695,
+            "cash_balance": 6612.703720092773,
+            "capital_deployed": 36863.42477416992
+        },
+        {
+            "date": "2023-05-30",
+            "portfolio_value": 43426.257904052734,
+            "cash_balance": 9348.491622924805,
+            "capital_deployed": 34077.76628112793
+        },
+        {
+            "date": "2023-05-31",
+            "portfolio_value": 43215.25718688965,
+            "cash_balance": 9348.491622924805,
+            "capital_deployed": 33866.765563964844
+        },
+        {
+            "date": "2023-06-01",
+            "portfolio_value": 43192.77717590332,
+            "cash_balance": 7422.180282592773,
+            "capital_deployed": 35770.59689331055
+        },
+        {
+            "date": "2023-06-02",
+            "portfolio_value": 43413.42630767822,
+            "cash_balance": 9424.057357788086,
+            "capital_deployed": 33989.36894989014
+        },
+        {
+            "date": "2023-06-05",
+            "portfolio_value": 43532.4884185791,
+            "cash_balance": 9424.057357788086,
+            "capital_deployed": 34108.431060791016
+        },
+        {
+            "date": "2023-06-06",
+            "portfolio_value": 43329.642921447754,
+            "cash_balance": 9268.863967895508,
+            "capital_deployed": 34060.778953552246
+        },
+        {
+            "date": "2023-06-07",
+            "portfolio_value": 43671.68522644043,
+            "cash_balance": 7413.89338684082,
+            "capital_deployed": 36257.79183959961
+        },
+        {
+            "date": "2023-06-08",
+            "portfolio_value": 43546.668937683105,
+            "cash_balance": 6968.93049621582,
+            "capital_deployed": 36577.738441467285
+        },
+        {
+            "date": "2023-06-09",
+            "portfolio_value": 43276.505378723145,
+            "cash_balance": 5010.510818481445,
+            "capital_deployed": 38265.9945602417
+        },
+        {
+            "date": "2023-06-12",
+            "portfolio_value": 43588.85787200928,
+            "cash_balance": 7060.954299926758,
+            "capital_deployed": 36527.90357208252
+        },
+        {
+            "date": "2023-06-13",
+            "portfolio_value": 43803.575538635254,
+            "cash_balance": 7060.954299926758,
+            "capital_deployed": 36742.621238708496
+        },
+        {
+            "date": "2023-06-14",
+            "portfolio_value": 43926.776054382324,
+            "cash_balance": 8790.462356567383,
+            "capital_deployed": 35136.31369781494
+        },
+        {
+            "date": "2023-06-15",
+            "portfolio_value": 43757.313385009766,
+            "cash_balance": 8767.670211791992,
+            "capital_deployed": 34989.64317321777
+        },
+        {
+            "date": "2023-06-16",
+            "portfolio_value": 43856.25231933594,
+            "cash_balance": 11185.262405395508,
+            "capital_deployed": 32670.98991394043
+        },
+        {
+            "date": "2023-06-19",
+            "portfolio_value": 43731.88055419922,
+            "cash_balance": 11415.844253540039,
+            "capital_deployed": 32316.03630065918
+        },
+        {
+            "date": "2023-06-20",
+            "portfolio_value": 43879.44152832031,
+            "cash_balance": 13400.796035766602,
+            "capital_deployed": 30478.64549255371
+        },
+        {
+            "date": "2023-06-21",
+            "portfolio_value": 43941.55799865723,
+            "cash_balance": 13764.744522094727,
+            "capital_deployed": 30176.8134765625
+        },
+        {
+            "date": "2023-06-22",
+            "portfolio_value": 43680.84901428223,
+            "cash_balance": 13764.744522094727,
+            "capital_deployed": 29916.1044921875
+        },
+        {
+            "date": "2023-06-23",
+            "portfolio_value": 43331.25405883789,
+            "cash_balance": 12338.588150024414,
+            "capital_deployed": 30992.665908813477
+        },
+        {
+            "date": "2023-06-26",
+            "portfolio_value": 43443.537536621094,
+            "cash_balance": 12338.588150024414,
+            "capital_deployed": 31104.94938659668
+        },
+        {
+            "date": "2023-06-27",
+            "portfolio_value": 43619.70243835449,
+            "cash_balance": 12338.588150024414,
+            "capital_deployed": 31281.114288330078
+        },
+        {
+            "date": "2023-06-28",
+            "portfolio_value": 43882.39518737793,
+            "cash_balance": 13807.818740844727,
+            "capital_deployed": 30074.576446533203
+        },
+        {
+            "date": "2023-06-30",
+            "portfolio_value": 44343.915924072266,
+            "cash_balance": 23718.109756469727,
+            "capital_deployed": 20625.80616760254
+        },
+        {
+            "date": "2023-07-03",
+            "portfolio_value": 44432.763900756836,
+            "cash_balance": 23900.4835357666,
+            "capital_deployed": 20532.280364990234
+        },
+        {
+            "date": "2023-07-04",
+            "portfolio_value": 44458.92166137695,
+            "cash_balance": 21944.2130279541,
+            "capital_deployed": 22514.70863342285
+        },
+        {
+            "date": "2023-07-05",
+            "portfolio_value": 44486.383880615234,
+            "cash_balance": 23932.690505981445,
+            "capital_deployed": 20553.69337463379
+        },
+        {
+            "date": "2023-07-06",
+            "portfolio_value": 44632.01496887207,
+            "cash_balance": 23932.690505981445,
+            "capital_deployed": 20699.324462890625
+        },
+        {
+            "date": "2023-07-07",
+            "portfolio_value": 44405.15776062012,
+            "cash_balance": 22269.77766418457,
+            "capital_deployed": 22135.380096435547
+        },
+        {
+            "date": "2023-07-10",
+            "portfolio_value": 44318.17933654785,
+            "cash_balance": 21222.691970825195,
+            "capital_deployed": 23095.487365722656
+        },
+        {
+            "date": "2023-07-11",
+            "portfolio_value": 44240.82095336914,
+            "cash_balance": 20575.262100219727,
+            "capital_deployed": 23665.558853149414
+        },
+        {
+            "date": "2023-07-12",
+            "portfolio_value": 44248.812759399414,
+            "cash_balance": 22120.8975982666,
+            "capital_deployed": 22127.915161132812
+        },
+        {
+            "date": "2023-07-13",
+            "portfolio_value": 44091.35890197754,
+            "cash_balance": 20437.480850219727,
+            "capital_deployed": 23653.878051757812
+        },
+        {
+            "date": "2023-07-14",
+            "portfolio_value": 44301.88914489746,
+            "cash_balance": 18482.65168762207,
+            "capital_deployed": 25819.23745727539
+        },
+        {
+            "date": "2023-07-17",
+            "portfolio_value": 44502.36097717285,
+            "cash_balance": 18528.846237182617,
+            "capital_deployed": 25973.514739990234
+        },
+        {
+            "date": "2023-07-18",
+            "portfolio_value": 44433.84022521973,
+            "cash_balance": 17885.604049682617,
+            "capital_deployed": 26548.23617553711
+        },
+        {
+            "date": "2023-07-19",
+            "portfolio_value": 44552.56344604492,
+            "cash_balance": 18962.800216674805,
+            "capital_deployed": 25589.763229370117
+        },
+        {
+            "date": "2023-07-20",
+            "portfolio_value": 44729.146896362305,
+            "cash_balance": 20243.187423706055,
+            "capital_deployed": 24485.95947265625
+        },
+        {
+            "date": "2023-07-21",
+            "portfolio_value": 44579.32588195801,
+            "cash_balance": 23513.474166870117,
+            "capital_deployed": 21065.85171508789
+        },
+        {
+            "date": "2023-07-24",
+            "portfolio_value": 44590.046813964844,
+            "cash_balance": 24859.981536865234,
+            "capital_deployed": 19730.06527709961
+        },
+        {
+            "date": "2023-07-25",
+            "portfolio_value": 44532.97296142578,
+            "cash_balance": 24230.325164794922,
+            "capital_deployed": 20302.64779663086
+        },
+        {
+            "date": "2023-07-26",
+            "portfolio_value": 44642.88815307617,
+            "cash_balance": 23594.922760009766,
+            "capital_deployed": 21047.965393066406
+        },
+        {
+            "date": "2023-07-27",
+            "portfolio_value": 44449.399322509766,
+            "cash_balance": 22545.83316040039,
+            "capital_deployed": 21903.566162109375
+        },
+        {
+            "date": "2023-07-28",
+            "portfolio_value": 44453.06427001953,
+            "cash_balance": 23978.124603271484,
+            "capital_deployed": 20474.939666748047
+        },
+        {
+            "date": "2023-07-31",
+            "portfolio_value": 44536.9299621582,
+            "cash_balance": 24035.820770263672,
+            "capital_deployed": 20501.10919189453
+        },
+        {
+            "date": "2023-08-01",
+            "portfolio_value": 44622.1305847168,
+            "cash_balance": 22445.22738647461,
+            "capital_deployed": 22176.903198242188
+        },
+        {
+            "date": "2023-08-02",
+            "portfolio_value": 44315.73715209961,
+            "cash_balance": 20507.418426513672,
+            "capital_deployed": 23808.318725585938
+        },
+        {
+            "date": "2023-08-03",
+            "portfolio_value": 44010.97198486328,
+            "cash_balance": 19893.44253540039,
+            "capital_deployed": 24117.52944946289
+        },
+        {
+            "date": "2023-08-04",
+            "portfolio_value": 44104.830627441406,
+            "cash_balance": 19294.747589111328,
+            "capital_deployed": 24810.083038330078
+        },
+        {
+            "date": "2023-08-07",
+            "portfolio_value": 44129.77294921875,
+            "cash_balance": 18674.490203857422,
+            "capital_deployed": 25455.282745361328
+        },
+        {
+            "date": "2023-08-08",
+            "portfolio_value": 44106.97830200195,
+            "cash_balance": 18056.656463623047,
+            "capital_deployed": 26050.321838378906
+        },
+        {
+            "date": "2023-08-09",
+            "portfolio_value": 44410.33688354492,
+            "cash_balance": 19193.217315673828,
+            "capital_deployed": 25217.119567871094
+        },
+        {
+            "date": "2023-08-10",
+            "portfolio_value": 44251.32400512695,
+            "cash_balance": 18570.140655517578,
+            "capital_deployed": 25681.183349609375
+        },
+        {
+            "date": "2023-08-11",
+            "portfolio_value": 43970.66537475586,
+            "cash_balance": 19016.10678100586,
+            "capital_deployed": 24954.55859375
+        },
+        {
+            "date": "2023-08-14",
+            "portfolio_value": 43684.48080444336,
+            "cash_balance": 18412.171478271484,
+            "capital_deployed": 25272.309326171875
+        },
+        {
+            "date": "2023-08-16",
+            "portfolio_value": 43625.24334716797,
+            "cash_balance": 17808.73080444336,
+            "capital_deployed": 25816.51254272461
+        },
+        {
+            "date": "2023-08-17",
+            "portfolio_value": 43508.02947998047,
+            "cash_balance": 16026.995208740234,
+            "capital_deployed": 27481.034271240234
+        },
+        {
+            "date": "2023-08-18",
+            "portfolio_value": 43273.57489013672,
+            "cash_balance": 15434.782135009766,
+            "capital_deployed": 27838.792755126953
+        },
+        {
+            "date": "2023-08-21",
+            "portfolio_value": 43542.369079589844,
+            "cash_balance": 14835.397247314453,
+            "capital_deployed": 28706.97183227539
+        },
+        {
+            "date": "2023-08-22",
+            "portfolio_value": 43449.981536865234,
+            "cash_balance": 13274.842315673828,
+            "capital_deployed": 30175.139221191406
+        },
+        {
+            "date": "2023-08-23",
+            "portfolio_value": 43561.52816772461,
+            "cash_balance": 12675.407928466797,
+            "capital_deployed": 30886.120239257812
+        },
+        {
+            "date": "2023-08-24",
+            "portfolio_value": 43578.975524902344,
+            "cash_balance": 11188.448699951172,
+            "capital_deployed": 32390.526824951172
+        },
+        {
+            "date": "2023-08-25",
+            "portfolio_value": 43481.22482299805,
+            "cash_balance": 9638.287811279297,
+            "capital_deployed": 33842.93701171875
+        },
+        {
+            "date": "2023-08-28",
+            "portfolio_value": 43619.14807128906,
+            "cash_balance": 8405.390106201172,
+            "capital_deployed": 35213.75796508789
+        },
+        {
+            "date": "2023-08-29",
+            "portfolio_value": 43954.55972290039,
+            "cash_balance": 7293.778656005859,
+            "capital_deployed": 36660.78106689453
+        },
+        {
+            "date": "2023-08-30",
+            "portfolio_value": 43946.70492553711,
+            "cash_balance": 6157.559783935547,
+            "capital_deployed": 37789.14514160156
+        },
+        {
+            "date": "2023-08-31",
+            "portfolio_value": 43478.308349609375,
+            "cash_balance": 5988.459762573242,
+            "capital_deployed": 37489.84858703613
+        },
+        {
+            "date": "2023-09-01",
+            "portfolio_value": 44076.75065612793,
+            "cash_balance": 5817.761672973633,
+            "capital_deployed": 38258.9889831543
+        },
+        {
+            "date": "2023-09-04",
+            "portfolio_value": 44257.39219665527,
+            "cash_balance": 7713.497497558594,
+            "capital_deployed": 36543.89469909668
+        },
+        {
+            "date": "2023-09-05",
+            "portfolio_value": 44321.24203491211,
+            "cash_balance": 9308.364807128906,
+            "capital_deployed": 35012.8772277832
+        },
+        {
+            "date": "2023-09-06",
+            "portfolio_value": 44436.53109741211,
+            "cash_balance": 11021.285461425781,
+            "capital_deployed": 33415.24563598633
+        },
+        {
+            "date": "2023-09-07",
+            "portfolio_value": 44586.061599731445,
+            "cash_balance": 9931.919372558594,
+            "capital_deployed": 34654.14222717285
+        },
+        {
+            "date": "2023-09-08",
+            "portfolio_value": 44571.65287780762,
+            "cash_balance": 9931.919372558594,
+            "capital_deployed": 34639.73350524902
+        },
+        {
+            "date": "2023-09-11",
+            "portfolio_value": 45019.012145996094,
+            "cash_balance": 9931.919372558594,
+            "capital_deployed": 35087.0927734375
+        },
+        {
+            "date": "2023-09-12",
+            "portfolio_value": 44543.51591491699,
+            "cash_balance": 9759.382431030273,
+            "capital_deployed": 34784.13348388672
+        },
+        {
+            "date": "2023-09-13",
+            "portfolio_value": 44791.22850036621,
+            "cash_balance": 8534.086776733398,
+            "capital_deployed": 36257.14172363281
+        },
+        {
+            "date": "2023-09-14",
+            "portfolio_value": 45447.8748626709,
+            "cash_balance": 10552.570053100586,
+            "capital_deployed": 34895.30480957031
+        },
+        {
+            "date": "2023-09-15",
+            "portfolio_value": 45500.581283569336,
+            "cash_balance": 10552.570053100586,
+            "capital_deployed": 34948.01123046875
+        },
+        {
+            "date": "2023-09-18",
+            "portfolio_value": 45421.93461608887,
+            "cash_balance": 12279.460311889648,
+            "capital_deployed": 33142.47430419922
+        },
+        {
+            "date": "2023-09-20",
+            "portfolio_value": 45005.23124694824,
+            "cash_balance": 10702.383407592773,
+            "capital_deployed": 34302.84783935547
+        },
+        {
+            "date": "2023-09-21",
+            "portfolio_value": 44902.03788757324,
+            "cash_balance": 9508.670639038086,
+            "capital_deployed": 35393.367248535156
+        },
+        {
+            "date": "2023-09-22",
+            "portfolio_value": 44513.330307006836,
+            "cash_balance": 8325.170272827148,
+            "capital_deployed": 36188.16003417969
+        },
+        {
+            "date": "2023-09-25",
+            "portfolio_value": 44661.75639343262,
+            "cash_balance": 7845.024826049805,
+            "capital_deployed": 36816.73156738281
+        },
+        {
+            "date": "2023-09-26",
+            "portfolio_value": 44593.25819396973,
+            "cash_balance": 7786.89372253418,
+            "capital_deployed": 36806.36447143555
+        },
+        {
+            "date": "2023-09-27",
+            "portfolio_value": 44584.30815124512,
+            "cash_balance": 5911.11247253418,
+            "capital_deployed": 38673.19567871094
+        },
+        {
+            "date": "2023-09-28",
+            "portfolio_value": 43995.247299194336,
+            "cash_balance": 5740.523818969727,
+            "capital_deployed": 38254.72348022461
+        },
+        {
+            "date": "2023-09-29",
+            "portfolio_value": 44478.926696777344,
+            "cash_balance": 4576.446304321289,
+            "capital_deployed": 39902.480392456055
+        },
+        {
+            "date": "2023-10-03",
+            "portfolio_value": 44059.40986633301,
+            "cash_balance": 4406.995986938477,
+            "capital_deployed": 39652.41387939453
+        },
+        {
+            "date": "2023-10-04",
+            "portfolio_value": 43756.27598571777,
+            "cash_balance": 3121.133316040039,
+            "capital_deployed": 40635.142669677734
+        },
+        {
+            "date": "2023-10-05",
+            "portfolio_value": 43840.65303039551,
+            "cash_balance": 2032.825210571289,
+            "capital_deployed": 41807.82781982422
+        },
+        {
+            "date": "2023-10-06",
+            "portfolio_value": 44300.28401184082,
+            "cash_balance": 4107.988174438477,
+            "capital_deployed": 40192.295837402344
+        },
+        {
+            "date": "2023-10-09",
+            "portfolio_value": 44058.09190368652,
+            "cash_balance": 2522.2562408447266,
+            "capital_deployed": 41535.8356628418
+        },
+        {
+            "date": "2023-10-10",
+            "portfolio_value": 44562.50538635254,
+            "cash_balance": 649.9428253173828,
+            "capital_deployed": 43912.562561035156
+        },
+        {
+            "date": "2023-10-11",
+            "portfolio_value": 44970.72200012207,
+            "cash_balance": 479.96714782714844,
+            "capital_deployed": 44490.75485229492
+        },
+        {
+            "date": "2023-10-12",
+            "portfolio_value": 44763.56294250488,
+            "cash_balance": 479.96714782714844,
+            "capital_deployed": 44283.595794677734
+        },
+        {
+            "date": "2023-10-13",
+            "portfolio_value": 44771.67491149902,
+            "cash_balance": 479.96714782714844,
+            "capital_deployed": 44291.707763671875
+        },
+        {
+            "date": "2023-10-16",
+            "portfolio_value": 44964.062103271484,
+            "cash_balance": 479.96714782714844,
+            "capital_deployed": 44484.094955444336
+        },
+        {
+            "date": "2023-10-17",
+            "portfolio_value": 45004.324768066406,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 44888.33009338379
+        },
+        {
+            "date": "2023-10-18",
+            "portfolio_value": 44868.91825866699,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 44752.923583984375
+        },
+        {
+            "date": "2023-10-19",
+            "portfolio_value": 44542.886489868164,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 44426.89181518555
+        },
+        {
+            "date": "2023-10-20",
+            "portfolio_value": 44084.290130615234,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 43968.29545593262
+        },
+        {
+            "date": "2023-10-23",
+            "portfolio_value": 43215.19691467285,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 43099.202239990234
+        },
+        {
+            "date": "2023-10-25",
+            "portfolio_value": 42822.85484313965,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 42706.86016845703
+        },
+        {
+            "date": "2023-10-26",
+            "portfolio_value": 41935.88053894043,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 41819.88586425781
+        },
+        {
+            "date": "2023-10-27",
+            "portfolio_value": 42122.1083984375,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 42006.11372375488
+        },
+        {
+            "date": "2023-10-30",
+            "portfolio_value": 41873.83184814453,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 41757.837173461914
+        },
+        {
+            "date": "2023-10-31",
+            "portfolio_value": 41943.8992767334,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 41827.90460205078
+        },
+        {
+            "date": "2023-11-01",
+            "portfolio_value": 41740.31700134277,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 41624.322326660156
+        },
+        {
+            "date": "2023-11-02",
+            "portfolio_value": 42156.00700378418,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 42040.01232910156
+        },
+        {
+            "date": "2023-11-03",
+            "portfolio_value": 42528.78680419922,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 42412.7921295166
+        },
+        {
+            "date": "2023-11-06",
+            "portfolio_value": 42818.40774536133,
+            "cash_balance": 115.99467468261719,
+            "capital_deployed": 42702.41307067871
+        },
+        {
+            "date": "2023-11-07",
+            "portfolio_value": 42827.491287231445,
+            "cash_balance": 679.8406219482422,
+            "capital_deployed": 42147.6506652832
+        },
+        {
+            "date": "2023-11-08",
+            "portfolio_value": 43103.33090209961,
+            "cash_balance": 2360.4153747558594,
+            "capital_deployed": 40742.91552734375
+        },
+        {
+            "date": "2023-11-09",
+            "portfolio_value": 42818.66744995117,
+            "cash_balance": 1795.9498596191406,
+            "capital_deployed": 41022.71759033203
+        },
+        {
+            "date": "2023-11-10",
+            "portfolio_value": 42762.630279541016,
+            "cash_balance": 1234.6992492675781,
+            "capital_deployed": 41527.93103027344
+        },
+        {
+            "date": "2023-11-13",
+            "portfolio_value": 42889.80682373047,
+            "cash_balance": 667.9585266113281,
+            "capital_deployed": 42221.84829711914
+        },
+        {
+            "date": "2023-11-15",
+            "portfolio_value": 43405.08987426758,
+            "cash_balance": 92.21597290039062,
+            "capital_deployed": 43312.87390136719
+        },
+        {
+            "date": "2023-11-16",
+            "portfolio_value": 43486.865631103516,
+            "cash_balance": 92.21597290039062,
+            "capital_deployed": 43394.649658203125
+        },
+        {
+            "date": "2023-11-17",
+            "portfolio_value": 43477.70864868164,
+            "cash_balance": 92.21597290039062,
+            "capital_deployed": 43385.49267578125
+        },
+        {
+            "date": "2023-11-20",
+            "portfolio_value": 43242.89517211914,
+            "cash_balance": 23.217987060546875,
+            "capital_deployed": 43219.677185058594
+        },
+        {
+            "date": "2023-11-21",
+            "portfolio_value": 43525.8557434082,
+            "cash_balance": 3114.973663330078,
+            "capital_deployed": 40410.882080078125
+        },
+        {
+            "date": "2023-11-22",
+            "portfolio_value": 43571.846588134766,
+            "cash_balance": 2535.175262451172,
+            "capital_deployed": 41036.671325683594
+        },
+        {
+            "date": "2023-11-23",
+            "portfolio_value": 43574.46633911133,
+            "cash_balance": 1366.6368103027344,
+            "capital_deployed": 42207.829528808594
+        },
+        {
+            "date": "2023-11-24",
+            "portfolio_value": 43357.954681396484,
+            "cash_balance": 793.7135314941406,
+            "capital_deployed": 42564.241149902344
+        },
+        {
+            "date": "2023-11-28",
+            "portfolio_value": 43621.41082763672,
+            "cash_balance": 1856.4052429199219,
+            "capital_deployed": 41765.0055847168
+        },
+        {
+            "date": "2023-11-29",
+            "portfolio_value": 44090.88278198242,
+            "cash_balance": 2751.0289001464844,
+            "capital_deployed": 41339.85388183594
+        },
+        {
+            "date": "2023-11-30",
+            "portfolio_value": 44132.4309387207,
+            "cash_balance": 1281.0265808105469,
+            "capital_deployed": 42851.404357910156
+        },
+        {
+            "date": "2023-12-01",
+            "portfolio_value": 44331.240631103516,
+            "cash_balance": 692.0779113769531,
+            "capital_deployed": 43639.16271972656
+        },
+        {
+            "date": "2023-12-04",
+            "portfolio_value": 44859.7880859375,
+            "cash_balance": 2029.8496398925781,
+            "capital_deployed": 42829.93844604492
+        },
+        {
+            "date": "2023-12-05",
+            "portfolio_value": 44995.649353027344,
+            "cash_balance": 3174.0460510253906,
+            "capital_deployed": 41821.60330200195
+        },
+        {
+            "date": "2023-12-06",
+            "portfolio_value": 45373.49725341797,
+            "cash_balance": 3174.0460510253906,
+            "capital_deployed": 42199.45120239258
+        },
+        {
+            "date": "2023-12-07",
+            "portfolio_value": 45298.34503173828,
+            "cash_balance": 2573.820343017578,
+            "capital_deployed": 42724.5246887207
+        },
+        {
+            "date": "2023-12-08",
+            "portfolio_value": 45265.989318847656,
+            "cash_balance": 3616.108917236328,
+            "capital_deployed": 41649.88040161133
+        },
+        {
+            "date": "2023-12-11",
+            "portfolio_value": 45861.42428588867,
+            "cash_balance": 3616.108917236328,
+            "capital_deployed": 42245.315368652344
+        },
+        {
+            "date": "2023-12-12",
+            "portfolio_value": 45581.37319946289,
+            "cash_balance": 3616.108917236328,
+            "capital_deployed": 41965.26428222656
+        },
+        {
+            "date": "2023-12-13",
+            "portfolio_value": 45663.472564697266,
+            "cash_balance": 1665.2863159179688,
+            "capital_deployed": 43998.1862487793
+        },
+        {
+            "date": "2023-12-14",
+            "portfolio_value": 45924.4850769043,
+            "cash_balance": 3179.9487915039062,
+            "capital_deployed": 42744.53628540039
+        },
+        {
+            "date": "2023-12-15",
+            "portfolio_value": 46573.12823486328,
+            "cash_balance": 4395.137634277344,
+            "capital_deployed": 42177.99060058594
+        },
+        {
+            "date": "2023-12-18",
+            "portfolio_value": 46389.252853393555,
+            "cash_balance": 5155.0986328125,
+            "capital_deployed": 41234.154220581055
+        },
+        {
+            "date": "2023-12-19",
+            "portfolio_value": 46188.625228881836,
+            "cash_balance": 7504.7623291015625,
+            "capital_deployed": 38683.86289978027
+        },
+        {
+            "date": "2023-12-20",
+            "portfolio_value": 44953.28176879883,
+            "cash_balance": 6761.30126953125,
+            "capital_deployed": 38191.98049926758
+        },
+        {
+            "date": "2023-12-21",
+            "portfolio_value": 45149.07633972168,
+            "cash_balance": 7791.912414550781,
+            "capital_deployed": 37357.1639251709
+        },
+        {
+            "date": "2023-12-22",
+            "portfolio_value": 45338.47009277344,
+            "cash_balance": 8120.514892578125,
+            "capital_deployed": 37217.95520019531
+        },
+        {
+            "date": "2023-12-26",
+            "portfolio_value": 45485.522216796875,
+            "cash_balance": 9329.043518066406,
+            "capital_deployed": 36156.47869873047
+        },
+        {
+            "date": "2023-12-27",
+            "portfolio_value": 45488.78161621094,
+            "cash_balance": 9975.559265136719,
+            "capital_deployed": 35513.22235107422
+        },
+        {
+            "date": "2023-12-28",
+            "portfolio_value": 45865.6953125,
+            "cash_balance": 12000.374084472656,
+            "capital_deployed": 33865.321228027344
+        },
+        {
+            "date": "2023-12-29",
+            "portfolio_value": 45739.54522705078,
+            "cash_balance": 10879.864685058594,
+            "capital_deployed": 34859.68054199219
+        }
+    ],
+    "trades": [
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "BUY",
+            "price": 603.025146484375,
+            "quantity": 3,
+            "date": "2025-11-28 19:48:27",
+            "order_id": "ORD_1",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:27",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCLIFE-EQ",
+            "action": "BUY",
+            "price": 510.85107421875,
+            "quantity": 3,
+            "date": "2025-11-28 19:48:27",
+            "order_id": "ORD_2",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:27",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1563.10595703125,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:28",
+            "order_id": "ORD_3",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:28",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBILIFE-EQ",
+            "action": "BUY",
+            "price": 1131.195068359375,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:28",
+            "order_id": "ORD_4",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:28",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "BUY",
+            "price": 536.880859375,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:28",
+            "order_id": "ORD_5",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:28",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "SELL",
+            "price": 1800.4801025390625,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:28",
+            "order_id": "ORD_6",
+            "profit": 237.3741455078125,
+            "profit_pct": 15.186055970169068,
+            "comment": "PROFIT EXIT: 15.2%",
+            "created_at": "2025-11-28 19:48:28",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1800.4801025390625,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:28",
+            "order_id": "ORD_7",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:28",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "SELL",
+            "price": 2161.285400390625,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:28",
+            "order_id": "ORD_8",
+            "profit": 360.8052978515625,
+            "profit_pct": 20.039393789620323,
+            "comment": "PROFIT EXIT: 20.0%",
+            "created_at": "2025-11-28 19:48:28",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDALCO-EQ",
+            "action": "BUY",
+            "price": 428.0573120117188,
+            "quantity": 4,
+            "date": "2025-11-28 19:48:29",
+            "order_id": "ORD_9",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:29",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1923.06201171875,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:29",
+            "order_id": "ORD_10",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:29",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TATASTEEL-EQ",
+            "action": "BUY",
+            "price": 100.92666625976562,
+            "quantity": 19,
+            "date": "2025-11-28 19:48:30",
+            "order_id": "ORD_11",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:30",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1715.2969970703125,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:30",
+            "order_id": "ORD_12",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:30",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "BUY",
+            "price": 556.22216796875,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:30",
+            "order_id": "ORD_13",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:30",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "BUY",
+            "price": 560.110107421875,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:31",
+            "order_id": "ORD_14",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:31",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1720.340087890625,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:32",
+            "order_id": "ORD_15",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:32",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "BUY",
+            "price": 938.1827392578124,
+            "quantity": 2,
+            "date": "2025-11-28 19:48:32",
+            "order_id": "ORD_16",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:32",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBIN-EQ",
+            "action": "BUY",
+            "price": 495.06256103515625,
+            "quantity": 4,
+            "date": "2025-11-28 19:48:33",
+            "order_id": "ORD_17",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:33",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1402.925537109375,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:33",
+            "order_id": "ORD_18",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:33",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INDUSINDBK-EQ",
+            "action": "BUY",
+            "price": 1052.2464599609375,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:34",
+            "order_id": "ORD_19",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:34",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:JSWSTEEL-EQ",
+            "action": "BUY",
+            "price": 675.0072631835938,
+            "quantity": 2,
+            "date": "2025-11-28 19:48:34",
+            "order_id": "ORD_20",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:34",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1191.8651123046875,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:35",
+            "order_id": "ORD_21",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:35",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1361.9818115234375,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:35",
+            "order_id": "ORD_22",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:35",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "BUY",
+            "price": 875.5074462890625,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:36",
+            "order_id": "ORD_23",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:36",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "SELL",
+            "price": 613.1141357421875,
+            "quantity": 6,
+            "date": "2025-11-28 19:48:36",
+            "order_id": "ORD_24",
+            "profit": 216.396240234375,
+            "profit_pct": 6.250092549931481,
+            "comment": "PROFIT EXIT: 6.3%",
+            "created_at": "2025-11-28 19:48:36",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INFY-EQ",
+            "action": "BUY",
+            "price": 1350.1490478515625,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:36",
+            "order_id": "ORD_25",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:36",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "SELL",
+            "price": 1876.92529296875,
+            "quantity": 6,
+            "date": "2025-11-28 19:48:36",
+            "order_id": "ORD_26",
+            "profit": 1946.080200195312,
+            "profit_pct": 20.89083937574816,
+            "comment": "PROFIT EXIT: 20.9%",
+            "created_at": "2025-11-28 19:48:36",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "BUY",
+            "price": 855.1185302734375,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:37",
+            "order_id": "ORD_27",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:37",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBIN-EQ",
+            "action": "SELL",
+            "price": 531.2382202148438,
+            "quantity": 4,
+            "date": "2025-11-28 19:48:37",
+            "order_id": "ORD_28",
+            "profit": 144.70263671875,
+            "profit_pct": 7.3072904369996445,
+            "comment": "PROFIT EXIT: 7.3%",
+            "created_at": "2025-11-28 19:48:37",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDALCO-EQ",
+            "action": "BUY",
+            "price": 406.4828186035156,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:38",
+            "order_id": "ORD_29",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:38",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INDUSINDBK-EQ",
+            "action": "SELL",
+            "price": 1148.7545166015625,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:38",
+            "order_id": "ORD_30",
+            "profit": 96.508056640625,
+            "profit_pct": 9.17162093795095,
+            "comment": "PROFIT EXIT: 9.2%",
+            "created_at": "2025-11-28 19:48:38",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJFINANCE-EQ",
+            "action": "BUY",
+            "price": 590.52099609375,
+            "quantity": 3,
+            "date": "2025-11-28 19:48:39",
+            "order_id": "ORD_31",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:39",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDALCO-EQ",
+            "action": "BUY",
+            "price": 400.942138671875,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:39",
+            "order_id": "ORD_32",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:39",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDALCO-EQ",
+            "action": "BUY",
+            "price": 397.8040161132813,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:40",
+            "order_id": "ORD_33",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:40",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJAJFINSV-EQ",
+            "action": "BUY",
+            "price": 1293.5706787109375,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:41",
+            "order_id": "ORD_34",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:41",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCLIFE-EQ",
+            "action": "BUY",
+            "price": 466.1256103515625,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:41",
+            "order_id": "ORD_35",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:41",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INDUSINDBK-EQ",
+            "action": "BUY",
+            "price": 1021.6748046875,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:42",
+            "order_id": "ORD_36",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:42",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDALCO-EQ",
+            "action": "BUY",
+            "price": 377.5044250488281,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:42",
+            "order_id": "ORD_37",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:42",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:RELIANCE-EQ",
+            "action": "BUY",
+            "price": 1014.8377075195312,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:43",
+            "order_id": "ORD_38",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:43",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDALCO-EQ",
+            "action": "BUY",
+            "price": 378.2889404296875,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:43",
+            "order_id": "ORD_39",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:43",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:WIPRO-EQ",
+            "action": "BUY",
+            "price": 175.7905731201172,
+            "quantity": 11,
+            "date": "2025-11-28 19:48:44",
+            "order_id": "ORD_40",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:44",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "BUY",
+            "price": 840.2769775390625,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:44",
+            "order_id": "ORD_41",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:44",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INFY-EQ",
+            "action": "BUY",
+            "price": 1260.6375732421875,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:45",
+            "order_id": "ORD_42",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:45",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDALCO-EQ",
+            "action": "BUY",
+            "price": 380.8876647949219,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:46",
+            "order_id": "ORD_43",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:46",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJFINANCE-EQ",
+            "action": "BUY",
+            "price": 550.758056640625,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:46",
+            "order_id": "ORD_44",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:46",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "BUY",
+            "price": 584.07763671875,
+            "quantity": 3,
+            "date": "2025-11-28 19:48:47",
+            "order_id": "ORD_45",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:47",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "SELL",
+            "price": 626.6481323242188,
+            "quantity": 3,
+            "date": "2025-11-28 19:48:47",
+            "order_id": "ORD_46",
+            "profit": 127.71148681640625,
+            "profit_pct": 7.28849949548191,
+            "comment": "PROFIT EXIT: 7.3%",
+            "created_at": "2025-11-28 19:48:47",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TATASTEEL-EQ",
+            "action": "BUY",
+            "price": 96.10295867919922,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:47",
+            "order_id": "ORD_47",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:47",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "BUY",
+            "price": 621.9727783203125,
+            "quantity": 3,
+            "date": "2025-11-28 19:48:48",
+            "order_id": "ORD_48",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:48",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "BUY",
+            "price": 1715.0972900390625,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:48",
+            "order_id": "ORD_49",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:48",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "BUY",
+            "price": 142.04307556152344,
+            "quantity": 14,
+            "date": "2025-11-28 19:48:49",
+            "order_id": "ORD_50",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:49",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:RELIANCE-EQ",
+            "action": "SELL",
+            "price": 1068.8638916015625,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:49",
+            "order_id": "ORD_51",
+            "profit": 54.02618408203125,
+            "profit_pct": 5.323627973391152,
+            "comment": "PROFIT EXIT: 5.3%",
+            "created_at": "2025-11-28 19:48:49",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TATASTEEL-EQ",
+            "action": "BUY",
+            "price": 96.79869079589844,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:50",
+            "order_id": "ORD_52",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:50",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TATASTEEL-EQ",
+            "action": "BUY",
+            "price": 97.3552703857422,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:51",
+            "order_id": "ORD_53",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:51",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "BUY",
+            "price": 1001.302490234375,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:53",
+            "order_id": "ORD_54",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:53",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIENT-EQ",
+            "action": "SELL",
+            "price": 1844.719482421875,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:53",
+            "order_id": "ORD_55",
+            "profit": 129.6221923828125,
+            "profit_pct": 7.557716587603043,
+            "comment": "PROFIT EXIT: 7.6%",
+            "created_at": "2025-11-28 19:48:53",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:NTPC-EQ",
+            "action": "BUY",
+            "price": 163.3386993408203,
+            "quantity": 12,
+            "date": "2025-11-28 19:48:54",
+            "order_id": "ORD_56",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:54",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INDUSINDBK-EQ",
+            "action": "SELL",
+            "price": 1085.2147216796875,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:54",
+            "order_id": "ORD_57",
+            "profit": 63.5399169921875,
+            "profit_pct": 6.219191928846916,
+            "comment": "PROFIT EXIT: 6.2%",
+            "created_at": "2025-11-28 19:48:54",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HCLTECH-EQ",
+            "action": "BUY",
+            "price": 962.546875,
+            "quantity": 2,
+            "date": "2025-11-28 19:48:56",
+            "order_id": "ORD_58",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:48:56",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCLIFE-EQ",
+            "action": "SELL",
+            "price": 528.3847045898438,
+            "quantity": 4,
+            "date": "2025-11-28 19:48:56",
+            "order_id": "ORD_59",
+            "profit": 114.8599853515625,
+            "profit_pct": 5.7467955058447115,
+            "comment": "PROFIT EXIT: 5.7%",
+            "created_at": "2025-11-28 19:48:56",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INFY-EQ",
+            "action": "BUY",
+            "price": 1154.0213623046875,
+            "quantity": 1,
+            "date": "2025-11-28 19:48:59",
+            "order_id": "ORD_60",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:48:59",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:JSWSTEEL-EQ",
+            "action": "SELL",
+            "price": 708.8561401367188,
+            "quantity": 2,
+            "date": "2025-11-28 19:48:59",
+            "order_id": "ORD_61",
+            "profit": 67.69775390625,
+            "profit_pct": 5.014594479099482,
+            "comment": "PROFIT EXIT: 5.0%",
+            "created_at": "2025-11-28 19:48:59",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INFY-EQ",
+            "action": "BUY",
+            "price": 1154.984375,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:00",
+            "order_id": "ORD_62",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:00",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INFY-EQ",
+            "action": "BUY",
+            "price": 1130.0843505859375,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:01",
+            "order_id": "ORD_63",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:01",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "SELL",
+            "price": 655.6353759765625,
+            "quantity": 3,
+            "date": "2025-11-28 19:49:01",
+            "order_id": "ORD_64",
+            "profit": 100.98779296875,
+            "profit_pct": 5.412230057263688,
+            "comment": "PROFIT EXIT: 5.4%",
+            "created_at": "2025-11-28 19:49:01",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INFY-EQ",
+            "action": "BUY",
+            "price": 1122.0137939453125,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:01",
+            "order_id": "ORD_65",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:01",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "SELL",
+            "price": 149.90188598632812,
+            "quantity": 14,
+            "date": "2025-11-28 19:49:01",
+            "order_id": "ORD_66",
+            "profit": 110.02334594726562,
+            "profit_pct": 5.53269520090107,
+            "comment": "PROFIT EXIT: 5.5%",
+            "created_at": "2025-11-28 19:49:01",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "BUY",
+            "price": 910.5858154296876,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:02",
+            "order_id": "ORD_67",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:02",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INFY-EQ",
+            "action": "BUY",
+            "price": 1124.673583984375,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:03",
+            "order_id": "ORD_68",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:03",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SUNPHARMA-EQ",
+            "action": "BUY",
+            "price": 951.6469116210938,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:04",
+            "order_id": "ORD_69",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:04",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INFY-EQ",
+            "action": "BUY",
+            "price": 1125.8197021484375,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:04",
+            "order_id": "ORD_70",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:04",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJFINANCE-EQ",
+            "action": "SELL",
+            "price": 610.530517578125,
+            "quantity": 4,
+            "date": "2025-11-28 19:49:04",
+            "order_id": "ORD_71",
+            "profit": 119.801025390625,
+            "profit_pct": 5.158676301564292,
+            "comment": "PROFIT EXIT: 5.2%",
+            "created_at": "2025-11-28 19:49:04",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "BUY",
+            "price": 914.5974731445312,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:05",
+            "order_id": "ORD_72",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:05",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDALCO-EQ",
+            "action": "SELL",
+            "price": 427.6650695800781,
+            "quantity": 10,
+            "date": "2025-11-28 19:49:05",
+            "order_id": "ORD_73",
+            "profit": 222.51144409179688,
+            "profit_pct": 5.488500277783977,
+            "comment": "PROFIT EXIT: 5.5%",
+            "created_at": "2025-11-28 19:49:05",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:WIPRO-EQ",
+            "action": "SELL",
+            "price": 186.3217010498047,
+            "quantity": 11,
+            "date": "2025-11-28 19:49:06",
+            "order_id": "ORD_74",
+            "profit": 115.8424072265625,
+            "profit_pct": 5.990723929486032,
+            "comment": "PROFIT EXIT: 6.0%",
+            "created_at": "2025-11-28 19:49:06",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJAJFINSV-EQ",
+            "action": "SELL",
+            "price": 1372.1912841796875,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:07",
+            "order_id": "ORD_75",
+            "profit": 78.62060546875,
+            "profit_pct": 6.077797430218239,
+            "comment": "PROFIT EXIT: 6.1%",
+            "created_at": "2025-11-28 19:49:07",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INDUSINDBK-EQ",
+            "action": "BUY",
+            "price": 1049.996337890625,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:09",
+            "order_id": "ORD_76",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:09",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 696.7223510742188,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:10",
+            "order_id": "ORD_77",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:10",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INDUSINDBK-EQ",
+            "action": "SELL",
+            "price": 1115.8349609375,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:10",
+            "order_id": "ORD_78",
+            "profit": 65.838623046875,
+            "profit_pct": 6.270366921387607,
+            "comment": "PROFIT EXIT: 6.3%",
+            "created_at": "2025-11-28 19:49:10",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCBANK-EQ",
+            "action": "BUY",
+            "price": 791.2803955078125,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:10",
+            "order_id": "ORD_79",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:10",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 661.954345703125,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:11",
+            "order_id": "ORD_80",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:11",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:DRREDDY-EQ",
+            "action": "BUY",
+            "price": 888.437744140625,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:12",
+            "order_id": "ORD_81",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:12",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDALCO-EQ",
+            "action": "BUY",
+            "price": 396.9214172363281,
+            "quantity": 5,
+            "date": "2025-11-28 19:49:13",
+            "order_id": "ORD_82",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:13",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:JSWSTEEL-EQ",
+            "action": "BUY",
+            "price": 695.2574462890625,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:13",
+            "order_id": "ORD_83",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:13",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 655.283203125,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:14",
+            "order_id": "ORD_84",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:14",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SUNPHARMA-EQ",
+            "action": "BUY",
+            "price": 915.8806762695312,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:15",
+            "order_id": "ORD_85",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:15",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 655.7701416015625,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:16",
+            "order_id": "ORD_86",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:16",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SUNPHARMA-EQ",
+            "action": "BUY",
+            "price": 905.9971923828124,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:17",
+            "order_id": "ORD_87",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:17",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "SELL",
+            "price": 1006.9551391601562,
+            "quantity": 3,
+            "date": "2025-11-28 19:49:17",
+            "order_id": "ORD_88",
+            "profit": 194.379638671875,
+            "profit_pct": 6.877078247809509,
+            "comment": "PROFIT EXIT: 6.9%",
+            "created_at": "2025-11-28 19:49:17",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 652.897216796875,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:18",
+            "order_id": "ORD_89",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:18",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HCLTECH-EQ",
+            "action": "SELL",
+            "price": 1011.42138671875,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:18",
+            "order_id": "ORD_90",
+            "profit": 97.7490234375,
+            "profit_pct": 5.077624060516533,
+            "comment": "PROFIT EXIT: 5.1%",
+            "created_at": "2025-11-28 19:49:18",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TATASTEEL-EQ",
+            "action": "BUY",
+            "price": 97.26250457763672,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:20",
+            "order_id": "ORD_91",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:20",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBILIFE-EQ",
+            "action": "SELL",
+            "price": 1191.338623046875,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:20",
+            "order_id": "ORD_92",
+            "profit": 60.1435546875,
+            "profit_pct": 5.316815496263523,
+            "comment": "PROFIT EXIT: 5.3%",
+            "created_at": "2025-11-28 19:49:20",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:GRASIM-EQ",
+            "action": "BUY",
+            "price": 1659.9849853515625,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:21",
+            "order_id": "ORD_93",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:21",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ONGC-EQ",
+            "action": "BUY",
+            "price": 139.9007568359375,
+            "quantity": 14,
+            "date": "2025-11-28 19:49:22",
+            "order_id": "ORD_94",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:22",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "SELL",
+            "price": 934.1438598632812,
+            "quantity": 5,
+            "date": "2025-11-28 19:49:22",
+            "order_id": "ORD_95",
+            "profit": 223.45086669921898,
+            "profit_pct": 5.024451977316774,
+            "comment": "PROFIT EXIT: 5.0%",
+            "created_at": "2025-11-28 19:49:22",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:POWERGRID-EQ",
+            "action": "BUY",
+            "price": 157.91094970703125,
+            "quantity": 12,
+            "date": "2025-11-28 19:49:23",
+            "order_id": "ORD_96",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:23",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:COALINDIA-EQ",
+            "action": "BUY",
+            "price": 190.63113403320312,
+            "quantity": 10,
+            "date": "2025-11-28 19:49:25",
+            "order_id": "ORD_97",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:25",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SUNPHARMA-EQ",
+            "action": "SELL",
+            "price": 978.165771484375,
+            "quantity": 4,
+            "date": "2025-11-28 19:49:25",
+            "order_id": "ORD_98",
+            "profit": 187.49139404296875,
+            "profit_pct": 5.03309403029462,
+            "comment": "PROFIT EXIT: 5.0%",
+            "created_at": "2025-11-28 19:49:25",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "BUY",
+            "price": 155.89883422851562,
+            "quantity": 12,
+            "date": "2025-11-28 19:49:26",
+            "order_id": "ORD_99",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:26",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ONGC-EQ",
+            "action": "BUY",
+            "price": 135.19338989257812,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:27",
+            "order_id": "ORD_100",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:27",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ICICIBANK-EQ",
+            "action": "BUY",
+            "price": 917.4852905273438,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:28",
+            "order_id": "ORD_101",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:28",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:JSWSTEEL-EQ",
+            "action": "SELL",
+            "price": 737.8765258789062,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:28",
+            "order_id": "ORD_102",
+            "profit": 85.2381591796875,
+            "profit_pct": 6.1299709650465655,
+            "comment": "PROFIT EXIT: 6.1%",
+            "created_at": "2025-11-28 19:49:28",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:KOTAKBANK-EQ",
+            "action": "BUY",
+            "price": 1880.7159423828125,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:30",
+            "order_id": "ORD_103",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:30",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "BUY",
+            "price": 969.2098388671876,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:31",
+            "order_id": "ORD_104",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:31",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:NTPC-EQ",
+            "action": "SELL",
+            "price": 172.53695678710938,
+            "quantity": 12,
+            "date": "2025-11-28 19:49:31",
+            "order_id": "ORD_105",
+            "profit": 110.37908935546875,
+            "profit_pct": 5.631401182579582,
+            "comment": "PROFIT EXIT: 5.6%",
+            "created_at": "2025-11-28 19:49:31",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:GRASIM-EQ",
+            "action": "SELL",
+            "price": 1749.508056640625,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:33",
+            "order_id": "ORD_106",
+            "profit": 89.5230712890625,
+            "profit_pct": 5.393004881312388,
+            "comment": "PROFIT EXIT: 5.4%",
+            "created_at": "2025-11-28 19:49:33",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:DRREDDY-EQ",
+            "action": "SELL",
+            "price": 941.6517944335938,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:34",
+            "order_id": "ORD_107",
+            "profit": 106.4281005859375,
+            "profit_pct": 5.98962061708016,
+            "comment": "PROFIT EXIT: 6.0%",
+            "created_at": "2025-11-28 19:49:34",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:WIPRO-EQ",
+            "action": "BUY",
+            "price": 186.6095733642578,
+            "quantity": 10,
+            "date": "2025-11-28 19:49:35",
+            "order_id": "ORD_108",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:35",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TATASTEEL-EQ",
+            "action": "SELL",
+            "price": 105.98226928710938,
+            "quantity": 23,
+            "date": "2025-11-28 19:49:35",
+            "order_id": "ORD_109",
+            "profit": 132.46611022949207,
+            "profit_pct": 5.746588491836456,
+            "comment": "PROFIT EXIT: 5.7%",
+            "created_at": "2025-11-28 19:49:35",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HINDALCO-EQ",
+            "action": "SELL",
+            "price": 417.9075317382813,
+            "quantity": 5,
+            "date": "2025-11-28 19:49:36",
+            "order_id": "ORD_110",
+            "profit": 104.93057250976591,
+            "profit_pct": 5.287221497916296,
+            "comment": "PROFIT EXIT: 5.3%",
+            "created_at": "2025-11-28 19:49:36",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:KOTAKBANK-EQ",
+            "action": "BUY",
+            "price": 1818.955810546875,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:37",
+            "order_id": "ORD_111",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:37",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:POWERGRID-EQ",
+            "action": "SELL",
+            "price": 167.07931518554688,
+            "quantity": 12,
+            "date": "2025-11-28 19:49:37",
+            "order_id": "ORD_112",
+            "profit": 110.0203857421875,
+            "profit_pct": 5.806035297441687,
+            "comment": "PROFIT EXIT: 5.8%",
+            "created_at": "2025-11-28 19:49:37",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "SELL",
+            "price": 1021.0414428710938,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:38",
+            "order_id": "ORD_113",
+            "profit": 103.66320800781227,
+            "profit_pct": 5.34782066022843,
+            "comment": "PROFIT EXIT: 5.3%",
+            "created_at": "2025-11-28 19:49:38",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBIN-EQ",
+            "action": "BUY",
+            "price": 546.0447998046875,
+            "quantity": 3,
+            "date": "2025-11-28 19:49:39",
+            "order_id": "ORD_114",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:39",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "BUY",
+            "price": 703.0781860351562,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:41",
+            "order_id": "ORD_115",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:41",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "SELL",
+            "price": 744.6152954101562,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:43",
+            "order_id": "ORD_116",
+            "profit": 83.07421875,
+            "profit_pct": 5.907893346718484,
+            "comment": "PROFIT EXIT: 5.9%",
+            "created_at": "2025-11-28 19:49:43",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INFY-EQ",
+            "action": "SELL",
+            "price": 1241.286376953125,
+            "quantity": 8,
+            "date": "2025-11-28 19:49:44",
+            "order_id": "ORD_117",
+            "profit": 507.9072265625,
+            "profit_pct": 5.390432378185216,
+            "comment": "PROFIT EXIT: 5.4%",
+            "created_at": "2025-11-28 19:49:44",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCBANK-EQ",
+            "action": "SELL",
+            "price": 837.002197265625,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:44",
+            "order_id": "ORD_118",
+            "profit": 91.443603515625,
+            "profit_pct": 5.778204795339338,
+            "comment": "PROFIT EXIT: 5.8%",
+            "created_at": "2025-11-28 19:49:44",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "BUY",
+            "price": 725.8153076171875,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:45",
+            "order_id": "ORD_119",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:45",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:AXISBANK-EQ",
+            "action": "BUY",
+            "price": 968.13525390625,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:46",
+            "order_id": "ORD_120",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:46",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "SELL",
+            "price": 167.3731231689453,
+            "quantity": 12,
+            "date": "2025-11-28 19:49:46",
+            "order_id": "ORD_121",
+            "profit": 137.69146728515625,
+            "profit_pct": 7.3600864286199466,
+            "comment": "PROFIT EXIT: 7.4%",
+            "created_at": "2025-11-28 19:49:46",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TATACONSUM-EQ",
+            "action": "BUY",
+            "price": 821.4564208984375,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:49",
+            "order_id": "ORD_122",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:49",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HCLTECH-EQ",
+            "action": "BUY",
+            "price": 1027.085693359375,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:50",
+            "order_id": "ORD_123",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:50",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 627.4298706054688,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:51",
+            "order_id": "ORD_124",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:51",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ONGC-EQ",
+            "action": "SELL",
+            "price": 147.51171875,
+            "quantity": 15,
+            "date": "2025-11-28 19:49:51",
+            "order_id": "ORD_125",
+            "profit": 118.87179565429705,
+            "profit_pct": 5.677312512158445,
+            "comment": "PROFIT EXIT: 5.7%",
+            "created_at": "2025-11-28 19:49:51",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 627.040283203125,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:52",
+            "order_id": "ORD_126",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:52",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TRENT-EQ",
+            "action": "BUY",
+            "price": 1663.416748046875,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:53",
+            "order_id": "ORD_127",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:53",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:POWERGRID-EQ",
+            "action": "BUY",
+            "price": 161.2357635498047,
+            "quantity": 12,
+            "date": "2025-11-28 19:49:54",
+            "order_id": "ORD_128",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:54",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:WIPRO-EQ",
+            "action": "SELL",
+            "price": 199.22772216796875,
+            "quantity": 10,
+            "date": "2025-11-28 19:49:54",
+            "order_id": "ORD_129",
+            "profit": 126.18148803710938,
+            "profit_pct": 6.761790714284838,
+            "comment": "PROFIT EXIT: 6.8%",
+            "created_at": "2025-11-28 19:49:54",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:NTPC-EQ",
+            "action": "BUY",
+            "price": 173.28024291992188,
+            "quantity": 11,
+            "date": "2025-11-28 19:49:55",
+            "order_id": "ORD_130",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:49:55",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 623.2421875,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:55",
+            "order_id": "ORD_131",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:55",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBIN-EQ",
+            "action": "SELL",
+            "price": 579.8864135742188,
+            "quantity": 3,
+            "date": "2025-11-28 19:49:56",
+            "order_id": "ORD_132",
+            "profit": 101.52484130859375,
+            "profit_pct": 6.197589242061442,
+            "comment": "PROFIT EXIT: 6.2%",
+            "created_at": "2025-11-28 19:49:56",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 622.4630737304688,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:56",
+            "order_id": "ORD_133",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:56",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ICICIBANK-EQ",
+            "action": "SELL",
+            "price": 971.546875,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:57",
+            "order_id": "ORD_134",
+            "profit": 108.1231689453125,
+            "profit_pct": 5.892365254333749,
+            "comment": "PROFIT EXIT: 5.9%",
+            "created_at": "2025-11-28 19:49:57",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 622.70654296875,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:58",
+            "order_id": "ORD_135",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:58",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:KOTAKBANK-EQ",
+            "action": "SELL",
+            "price": 1964.1593017578125,
+            "quantity": 2,
+            "date": "2025-11-28 19:49:58",
+            "order_id": "ORD_136",
+            "profit": 228.6468505859375,
+            "profit_pct": 6.180192888865807,
+            "comment": "PROFIT EXIT: 6.2%",
+            "created_at": "2025-11-28 19:49:58",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 618.0318603515625,
+            "quantity": 1,
+            "date": "2025-11-28 19:49:59",
+            "order_id": "ORD_137",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:49:59",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:NTPC-EQ",
+            "action": "SELL",
+            "price": 182.0139312744141,
+            "quantity": 11,
+            "date": "2025-11-28 19:49:59",
+            "order_id": "ORD_138",
+            "profit": 96.07057189941438,
+            "profit_pct": 5.040210128588244,
+            "comment": "PROFIT EXIT: 5.0%",
+            "created_at": "2025-11-28 19:49:59",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 615.6458740234375,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:00",
+            "order_id": "ORD_139",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:00",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 609.6563720703125,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:00",
+            "order_id": "ORD_140",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:00",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 615.4024047851562,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:01",
+            "order_id": "ORD_141",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:01",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "BUY",
+            "price": 1029.089599609375,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:02",
+            "order_id": "ORD_142",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:02",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:POWERGRID-EQ",
+            "action": "SELL",
+            "price": 173.42666625976562,
+            "quantity": 12,
+            "date": "2025-11-28 19:50:02",
+            "order_id": "ORD_143",
+            "profit": 146.29083251953125,
+            "profit_pct": 7.560917281354422,
+            "comment": "PROFIT EXIT: 7.6%",
+            "created_at": "2025-11-28 19:50:02",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 608.8285522460938,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:03",
+            "order_id": "ORD_144",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:03",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "SELL",
+            "price": 770.7769165039062,
+            "quantity": 2,
+            "date": "2025-11-28 19:50:03",
+            "order_id": "ORD_145",
+            "profit": 89.9232177734375,
+            "profit_pct": 6.1946349732310395,
+            "comment": "PROFIT EXIT: 6.2%",
+            "created_at": "2025-11-28 19:50:03",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJFINANCE-EQ",
+            "action": "BUY",
+            "price": 721.9288330078125,
+            "quantity": 2,
+            "date": "2025-11-28 19:50:04",
+            "order_id": "ORD_146",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:04",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJAJFINSV-EQ",
+            "action": "BUY",
+            "price": 1570.5933837890625,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:05",
+            "order_id": "ORD_147",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:05",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "BUY",
+            "price": 159.81741333007812,
+            "quantity": 12,
+            "date": "2025-11-28 19:50:07",
+            "order_id": "ORD_148",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:07",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 593.9758911132812,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:08",
+            "order_id": "ORD_149",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:08",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "SELL",
+            "price": 1099.5418701171875,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:08",
+            "order_id": "ORD_150",
+            "profit": 70.4522705078125,
+            "profit_pct": 6.846077400311401,
+            "comment": "PROFIT EXIT: 6.8%",
+            "created_at": "2025-11-28 19:50:08",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBIN-EQ",
+            "action": "BUY",
+            "price": 552.74560546875,
+            "quantity": 3,
+            "date": "2025-11-28 19:50:09",
+            "order_id": "ORD_151",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:09",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 600.2573852539062,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:10",
+            "order_id": "ORD_152",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:10",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 597.833740234375,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:11",
+            "order_id": "ORD_153",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:11",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TRENT-EQ",
+            "action": "SELL",
+            "price": 1785.127685546875,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:11",
+            "order_id": "ORD_154",
+            "profit": 121.7109375,
+            "profit_pct": 7.316923894322254,
+            "comment": "PROFIT EXIT: 7.3%",
+            "created_at": "2025-11-28 19:50:11",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 608.5668334960938,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:12",
+            "order_id": "ORD_155",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:12",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 603.07666015625,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:13",
+            "order_id": "ORD_156",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:13",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HCLTECH-EQ",
+            "action": "SELL",
+            "price": 1079.2000732421875,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:13",
+            "order_id": "ORD_157",
+            "profit": 52.1143798828125,
+            "profit_pct": 5.074005043567265,
+            "comment": "PROFIT EXIT: 5.1%",
+            "created_at": "2025-11-28 19:50:13",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 593.2339477539062,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:14",
+            "order_id": "ORD_158",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:14",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 583.935302734375,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:15",
+            "order_id": "ORD_159",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:15",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 583.440673828125,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:16",
+            "order_id": "ORD_160",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:16",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:KOTAKBANK-EQ",
+            "action": "BUY",
+            "price": 1761.735595703125,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:17",
+            "order_id": "ORD_161",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:17",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 572.2130737304688,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:18",
+            "order_id": "ORD_162",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:18",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 579.3848876953125,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:19",
+            "order_id": "ORD_163",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:19",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCBANK-EQ",
+            "action": "BUY",
+            "price": 770.2774658203125,
+            "quantity": 2,
+            "date": "2025-11-28 19:50:20",
+            "order_id": "ORD_164",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:20",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 579.4343872070312,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:21",
+            "order_id": "ORD_165",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:21",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJAJFINSV-EQ",
+            "action": "BUY",
+            "price": 1466.959228515625,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:22",
+            "order_id": "ORD_166",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:22",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:JSWSTEEL-EQ",
+            "action": "BUY",
+            "price": 765.0804443359375,
+            "quantity": 2,
+            "date": "2025-11-28 19:50:23",
+            "order_id": "ORD_167",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:23",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:RELIANCE-EQ",
+            "action": "BUY",
+            "price": 1212.897705078125,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:25",
+            "order_id": "ORD_168",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:25",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SUNPHARMA-EQ",
+            "action": "BUY",
+            "price": 1091.6114501953125,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:26",
+            "order_id": "ORD_169",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:26",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:DRREDDY-EQ",
+            "action": "BUY",
+            "price": 1116.2188720703125,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:27",
+            "order_id": "ORD_170",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:27",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "BUY",
+            "price": 149.1000213623047,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:28",
+            "order_id": "ORD_171",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:28",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "BUY",
+            "price": 150.69808959960938,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:30",
+            "order_id": "ORD_172",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:30",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:COALINDIA-EQ",
+            "action": "SELL",
+            "price": 208.665283203125,
+            "quantity": 10,
+            "date": "2025-11-28 19:50:30",
+            "order_id": "ORD_173",
+            "profit": 180.34149169921875,
+            "profit_pct": 9.460232853034794,
+            "comment": "PROFIT EXIT: 9.5%",
+            "created_at": "2025-11-28 19:50:30",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "BUY",
+            "price": 150.91700744628906,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:31",
+            "order_id": "ORD_174",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:31",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:JSWSTEEL-EQ",
+            "action": "SELL",
+            "price": 807.4336547851562,
+            "quantity": 2,
+            "date": "2025-11-28 19:50:31",
+            "order_id": "ORD_175",
+            "profit": 84.7064208984375,
+            "profit_pct": 5.535785257977652,
+            "comment": "PROFIT EXIT: 5.5%",
+            "created_at": "2025-11-28 19:50:31",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TATACONSUM-EQ",
+            "action": "SELL",
+            "price": 866.4603271484375,
+            "quantity": 2,
+            "date": "2025-11-28 19:50:32",
+            "order_id": "ORD_176",
+            "profit": 90.0078125,
+            "profit_pct": 5.4785506698917334,
+            "comment": "PROFIT EXIT: 5.5%",
+            "created_at": "2025-11-28 19:50:32",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:NESTLEIND-EQ",
+            "action": "BUY",
+            "price": 1069.3660888671875,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:34",
+            "order_id": "ORD_177",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:34",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "BUY",
+            "price": 152.5369415283203,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:38",
+            "order_id": "ORD_178",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:38",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "BUY",
+            "price": 1205.295654296875,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:39",
+            "order_id": "ORD_179",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:39",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:AXISBANK-EQ",
+            "action": "SELL",
+            "price": 1019.2416381835938,
+            "quantity": 2,
+            "date": "2025-11-28 19:50:39",
+            "order_id": "ORD_180",
+            "profit": 102.2127685546875,
+            "profit_pct": 5.2788475650627085,
+            "comment": "PROFIT EXIT: 5.3%",
+            "created_at": "2025-11-28 19:50:39",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBIN-EQ",
+            "action": "SELL",
+            "price": 582.2967529296875,
+            "quantity": 3,
+            "date": "2025-11-28 19:50:42",
+            "order_id": "ORD_181",
+            "profit": 88.6534423828125,
+            "profit_pct": 5.3462473818994845,
+            "comment": "PROFIT EXIT: 5.3%",
+            "created_at": "2025-11-28 19:50:42",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:JSWSTEEL-EQ",
+            "action": "BUY",
+            "price": 778.5384521484375,
+            "quantity": 2,
+            "date": "2025-11-28 19:50:45",
+            "order_id": "ORD_182",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:45",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:RELIANCE-EQ",
+            "action": "BUY",
+            "price": 1173.7127685546875,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:46",
+            "order_id": "ORD_183",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:46",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "BUY",
+            "price": 1163.5003662109375,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:47",
+            "order_id": "ORD_184",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:47",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJFINANCE-EQ",
+            "action": "SELL",
+            "price": 773.3072509765625,
+            "quantity": 2,
+            "date": "2025-11-28 19:50:47",
+            "order_id": "ORD_185",
+            "profit": 102.7568359375,
+            "profit_pct": 7.11682587252946,
+            "comment": "PROFIT EXIT: 7.1%",
+            "created_at": "2025-11-28 19:50:47",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:WIPRO-EQ",
+            "action": "BUY",
+            "price": 198.67599487304688,
+            "quantity": 10,
+            "date": "2025-11-28 19:50:49",
+            "order_id": "ORD_186",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:49",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:NESTLEIND-EQ",
+            "action": "SELL",
+            "price": 1123.53955078125,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:49",
+            "order_id": "ORD_187",
+            "profit": 54.1734619140625,
+            "profit_pct": 5.065941633837493,
+            "comment": "PROFIT EXIT: 5.1%",
+            "created_at": "2025-11-28 19:50:49",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "BUY",
+            "price": 1141.670654296875,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:50",
+            "order_id": "ORD_188",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:50",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ICICIBANK-EQ",
+            "action": "BUY",
+            "price": 927.890625,
+            "quantity": 2,
+            "date": "2025-11-28 19:50:52",
+            "order_id": "ORD_189",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:52",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "BUY",
+            "price": 150.58865356445312,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:53",
+            "order_id": "ORD_190",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:53",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "BUY",
+            "price": 1144.0775146484375,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:54",
+            "order_id": "ORD_191",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:54",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "BUY",
+            "price": 149.4503173828125,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:56",
+            "order_id": "ORD_192",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:56",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBILIFE-EQ",
+            "action": "BUY",
+            "price": 1265.8626708984375,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:57",
+            "order_id": "ORD_193",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:50:57",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:DRREDDY-EQ",
+            "action": "BUY",
+            "price": 1068.30810546875,
+            "quantity": 1,
+            "date": "2025-11-28 19:50:58",
+            "order_id": "ORD_194",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:50:58",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJAJFINSV-EQ",
+            "action": "SELL",
+            "price": 1632.8238525390625,
+            "quantity": 2,
+            "date": "2025-11-28 19:50:58",
+            "order_id": "ORD_195",
+            "profit": 228.0950927734375,
+            "profit_pct": 7.5091733999752694,
+            "comment": "PROFIT EXIT: 7.5%",
+            "created_at": "2025-11-28 19:50:58",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:RELIANCE-EQ",
+            "action": "BUY",
+            "price": 1150.4847412109375,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:00",
+            "order_id": "ORD_196",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:00",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "BUY",
+            "price": 782.865966796875,
+            "quantity": 2,
+            "date": "2025-11-28 19:51:01",
+            "order_id": "ORD_197",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:51:01",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCLIFE-EQ",
+            "action": "BUY",
+            "price": 617.4378051757812,
+            "quantity": 3,
+            "date": "2025-11-28 19:51:02",
+            "order_id": "ORD_198",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:51:02",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "BUY",
+            "price": 149.97567749023438,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:03",
+            "order_id": "ORD_199",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:03",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBILIFE-EQ",
+            "action": "SELL",
+            "price": 1343.37548828125,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:08",
+            "order_id": "ORD_200",
+            "profit": 77.5128173828125,
+            "profit_pct": 6.123319627380931,
+            "comment": "PROFIT EXIT: 6.1%",
+            "created_at": "2025-11-28 19:51:08",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBIN-EQ",
+            "action": "BUY",
+            "price": 555.7826538085938,
+            "quantity": 3,
+            "date": "2025-11-28 19:51:09",
+            "order_id": "ORD_201",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:51:09",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SUNPHARMA-EQ",
+            "action": "SELL",
+            "price": 1149.8941650390625,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:29",
+            "order_id": "ORD_202",
+            "profit": 58.28271484375,
+            "profit_pct": 5.339144695974193,
+            "comment": "PROFIT EXIT: 5.3%",
+            "created_at": "2025-11-28 19:51:29",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 546.0482177734375,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:30",
+            "order_id": "ORD_203",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:30",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BPCL-EQ",
+            "action": "SELL",
+            "price": 168.21095275878906,
+            "quantity": 19,
+            "date": "2025-11-28 19:51:30",
+            "order_id": "ORD_204",
+            "profit": 224.93243408203105,
+            "profit_pct": 7.5707406741372845,
+            "comment": "PROFIT EXIT: 7.6%",
+            "created_at": "2025-11-28 19:51:30",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJFINANCE-EQ",
+            "action": "BUY",
+            "price": 737.7166748046875,
+            "quantity": 2,
+            "date": "2025-11-28 19:51:32",
+            "order_id": "ORD_205",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:51:32",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 544.4655151367188,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:34",
+            "order_id": "ORD_206",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:34",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 541.2506103515625,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:35",
+            "order_id": "ORD_207",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:35",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 546.74072265625,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:36",
+            "order_id": "ORD_208",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:36",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 555.7425537109375,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:38",
+            "order_id": "ORD_209",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:38",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCLIFE-EQ",
+            "action": "SELL",
+            "price": 648.3966674804688,
+            "quantity": 3,
+            "date": "2025-11-28 19:51:41",
+            "order_id": "ORD_210",
+            "profit": 92.8765869140625,
+            "profit_pct": 5.014085960588966,
+            "comment": "PROFIT EXIT: 5.0%",
+            "created_at": "2025-11-28 19:51:41",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:AXISBANK-EQ",
+            "action": "BUY",
+            "price": 987.093994140625,
+            "quantity": 2,
+            "date": "2025-11-28 19:51:42",
+            "order_id": "ORD_211",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:51:42",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "SELL",
+            "price": 1229.5782470703125,
+            "quantity": 3,
+            "date": "2025-11-28 19:51:42",
+            "order_id": "ORD_212",
+            "profit": 178.26806640624977,
+            "profit_pct": 5.078187116422864,
+            "comment": "PROFIT EXIT: 5.1%",
+            "created_at": "2025-11-28 19:51:42",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 556.9790649414062,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:44",
+            "order_id": "ORD_213",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:44",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 559.7984008789062,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:45",
+            "order_id": "ORD_214",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:45",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "BUY",
+            "price": 1148.5384521484375,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:47",
+            "order_id": "ORD_215",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:51:47",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 552.9232788085938,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:48",
+            "order_id": "ORD_216",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:48",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ADANIPORTS-EQ",
+            "action": "SELL",
+            "price": 830.0827026367188,
+            "quantity": 2,
+            "date": "2025-11-28 19:51:48",
+            "order_id": "ORD_217",
+            "profit": 94.4334716796875,
+            "profit_pct": 6.0312668888945025,
+            "comment": "PROFIT EXIT: 6.0%",
+            "created_at": "2025-11-28 19:51:48",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 557.4736938476562,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:50",
+            "order_id": "ORD_218",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:50",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:AXISBANK-EQ",
+            "action": "SELL",
+            "price": 1058.427978515625,
+            "quantity": 2,
+            "date": "2025-11-28 19:51:50",
+            "order_id": "ORD_219",
+            "profit": 142.66796875,
+            "profit_pct": 7.226665829033248,
+            "comment": "PROFIT EXIT: 7.2%",
+            "created_at": "2025-11-28 19:51:50",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:NESTLEIND-EQ",
+            "action": "BUY",
+            "price": 1182.2322998046875,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:51",
+            "order_id": "ORD_220",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:51:51",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INDUSINDBK-EQ",
+            "action": "BUY",
+            "price": 1450.0023193359375,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:53",
+            "order_id": "ORD_221",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:51:53",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 568.9486694335938,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:54",
+            "order_id": "ORD_222",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:54",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ICICIBANK-EQ",
+            "action": "SELL",
+            "price": 975.2149658203124,
+            "quantity": 2,
+            "date": "2025-11-28 19:51:54",
+            "order_id": "ORD_223",
+            "profit": 94.64868164062477,
+            "profit_pct": 5.100206807274552,
+            "comment": "PROFIT EXIT: 5.1%",
+            "created_at": "2025-11-28 19:51:54",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 572.658203125,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:56",
+            "order_id": "ORD_224",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:56",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBIN-EQ",
+            "action": "SELL",
+            "price": 586.4425659179688,
+            "quantity": 3,
+            "date": "2025-11-28 19:51:56",
+            "order_id": "ORD_225",
+            "profit": 91.979736328125,
+            "profit_pct": 5.51652915024836,
+            "comment": "PROFIT EXIT: 5.5%",
+            "created_at": "2025-11-28 19:51:56",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 575.1312866210938,
+            "quantity": 1,
+            "date": "2025-11-28 19:51:57",
+            "order_id": "ORD_226",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:51:57",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 580.2257080078125,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:00",
+            "order_id": "ORD_227",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:52:00",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:JSWSTEEL-EQ",
+            "action": "SELL",
+            "price": 830.5894165039062,
+            "quantity": 2,
+            "date": "2025-11-28 19:52:00",
+            "order_id": "ORD_228",
+            "profit": 104.1019287109375,
+            "profit_pct": 6.685728137361753,
+            "comment": "PROFIT EXIT: 6.7%",
+            "created_at": "2025-11-28 19:52:00",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 578.8902587890625,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:02",
+            "order_id": "ORD_229",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:52:02",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ONGC-EQ",
+            "action": "BUY",
+            "price": 175.52932739257812,
+            "quantity": 11,
+            "date": "2025-11-28 19:52:07",
+            "order_id": "ORD_230",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:52:07",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:INDUSINDBK-EQ",
+            "action": "SELL",
+            "price": 1534.6624755859375,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:07",
+            "order_id": "ORD_231",
+            "profit": 84.66015625,
+            "profit_pct": 5.8386221263957765,
+            "comment": "PROFIT EXIT: 5.8%",
+            "created_at": "2025-11-28 19:52:07",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:TECHM-EQ",
+            "action": "SELL",
+            "price": 1235.1888427734375,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:08",
+            "order_id": "ORD_232",
+            "profit": 91.111328125,
+            "profit_pct": 7.963737330594904,
+            "comment": "PROFIT EXIT: 8.0%",
+            "created_at": "2025-11-28 19:52:08",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:WIPRO-EQ",
+            "action": "SELL",
+            "price": 213.62106323242188,
+            "quantity": 10,
+            "date": "2025-11-28 19:52:10",
+            "order_id": "ORD_233",
+            "profit": 149.45068359375,
+            "profit_pct": 7.522332211762592,
+            "comment": "PROFIT EXIT: 7.5%",
+            "created_at": "2025-11-28 19:52:10",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCLIFE-EQ",
+            "action": "BUY",
+            "price": 668.1248168945312,
+            "quantity": 2,
+            "date": "2025-11-28 19:52:11",
+            "order_id": "ORD_234",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:52:11",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:RELIANCE-EQ",
+            "action": "SELL",
+            "price": 1269.6527099609375,
+            "quantity": 3,
+            "date": "2025-11-28 19:52:11",
+            "order_id": "ORD_235",
+            "profit": 271.8629150390625,
+            "profit_pct": 7.686050234049804,
+            "comment": "PROFIT EXIT: 7.7%",
+            "created_at": "2025-11-28 19:52:11",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:SBILIFE-EQ",
+            "action": "BUY",
+            "price": 1419.29443359375,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:13",
+            "order_id": "ORD_236",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:52:13",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:CIPLA-EQ",
+            "action": "SELL",
+            "price": 1212.8502197265625,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:13",
+            "order_id": "ORD_237",
+            "profit": 64.311767578125,
+            "profit_pct": 5.599444011458601,
+            "comment": "PROFIT EXIT: 5.6%",
+            "created_at": "2025-11-28 19:52:13",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BHARTIARTL-EQ",
+            "action": "BUY",
+            "price": 958.1556396484376,
+            "quantity": 2,
+            "date": "2025-11-28 19:52:14",
+            "order_id": "ORD_238",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:52:14",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCBANK-EQ",
+            "action": "SELL",
+            "price": 820.8927612304688,
+            "quantity": 2,
+            "date": "2025-11-28 19:52:14",
+            "order_id": "ORD_239",
+            "profit": 101.2305908203125,
+            "profit_pct": 6.571047142895855,
+            "comment": "PROFIT EXIT: 6.6%",
+            "created_at": "2025-11-28 19:52:14",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 571.1743774414062,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:16",
+            "order_id": "ORD_240",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:52:16",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:ONGC-EQ",
+            "action": "SELL",
+            "price": 185.34405517578125,
+            "quantity": 11,
+            "date": "2025-11-28 19:52:16",
+            "order_id": "ORD_241",
+            "profit": 107.96200561523438,
+            "profit_pct": 5.591503100363455,
+            "comment": "PROFIT EXIT: 5.6%",
+            "created_at": "2025-11-28 19:52:16",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BAJAJFINSV-EQ",
+            "action": "BUY",
+            "price": 1670.18212890625,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:18",
+            "order_id": "ORD_242",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:52:18",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:KOTAKBANK-EQ",
+            "action": "SELL",
+            "price": 1882.6136474609373,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:18",
+            "order_id": "ORD_243",
+            "profit": 120.87805175781227,
+            "profit_pct": 6.861304957034073,
+            "comment": "PROFIT EXIT: 6.9%",
+            "created_at": "2025-11-28 19:52:18",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:HDFCLIFE-EQ",
+            "action": "BUY",
+            "price": 634.0850219726562,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:19",
+            "order_id": "ORD_244",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:52:19",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:NESTLEIND-EQ",
+            "action": "SELL",
+            "price": 1263.4276123046875,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:19",
+            "order_id": "ORD_245",
+            "profit": 81.1953125,
+            "profit_pct": 6.867966009168756,
+            "comment": "PROFIT EXIT: 6.9%",
+            "created_at": "2025-11-28 19:52:19",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:UPL-EQ",
+            "action": "BUY",
+            "price": 576.911865234375,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:21",
+            "order_id": "ORD_246",
+            "is_averaging": true,
+            "comment": "AVERAGING",
+            "created_at": "2025-11-28 19:52:21",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:BHARTIARTL-EQ",
+            "action": "SELL",
+            "price": 1022.4074096679688,
+            "quantity": 2,
+            "date": "2025-11-28 19:52:21",
+            "order_id": "ORD_247",
+            "profit": 128.50354003906227,
+            "profit_pct": 6.705775905374425,
+            "comment": "PROFIT EXIT: 6.7%",
+            "created_at": "2025-11-28 19:52:21",
+            "filled": true,
+            "status": "OPEN"
+        },
+        {
+            "symbol": "NSE:AXISBANK-EQ",
+            "action": "BUY",
+            "price": 1100.5093994140625,
+            "quantity": 1,
+            "date": "2025-11-28 19:52:24",
+            "order_id": "ORD_248",
+            "is_averaging": false,
+            "comment": "NEW ENTRY",
+            "created_at": "2025-11-28 19:52:24",
+            "filled": true,
+            "status": "OPEN"
+        }
+    ]
+}

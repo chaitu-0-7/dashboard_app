@@ -1,378 +1,279 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strategy Runs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --background: #f8fafc; /* slate-50 */
-            --foreground: #0f172a; /* slate-900 */
-            --card: #ffffff;
-            --card-foreground: #0f172a;
-            --popover: #ffffff;
-            --popover-foreground: #0f172a;
-            --primary: #0f172a; /* slate-900 */
-            --primary-foreground: #f8fafc; /* slate-50 */
-            --secondary: #e2e8f0; /* slate-200 */
-            --secondary-foreground: #1e293b; /* slate-800 */
-            --muted: #e2e8f0; /* slate-200 */
-            --muted-foreground: #64748b; /* slate-500 */
-            --accent: #e2e8f0; /* slate-200 */
-            --accent-foreground: #1e293b; /* slate-800 */
-            --destructive: #ef4444; /* red-500 */
-            --destructive-foreground: #f8fafc; /* slate-50 */
-            --border: #e2e8f0; /* slate-200 */
-            --input: #e2e8f0; /* slate-200 */
-            --ring: #0f172a; /* slate-900 */
-            --radius: 0.5rem;
-        }
+{% extends "base.html" %}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: var(--foreground);
-            margin: 0;
-            padding: 0;
-            line-height: 1.5;
-        }
-        .navbar {
-            background-color: var(--primary);
-            padding: 1rem 1.5rem;
-            color: var(--primary-foreground);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .navbar a {
-            color: var(--primary-foreground);
-            text-decoration: none;
-            margin-left: 1.5rem;
-            font-weight: 500;
-            transition: color 0.2s ease;
-            padding: 0.5rem 0;
-        }
-        .navbar a:hover {
-            color: var(--accent);
-        }
-        .navbar a.active {
-            border-bottom: 2px solid var(--accent);
-        }
-        .logout-button {
-            background-color: #dc2626; /* red-700 */
-            color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: var(--radius);
-            margin-left: 1.5rem;
-            font-weight: 500;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            border: 1px solid transparent;
-        }
-        .logout-button:hover {
-            background-color: #b91c1c; /* red-800 */
-            color: white;
-            border-color: #b91c1c;
-            transform: translateY(-1px);
-        }
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            background-color: var(--card);
-            padding: 2rem;
-            border-radius: var(--radius);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 1px solid var(--border);
-        }
-        h1 {
-            color: var(--primary);
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.4rem;
-            margin-top: 0;
-            font-size: 1.5em;
-            text-align: center;
-            margin-bottom: 0.8rem;
-            font-weight: 600;
-        }
-        .run-button {
-            background-color: var(--primary);
-            color: var(--primary-foreground);
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 1.2rem;
-            font-weight: 600;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            display: block;
-            margin: 2rem auto;
-        }
-        .run-button:hover {
-            background-color: var(--primary-foreground);
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            transform: translateY(-1px);
-        }
-        .run-entry {
-            background-color: var(--secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            margin-bottom: 1rem;
-        }
-        .run-summary {
-            padding: 0.75rem 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .run-details {
-            display: flex;
-            gap: 1rem;
-            font-size: 0.9em;
-            color: var(--muted-foreground);
-        }
-        .run-status-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 5px;
-            vertical-align: middle;
-        }
-        .status-completed { background-color: #22c55e; /* green-500 */ }
-        .status-failed { background-color: #ef4444; /* red-500 */ }
-        .status-in-progress { background-color: #f59e0b; /* amber-500 */ }
-        .run-logs {
-            padding: 0.5rem 1rem;
-            background-color: var(--card);
-            border-top: 1px solid var(--border);
-            border-radius: 0 0 var(--radius) var(--radius);
-        }
-        .run-logs table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.8rem;
-        }
-        .run-logs th, .run-logs td {
-            padding: 0.3rem 0.5rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        .run-logs th {
-            background-color: var(--muted);
-            color: var(--muted-foreground);
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .run-logs tbody tr:hover {
-            background-color: var(--secondary);
-        }
-        .log-level-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-        .log-level-INFO { background-color: #3b82f6; /* blue-500 */ }
-        .log-level-WARNING { background-color: #f59e0b; /* amber-500 */ }
-        .log-level-ERROR { background-color: #ef4444; /* red-500 */ }
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            gap: 1rem;
-        }
-        .pagination button {
-            background-color: var(--primary);
-            color: var(--primary-foreground);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .pagination button:hover:not(:disabled) {
-            background-color: var(--primary-foreground);
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            transform: translateY(-1px);
-        }
-        .pagination button:disabled {
-            background-color: var(--muted);
-            color: var(--muted-foreground);
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        .no-data-message {
-            text-align: center;
-            padding: 4rem 1.5rem;
-            color: var(--muted-foreground);
-            font-size: 1.2em;
-            background-color: var(--muted);
-            border-radius: var(--radius);
-            border: 1px dashed var(--border);
-            margin-top: 2rem;
-        }
-    .navbar .nav-links {
-            display: flex;
-        }
+{% block title %}Strategy Runs - Nifty Shop{% endblock %}
+{% block page_title %}Strategy Execution{% endblock %}
+{% block page_subtitle %}Manage and monitor automated trading runs{% endblock %}
 
-        .navbar .mobile-nav-toggle {
-            display: none;
-        }
+{% block content %}
+<div class="card mb-4 text-center p-5">
+    <h3 class="card-title mb-4" style="font-size: 1.1rem;">Manual Execution</h3>
+    <p class="text-muted mb-4">Trigger the trading strategy manually. This will execute the analysis and place orders
+        immediately.</p>
 
-        @media (max-width: 768px) {
-            .navbar .nav-links {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background-color: var(--primary);
-                padding: 1rem 0;
-            }
+    <form action="/execute-strategy" method="post" id="strategy-form">
+        <button class="btn btn-primary" type="submit" style="padding: 0.75rem 2rem; font-size: 1.1rem;">
+            <i data-feather="play" style="width: 18px; margin-right: 8px;"></i> Run Strategy Now
+        </button>
+    </form>
 
-            .navbar .nav-links.active {
-                display: flex;
-            }
-
-            .navbar .mobile-nav-toggle {
-                display: block;
-                cursor: pointer;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="navbar">
-        <div>Nifty Shop Bot</div>
-        <div class="nav-links">
-            <a href="/" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
-            <a href="/trading-overview" class="{% if active_page == 'trading_overview' %}active{% endif %}">Trading Overview</a>
-            <a href="/logs" class="{% if active_page == 'logs' %}active{% endif %}">Logs</a>
-            <a href="/token-refresh" class="{% if active_page == 'token_refresh' %}active{% endif %}">Token Refresh</a>
-            <a href="/run-strategy" class="{% if active_page == 'run_strategy' %}active{% endif %}">Strategy</a>
-            <a href="/logout" class="logout-button">Logout</a>
-        </div>
-        <div class="mobile-nav-toggle">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </div>
+    {% if request.args.get('status') == 'success' %}
+    <div class="alert alert-success mt-4 animate-fade-in" style="display: inline-block;">
+        <i data-feather="check-circle" style="width: 16px; margin-right: 6px;"></i> Strategy execution started
+        successfully!
     </div>
+    {% endif %}
+</div>
 
-    <div class="container">
-        <h1>Strategy Runs</h1>
-        <form action="/execute-strategy" method="post">
-            <button class="run-button" type="submit">Run Strategy Now</button>
-        </form>
-        {% if request.args.get('status') == 'success' %}
-            <p style="text-align: center; color: green;">Strategy execution started successfully!</p>
-        {% endif %}
+<!-- Loading Modal -->
+<div class="modal-overlay" id="loading-modal">
+    <div class="modal-content">
+        <div class="loader"></div>
+        <h3 class="mt-4 mb-2">Strategy Running...</h3>
+        <p class="text-muted">Analyzing market conditions and executing trades</p>
+        <p class="text-sm text-muted mt-3">This may take a few moments</p>
+    </div>
+</div>
 
-        {% if runs %}
-            {% for run in runs %}
-                <details class="run-entry" data-run-id="{{ run.run_id }}">
-                    <summary class="run-summary">
-                        <span>
-                            <span class="run-status-indicator status-{{ run.status }}"></span>
-                            Run at: {{ run.run_time.strftime('%Y-%m-%d %H:%M:%S') }} ({{ run.triggered_by }})
-                        </span>
-                        <div class="run-details">
-                            <span>Trades: {{ run.executed_trades_count }}</span>
-                            <span>P&L: ₹{{ '%.2f' | format(run.total_pnl) }}</span>
-                        </div>
-                    </summary>
-                    <div class="run-logs">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Level</th>
-                                    <th>Message</th>
-                                </tr>
-                            </thead>
-                            <tbody class="log-table-body">
-                                <!-- Logs will be loaded here by JavaScript -->
-                            </tbody>
-                        </table>
-                        <p class="no-logs-message" style="display: none;">No logs found for this run.</p>
+<h2 class="page-title" style="font-size: 1.5rem; margin-bottom: 1.5rem;">Execution History</h2>
+
+{% if runs %}
+<div class="card">
+    {% for run in runs %}
+    <details class="custom-details run-entry" data-run-id="{{ run.run_id }}"
+        style="border-bottom: 1px solid var(--border);">
+        <summary class="flex-between p-4 cursor-pointer hover-bg-hover">
+            <div class="flex-center">
+                <span class="status-dot {% if run.status == 'failed' %}bg-danger{% else %}bg-success{% endif %}"></span>
+                <div>
+                    <div style="font-weight: 600;">{{ run.run_time.strftime('%Y-%m-%d %H:%M:%S') }}</div>
+                    <div class="text-muted text-sm">{{ run.triggered_by|default('Scheduled') }}</div>
+                </div>
+            </div>
+            <div class="flex-center gap-4">
+                <div class="text-right">
+                    <div class="text-sm text-muted">Trades</div>
+                    <div style="font-weight: 600;">{{ run.executed_trades_count }}</div>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-muted">P&L</div>
+                    <div style="font-weight: 600;"
+                        class="{% if run.total_pnl > 0 %}text-success{% elif run.total_pnl < 0 %}text-danger{% endif %}">
+                        ₹{{ '%.2f' | format(run.total_pnl) }}
                     </div>
-                </details>
-            {% endfor %}
-
-            <div class="pagination">
-                <button {% if page == 1 %}disabled{% endif %} onclick="window.location.href='/run-strategy?page={{ page - 1 }}'">Previous Runs</button>
-                <button {% if not has_more_runs %}disabled{% endif %} onclick="window.location.href='/run-strategy?page={{ page + 1 }}'">Next Runs</button>
+                </div>
+                <i data-feather="chevron-down" class="text-muted transition-transform"></i>
             </div>
-        {% else %}
-            <div class="no-data-message">
-                <p>No strategy runs found.</p>
+        </summary>
+        <div class="p-4 bg-panel border-top border-border">
+            <h4 class="text-muted text-sm uppercase mb-2">Execution Logs</h4>
+            <div class="table-container" style="margin-bottom: 0;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Level</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody class="log-table-body">
+                        <!-- Logs loaded via JS -->
+                        <tr>
+                            <td colspan="3" class="text-center text-muted p-4">
+                                <i data-feather="loader" class="spin" style="width: 16px; margin-right: 6px;"></i>
+                                Loading logs...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="no-logs-message text-center text-muted p-4" style="display: none;">No logs found for this run.
+                </p>
             </div>
-        {% endif %}
-    </div>
+        </div>
+    </details>
+    {% endfor %}
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const runEntries = document.querySelectorAll('.run-entry');
+<div class="flex-center mt-4 gap-2">
+    <button class="btn btn-outline" {% if page==1 %}disabled{% endif %}
+        onclick="window.location.href='/run-strategy?page={{ page - 1 }}'">
+        <i data-feather="chevron-left" style="width: 16px; margin-right: 4px;"></i> Previous
+    </button>
+    <button class="btn btn-outline" {% if not has_more_runs %}disabled{% endif %}
+        onclick="window.location.href='/run-strategy?page={{ page + 1 }}'">
+        Next <i data-feather="chevron-right" style="width: 16px; margin-left: 4px;"></i>
+    </button>
+</div>
+{% else %}
+<div class="card flex-center p-5 flex-column">
+    <i data-feather="clock" class="text-muted mb-4" style="width: 48px; height: 48px; opacity: 0.5;"></i>
+    <h3 class="text-muted">No strategy runs found</h3>
+</div>
+{% endif %}
 
-            runEntries.forEach(entry => {
-                entry.addEventListener('toggle', async function() {
-                    if (this.open) {
-                        const runId = this.dataset.runId;
-                        const logTableBody = this.querySelector('.log-table-body');
-                        const noLogsMessage = this.querySelector('.no-logs-message');
+{% endblock %}
 
-                        // Clear previous logs
-                        logTableBody.innerHTML = '';
-                        noLogsMessage.style.display = 'none';
+{% block scripts %}
+<script>
+    // Show loading modal when strategy form is submitted
+    document.getElementById('strategy-form').addEventListener('submit', function () {
+        document.getElementById('loading-modal').classList.add('show');
+    });
 
-                        try {
-                            const response = await fetch(`/api/run-logs/${runId}`);
-                            const data = await response.json();
+    document.addEventListener('DOMContentLoaded', function () {
+        const runEntries = document.querySelectorAll('.run-entry');
 
-                            if (data.logs.length > 0) {
-                                data.logs.forEach(log => {
-                                    const row = logTableBody.insertRow();
-                                    row.innerHTML = `
-                                        <td>${log.timestamp}</td>
-                                        <td>
-                                            <span class="log-level-indicator log-level-${log.level}"></span>
-                                            ${log.level}
-                                        </td>
-                                        <td>${log.message}</td>
-                                    `;
-                                });
-                            } else {
-                                noLogsMessage.style.display = 'block';
-                            }
-                        } catch (error) {
-                            console.error('Error fetching logs:', error);
-                            noLogsMessage.textContent = 'Error loading logs.';
+        runEntries.forEach(entry => {
+            entry.addEventListener('toggle', async function () {
+                if (this.open) {
+                    const runId = this.dataset.runId;
+                    const logTableBody = this.querySelector('.log-table-body');
+                    const noLogsMessage = this.querySelector('.no-logs-message');
+
+                    // Only fetch if we haven't already (check if loading spinner is present)
+                    if (!logTableBody.querySelector('.spin')) return;
+
+                    try {
+                        const response = await fetch(`/api/run-logs/${runId}`);
+                        const data = await response.json();
+
+                        logTableBody.innerHTML = ''; // Clear loading spinner
+
+                        if (data.logs.length > 0) {
+                            noLogsMessage.style.display = 'none';
+                            data.logs.forEach(log => {
+                                const row = logTableBody.insertRow();
+                                let badgeClass = 'badge-info';
+                                if (log.level === 'WARNING') badgeClass = 'badge-warning';
+                                if (log.level === 'ERROR') badgeClass = 'badge-danger';
+
+                                row.innerHTML = `
+                                    <td style="white-space: nowrap; color: var(--text-muted); width: 150px;">${log.timestamp.split(' ')[1]}</td>
+                                    <td style="width: 100px;">
+                                        <span class="badge ${badgeClass}">${log.level}</span>
+                                    </td>
+                                    <td style="font-family: monospace; font-size: 0.85rem; color: var(--text-main);">${log.message}</td>
+                                `;
+                            });
+                        } else {
                             noLogsMessage.style.display = 'block';
                         }
+                    } catch (error) {
+                        console.error('Error fetching logs:', error);
+                        logTableBody.innerHTML = '';
+                        noLogsMessage.textContent = 'Error loading logs.';
+                        noLogsMessage.style.display = 'block';
                     }
-                });
+                }
             });
         });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-            const navLinks = document.querySelector('.nav-links');
+    });
+</script>
+<style>
+    details>summary {
+        list-style: none;
+    }
 
-            mobileNavToggle.addEventListener('click', function() {
-                navLinks.classList.toggle('active');
-            });
-        });
-    </script>
-</body>
-</html>
+    details>summary::-webkit-details-marker {
+        display: none;
+    }
+
+    details[open] summary i.transition-transform {
+        transform: rotate(180deg);
+    }
+
+    .transition-transform {
+        transition: transform 0.2s ease;
+    }
+
+    .hover-bg-hover:hover {
+        background-color: var(--bg-hover);
+    }
+
+    .bg-panel {
+        background-color: var(--bg-panel);
+    }
+
+    .spin {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Loading Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .modal-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        padding: 3rem 2rem;
+        text-align: center;
+        max-width: 400px;
+        box-shadow: var(--shadow-lg);
+        animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Loader Spinner */
+    .loader {
+        border: 4px solid var(--bg-hover);
+        border-top: 4px solid var(--primary);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    .mt-4 {
+        margin-top: 1rem;
+    }
+
+    .mt-3 {
+        margin-top: 0.75rem;
+    }
+
+    .mb-2 {
+        margin-bottom: 0.5rem;
+    }
+
+    .text-sm {
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}

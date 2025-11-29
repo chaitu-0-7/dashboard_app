@@ -1,429 +1,172 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nifty Shop Logs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --background: #f8fafc; /* slate-50 */
-            --foreground: #0f172a; /* slate-900 */
-            --card: #ffffff;
-            --card-foreground: #0f172a;
-            --popover: #ffffff;
-            --popover-foreground: #0f172a;
-            --primary: #0f172a; /* slate-900 */
-            --primary-foreground: #f8fafc; /* slate-50 */
-            --secondary: #e2e8f0; /* slate-200 */
-            --secondary-foreground: #1e293b; /* slate-800 */
-            --muted: #e2e8f0; /* slate-200 */
-            --muted-foreground: #64748b; /* slate-500 */
-            --accent: #e2e8f0; /* slate-200 */
-            --accent-foreground: #1e293b; /* slate-800 */
-            --destructive: #ef4444; /* red-500 */
-            --destructive-foreground: #f8fafc; /* slate-50 */
-            --border: #e2e8f0; /* slate-200 */
-            --input: #e2e8f0; /* slate-200 */
-            --ring: #0f172a; /* slate-900 */
-            --radius: 0.5rem;
-        }
+{% extends "base.html" %}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: var(--foreground);
-            margin: 0;
-            padding: 0;
-            line-height: 1.5;
-        }
-        .navbar {
-            background-color: var(--primary);
-            padding: 1rem 1.5rem;
-            color: var(--primary-foreground);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .navbar a {
-            color: var(--primary-foreground);
-            text-decoration: none;
-            margin-left: 1.5rem;
-            font-weight: 500;
-            transition: color 0.2s ease;
-            padding: 0.5rem 0;
-        }
-        .navbar a:hover {
-            color: var(--accent);
-        }
-        .navbar a.active {
-            border-bottom: 2px solid var(--accent);
-        }
-        .logout-button {
-            background-color: #dc2626; /* red-700 */
-            color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: var(--radius);
-            margin-left: 1.5rem;
-            font-weight: 500;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            border: 1px solid transparent;
-        }
-        .logout-button:hover {
-            background-color: #b91c1c; /* red-800 */
-            color: white;
-            border-color: #b91c1c;
-            transform: translateY(-1px);
-        }
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            background-color: var(--card);
-            padding: 2rem;
-            border-radius: var(--radius);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 1px solid var(--border);
-        }
-        h1 {
-            color: var(--primary);
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.4rem;
-            margin-top: 0;
-            font-size: 1.5em;
-            text-align: center;
-            margin-bottom: 0.8rem;
-            font-weight: 600;
-        }
-        .log-controls {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            justify-content: center;
-            align-items: center;
-        }
-        .log-controls input, .log-controls select {
-            padding: 0.5rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background-color: var(--input);
-            color: var(--foreground);
-        }
-        .log-controls input[type="text"] {
-            flex-grow: 1;
-        }
+{% block title %}System Logs - Nifty Shop{% endblock %}
+{% block page_title %}System Logs{% endblock %}
+{% block page_subtitle %}Monitor application activity and debug issues{% endblock %}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            font-size: 0.8rem;
-        }
-        th, td {
-            padding: 0.3rem 0.5rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        th {
-            background-color: var(--muted);
-            color: var(--muted-foreground);
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-        }
-        tr:last-child td {
-            border-bottom: none;
-        }
-        tbody tr:hover {
-            background-color: var(--secondary);
-        }
+{% block content %}
+<div class="card">
+    <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 1rem;">
+        <h3 class="card-title">Log Filters</h3>
+        <div class="flex-between w-100" style="flex-wrap: wrap; gap: 1rem;">
+            <input type="text" id="log-search" placeholder="Search logs..."
+                style="flex: 1; min-width: 200px; padding: 0.6rem; background: var(--bg-app); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius-sm);">
 
-        .log-message {
-            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-            white-space: pre-wrap; /* Preserve whitespace and wrap text */
-            word-break: break-all; /* Break long words */
-        }
-        .log-level-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-        .log-level-INFO { background-color: #3b82f6; /* blue-500 */ }
-        .log-level-WARNING { background-color: #f59e0b; /* amber-500 */ }
-        .log-level-ERROR { background-color: #ef4444; /* red-500 */ }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            gap: 1rem;
-        }
-        .pagination button {
-            background-color: var(--primary);
-            color: var(--primary-foreground);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .pagination button:hover:not(:disabled) {
-            background-color: var(--primary-foreground);
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            transform: translateY(-1px);
-        }
-        .pagination button:disabled {
-            background-color: var(--muted);
-            color: var(--muted-foreground);
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        .no-data-message {
-            text-align: center;
-            padding: 4rem 1.5rem;
-            color: var(--muted-foreground);
-            font-size: 1.2em;
-            background-color: var(--muted);
-            border-radius: var(--radius);
-            border: 1px dashed var(--border);
-            margin-top: 2rem;
-        }
-        .no-data-message p {
-            margin: 0;
-        }
-        .sort-icon {
-            margin-left: 5px;
-            cursor: pointer;
-        }
-    .navbar .nav-links {
-            display: flex;
-        }
-
-        .navbar .mobile-nav-toggle {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            .navbar .nav-links {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background-color: var(--primary);
-                padding: 1rem 0;
-            }
-
-            .navbar .nav-links.active {
-                display: flex;
-            }
-
-            .navbar .mobile-nav-toggle {
-                display: block;
-                cursor: pointer;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="navbar">
-        <div>Nifty Shop Bot</div>
-        <div class="nav-links">
-            <a href="/" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
-            <a href="/trading-overview" class="{% if active_page == 'trading_overview' %}active{% endif %}">Trading Overview</a>
-            <a href="/logs" class="{% if active_page == 'logs' %}active{% endif %}">Logs</a>
-            <a href="/token-refresh" class="{% if active_page == 'token_refresh' %}active{% endif %}">Token Refresh</a>
-            <a href="/run-strategy" class="{% if active_page == 'run_strategy' %}active{% endif %}">Strategy</a>
-            <a href="/logout" class="logout-button">Logout</a>
-        </div>
-        <div class="mobile-nav-toggle">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </div>
-    </div>
-
-    <div class="container">
-        <h1>Application Logs</h1>
-
-        <div class="log-controls">
-            <input type="text" id="log-search" placeholder="Search logs...">
-            <select id="log-level-filter">
+            <select id="log-level-filter"
+                style="padding: 0.6rem; background: var(--bg-app); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius-sm);">
                 <option value="">All Levels</option>
                 <option value="INFO">INFO</option>
                 <option value="WARNING">WARNING</option>
                 <option value="ERROR">ERROR</option>
             </select>
-            <input type="date" id="log-date-filter">
-            <span id="loading-indicator" style="display: none; margin-left: 1rem; color: var(--muted-foreground);"></span>
-        </div>
 
+            <input type="date" id="log-date-filter"
+                style="padding: 0.6rem; background: var(--bg-app); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius-sm);">
+        </div>
+        <div id="loading-indicator" class="text-muted" style="display: none; font-size: 0.875rem;">
+            <i data-feather="loader" class="spin" style="width: 14px; margin-right: 6px;"></i> Loading logs...
+        </div>
+    </div>
+
+    <div class="table-container" style="border: none; margin-bottom: 0;">
         <table id="logs-table">
             <thead>
                 <tr>
-                    <th data-sort-key="timestamp">Timestamp <span class="sort-icon">&#8597;</span></th>
+                    <th data-sort-key="timestamp" style="cursor: pointer;">Timestamp <i data-feather="chevron-down"
+                            style="width: 14px;"></i></th>
                     <th>Level</th>
                     <th>Message</th>
                 </tr>
             </thead>
             <tbody id="log-table-body">
-                <!-- Logs will be loaded here by JavaScript -->
+                <!-- Logs will be loaded here -->
             </tbody>
         </table>
-
-        <div class="pagination">
-            <button id="load-more-logs">Load More Logs</button>
-        </div>
-
-        <div id="no-logs-message" class="no-data-message" style="display: none;">
-            <p>No logs to display.</p>
-        </div>
     </div>
 
-    <script>
-        let currentPage = 1;
-        let hasMoreLogs = true;
-        const logTableBody = document.getElementById('log-table-body');
-        const loadMoreButton = document.getElementById('load-more-logs');
-        const noLogsMessage = document.getElementById('no-logs-message');
-        const logsTable = document.getElementById('logs-table');
-        const logSearchInput = document.getElementById('log-search');
-        const logLevelFilter = document.getElementById('log-level-filter');
-        const logDateFilter = document.getElementById('log-date-filter');
-        const loadingIndicator = document.getElementById('loading-indicator');
+    <div id="no-logs-message" class="p-5 text-center text-muted" style="display: none;">
+        <i data-feather="file-text" style="width: 32px; height: 32px; margin-bottom: 1rem; opacity: 0.5;"></i>
+        <p>No logs found matching your criteria.</p>
+    </div>
 
-        async function fetchLogs(reset = false) {
-            if (reset) {
-                currentPage = 1;
-                logTableBody.innerHTML = '';
-                hasMoreLogs = true;
-                noLogsMessage.style.display = 'none';
-                logsTable.style.display = 'table';
-                loadMoreButton.style.display = 'block';
-            }
+    <div class="p-4 text-center border-top" style="border-color: var(--border) !important;">
+        <button id="load-more-logs" class="btn btn-outline">Load More Logs</button>
+    </div>
+</div>
+{% endblock %}
 
-            if (!hasMoreLogs) return;
+{% block scripts %}
+<script>
+    let currentPage = 1;
+    let hasMoreLogs = true;
+    const logTableBody = document.getElementById('log-table-body');
+    const loadMoreButton = document.getElementById('load-more-logs');
+    const noLogsMessage = document.getElementById('no-logs-message');
+    const logsTable = document.getElementById('logs-table');
+    const logSearchInput = document.getElementById('log-search');
+    const logLevelFilter = document.getElementById('log-level-filter');
+    const logDateFilter = document.getElementById('log-date-filter');
+    const loadingIndicator = document.getElementById('loading-indicator');
 
-            loadMoreButton.disabled = true;
-            loadMoreButton.textContent = 'Loading...';
-            loadingIndicator.textContent = 'Loading...';
-            loadingIndicator.style.display = 'inline';
+    async function fetchLogs(reset = false) {
+        if (reset) {
+            currentPage = 1;
+            logTableBody.innerHTML = '';
+            hasMoreLogs = true;
+            noLogsMessage.style.display = 'none';
+            logsTable.style.display = 'table';
+            loadMoreButton.style.display = 'inline-flex';
+        }
 
-            const searchQuery = logSearchInput.value;
-            const logLevel = logLevelFilter.value;
-            const logDate = logDateFilter.value;
+        if (!hasMoreLogs) return;
 
-            let url = `/api/logs?page=${currentPage}`;
-            if (searchQuery) url += `&search=${searchQuery}`;
-            if (logLevel) url += `&level=${logLevel}`;
-            if (logDate) url += `&date=${logDate}`;
+        loadMoreButton.disabled = true;
+        loadMoreButton.innerHTML = '<i data-feather="loader" class="spin" style="width: 14px; margin-right: 6px;"></i> Loading...';
+        feather.replace();
+        loadingIndicator.style.display = 'block';
 
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
+        const searchQuery = logSearchInput.value;
+        const logLevel = logLevelFilter.value;
+        const logDate = logDateFilter.value;
 
-                if (data.logs.length === 0 && currentPage === 1) {
-                    noLogsMessage.style.display = 'block';
-                    loadMoreButton.style.display = 'none';
-                    logsTable.style.display = 'none';
-                    return;
-                }
+        let url = `/api/logs?page=${currentPage}`;
+        if (searchQuery) url += `&search=${searchQuery}`;
+        if (logLevel) url += `&level=${logLevel}`;
+        if (logDate) url += `&date=${logDate}`;
 
-                data.logs.forEach(log => {
-                    const row = logTableBody.insertRow();
-                    row.innerHTML = `
-                        <td>${log.timestamp}</td>
-                        <td>
-                            <span class="log-level-indicator log-level-${log.level}"></span>
-                            ${log.level}
-                        </td>
-                        <td class="log-message">${log.message}</td>
-                    `;
-                });
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
 
-                hasMoreLogs = data.has_more;
-                currentPage = data.next_page;
-
-                if (!hasMoreLogs) {
-                    loadMoreButton.style.display = 'none';
-                }
-            } catch (error) {
-                console.error('Error fetching logs:', error);
-                // Optionally display an error message to the user
-            } finally {
-                loadMoreButton.disabled = false;
-                loadMoreButton.textContent = 'Load More Logs';
+            if (data.logs.length === 0 && currentPage === 1) {
+                noLogsMessage.style.display = 'block';
+                loadMoreButton.style.display = 'none';
+                logsTable.style.display = 'none';
                 loadingIndicator.style.display = 'none';
+                return;
             }
-        }
 
-        // Debounce function to limit how often a function is called
-        function debounce(func, delay) {
-            let timeout;
-            return function(...args) {
-                const context = this;
-                clearTimeout(timeout);
-                loadingIndicator.textContent = 'Typing...'; // Show typing indicator
-                loadingIndicator.style.display = 'inline';
-                timeout = setTimeout(() => {
-                    loadingIndicator.textContent = ''; // Clear typing indicator before fetch
-                    loadingIndicator.style.display = 'none';
-                    func.apply(context, args);
-                }, delay);
-            };
-        }
+            data.logs.forEach(log => {
+                const row = logTableBody.insertRow();
+                let badgeClass = 'badge-info';
+                if (log.level === 'WARNING') badgeClass = 'badge-warning';
+                if (log.level === 'ERROR') badgeClass = 'badge-danger';
 
-        const debouncedFetchLogs = debounce(() => fetchLogs(true), 1000); // Increased delay to 1 second
-
-        loadMoreButton.addEventListener('click', () => fetchLogs());
-        logSearchInput.addEventListener('input', debouncedFetchLogs);
-        logLevelFilter.addEventListener('change', debouncedFetchLogs);
-        logDateFilter.addEventListener('change', debouncedFetchLogs);
-
-        // Initial load
-        fetchLogs();
-
-        const sortableHeaders = logsTable.querySelectorAll('th[data-sort-key]');
-
-        sortableHeaders.forEach(header => {
-            header.addEventListener('click', () => {
-                const tbody = logTableBody;
-                const rows = Array.from(tbody.querySelectorAll('tr'));
-                const sortKey = header.dataset.sortKey;
-                const currentSort = header.dataset.sortDir || 'desc';
-                const newSort = currentSort === 'asc' ? 'desc' : 'asc';
-                header.dataset.sortDir = newSort;
-
-                rows.sort((a, b) => {
-                    const aVal = a.cells[0].textContent.trim();
-                    const bVal = b.cells[0].textContent.trim();
-
-                    if (newSort === 'asc') {
-                        return aVal.localeCompare(bVal);
-                    } else {
-                        return bVal.localeCompare(aVal);
-                    }
-                });
-
-                rows.forEach(row => tbody.appendChild(row));
+                row.innerHTML = `
+                    <td style="white-space: nowrap; color: var(--text-muted); width: 180px;">${log.timestamp}</td>
+                    <td style="width: 100px;">
+                        <span class="badge ${badgeClass}">${log.level}</span>
+                    </td>
+                    <td style="font-family: monospace; font-size: 0.85rem; color: var(--text-main);">${log.message}</td>
+                `;
             });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-            const navLinks = document.querySelector('.nav-links');
 
-            mobileNavToggle.addEventListener('click', function() {
-                navLinks.classList.toggle('active');
-            });
-        });
-    </script>
-</body>
-</html>
+            hasMoreLogs = data.has_more;
+            currentPage = data.next_page;
+
+            if (!hasMoreLogs) {
+                loadMoreButton.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error fetching logs:', error);
+        } finally {
+            loadMoreButton.disabled = false;
+            loadMoreButton.textContent = 'Load More Logs';
+            loadingIndicator.style.display = 'none';
+        }
+    }
+
+    function debounce(func, delay) {
+        let timeout;
+        return function (...args) {
+            const context = this;
+            clearTimeout(timeout);
+            loadingIndicator.style.display = 'block';
+            timeout = setTimeout(() => {
+                func.apply(context, args);
+            }, delay);
+        };
+    }
+
+    const debouncedFetchLogs = debounce(() => fetchLogs(true), 800);
+
+    loadMoreButton.addEventListener('click', () => fetchLogs());
+    logSearchInput.addEventListener('input', debouncedFetchLogs);
+    logLevelFilter.addEventListener('change', debouncedFetchLogs);
+    logDateFilter.addEventListener('change', debouncedFetchLogs);
+
+    // Initial load
+    fetchLogs();
+</script>
+<style>
+    .spin {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+{% endblock %}

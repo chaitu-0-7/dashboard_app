@@ -1,0 +1,1128 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Nifty Shop Backtest Report</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f9; }
+            .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+            h1, h2 { color: #333; }
+            .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+            .metric-card { background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #007bff; }
+            .metric-value { font-size: 24px; font-weight: bold; color: #007bff; }
+            .metric-label { color: #666; font-size: 14px; }
+            .chart-container { position: relative; height: 400px; margin-bottom: 40px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+            th { background-color: #007bff; color: white; }
+            tr:hover { background-color: #f1f1f1; }
+            .profit { color: green; }
+            .loss { color: red; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Nifty Shop Strategy Backtest</h1>
+            <p>Period: 2023-01-02 to 2023-12-29</p>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Total Return</div>
+                    <div class="metric-value" style="color: green">
+                        14.35%
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Final Balance</div>
+                    <div class="metric-value">₹45,739.55</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Max Drawdown</div>
+                    <div class="metric-value" style="color: red">8.26%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Total Trades</div>
+                    <div class="metric-value">248</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Win Rate</div>
+                    <div class="metric-value">100.0%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Total Brokerage</div>
+                    <div class="metric-value" style="color: #dc3545">₹4,960.00</div>
+                </div>
+            </div>
+
+            <h2>Portfolio Performance</h2>
+            <div class="chart-container">
+                <canvas id="equityCurve"></canvas>
+            </div>
+
+            <h2>Capital Allocation</h2>
+            <div class="chart-container">
+                <canvas id="allocationChart"></canvas>
+            </div>
+
+            <h2>Trade History (Closed Cycles)</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Entry Date</th>
+                            <th>Exit Date</th>
+                            <th>Hold Days</th>
+                            <th>Avg Buy Price</th>
+                            <th>Sell Price</th>
+                            <th>Qty</th>
+                            <th>Averages</th>
+                            <th>P&L</th>
+                            <th>P&L %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td>NSE:ADANIENT-EQ</td>
+                            <td>2025-11-28 19:48:28</td>
+                            <td>2025-11-28 19:48:28</td>
+                            <td>0</td>
+                            <td>₹1563.11</td>
+                            <td>₹1800.48</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹237.37</td>
+                            <td class="profit">15.19%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ADANIENT-EQ</td>
+                            <td>2025-11-28 19:48:28</td>
+                            <td>2025-11-28 19:48:28</td>
+                            <td>0</td>
+                            <td>₹1800.48</td>
+                            <td>₹2161.29</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹360.81</td>
+                            <td class="profit">20.04%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ADANIPORTS-EQ</td>
+                            <td>2025-11-28 19:48:27</td>
+                            <td>2025-11-28 19:48:36</td>
+                            <td>0</td>
+                            <td>₹577.05</td>
+                            <td>₹613.11</td>
+                            <td>6</td>
+                            <td>3</td>
+                            <td class="profit">₹216.40</td>
+                            <td class="profit">6.25%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ADANIENT-EQ</td>
+                            <td>2025-11-28 19:48:29</td>
+                            <td>2025-11-28 19:48:36</td>
+                            <td>0</td>
+                            <td>₹1552.58</td>
+                            <td>₹1876.93</td>
+                            <td>6</td>
+                            <td>5</td>
+                            <td class="profit">₹1946.08</td>
+                            <td class="profit">20.89%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:SBIN-EQ</td>
+                            <td>2025-11-28 19:48:33</td>
+                            <td>2025-11-28 19:48:37</td>
+                            <td>0</td>
+                            <td>₹495.06</td>
+                            <td>₹531.24</td>
+                            <td>4</td>
+                            <td>0</td>
+                            <td class="profit">₹144.70</td>
+                            <td class="profit">7.31%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:INDUSINDBK-EQ</td>
+                            <td>2025-11-28 19:48:34</td>
+                            <td>2025-11-28 19:48:38</td>
+                            <td>0</td>
+                            <td>₹1052.25</td>
+                            <td>₹1148.75</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹96.51</td>
+                            <td class="profit">9.17%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ADANIPORTS-EQ</td>
+                            <td>2025-11-28 19:48:47</td>
+                            <td>2025-11-28 19:48:47</td>
+                            <td>0</td>
+                            <td>₹584.08</td>
+                            <td>₹626.65</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td class="profit">₹127.71</td>
+                            <td class="profit">7.29%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:RELIANCE-EQ</td>
+                            <td>2025-11-28 19:48:43</td>
+                            <td>2025-11-28 19:48:49</td>
+                            <td>0</td>
+                            <td>₹1014.84</td>
+                            <td>₹1068.86</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹54.03</td>
+                            <td class="profit">5.32%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ADANIENT-EQ</td>
+                            <td>2025-11-28 19:48:48</td>
+                            <td>2025-11-28 19:48:53</td>
+                            <td>0</td>
+                            <td>₹1715.10</td>
+                            <td>₹1844.72</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹129.62</td>
+                            <td class="profit">7.56%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:INDUSINDBK-EQ</td>
+                            <td>2025-11-28 19:48:42</td>
+                            <td>2025-11-28 19:48:54</td>
+                            <td>0</td>
+                            <td>₹1021.67</td>
+                            <td>₹1085.21</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹63.54</td>
+                            <td class="profit">6.22%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:HDFCLIFE-EQ</td>
+                            <td>2025-11-28 19:48:27</td>
+                            <td>2025-11-28 19:48:56</td>
+                            <td>0</td>
+                            <td>₹499.67</td>
+                            <td>₹528.38</td>
+                            <td>4</td>
+                            <td>1</td>
+                            <td class="profit">₹114.86</td>
+                            <td class="profit">5.75%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:JSWSTEEL-EQ</td>
+                            <td>2025-11-28 19:48:34</td>
+                            <td>2025-11-28 19:48:59</td>
+                            <td>0</td>
+                            <td>₹675.01</td>
+                            <td>₹708.86</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹67.70</td>
+                            <td class="profit">5.01%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ADANIPORTS-EQ</td>
+                            <td>2025-11-28 19:48:48</td>
+                            <td>2025-11-28 19:49:01</td>
+                            <td>0</td>
+                            <td>₹621.97</td>
+                            <td>₹655.64</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td class="profit">₹100.99</td>
+                            <td class="profit">5.41%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:BPCL-EQ</td>
+                            <td>2025-11-28 19:48:49</td>
+                            <td>2025-11-28 19:49:01</td>
+                            <td>0</td>
+                            <td>₹142.04</td>
+                            <td>₹149.90</td>
+                            <td>14</td>
+                            <td>0</td>
+                            <td class="profit">₹110.02</td>
+                            <td class="profit">5.53%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:BAJFINANCE-EQ</td>
+                            <td>2025-11-28 19:48:39</td>
+                            <td>2025-11-28 19:49:04</td>
+                            <td>0</td>
+                            <td>₹580.58</td>
+                            <td>₹610.53</td>
+                            <td>4</td>
+                            <td>1</td>
+                            <td class="profit">₹119.80</td>
+                            <td class="profit">5.16%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:HINDALCO-EQ</td>
+                            <td>2025-11-28 19:48:29</td>
+                            <td>2025-11-28 19:49:05</td>
+                            <td>0</td>
+                            <td>₹405.41</td>
+                            <td>₹427.67</td>
+                            <td>10</td>
+                            <td>6</td>
+                            <td class="profit">₹222.51</td>
+                            <td class="profit">5.49%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:WIPRO-EQ</td>
+                            <td>2025-11-28 19:48:44</td>
+                            <td>2025-11-28 19:49:06</td>
+                            <td>0</td>
+                            <td>₹175.79</td>
+                            <td>₹186.32</td>
+                            <td>11</td>
+                            <td>0</td>
+                            <td class="profit">₹115.84</td>
+                            <td class="profit">5.99%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:BAJAJFINSV-EQ</td>
+                            <td>2025-11-28 19:48:41</td>
+                            <td>2025-11-28 19:49:07</td>
+                            <td>0</td>
+                            <td>₹1293.57</td>
+                            <td>₹1372.19</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹78.62</td>
+                            <td class="profit">6.08%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:INDUSINDBK-EQ</td>
+                            <td>2025-11-28 19:49:09</td>
+                            <td>2025-11-28 19:49:10</td>
+                            <td>0</td>
+                            <td>₹1050.00</td>
+                            <td>₹1115.83</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹65.84</td>
+                            <td class="profit">6.27%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:TECHM-EQ</td>
+                            <td>2025-11-28 19:48:53</td>
+                            <td>2025-11-28 19:49:17</td>
+                            <td>0</td>
+                            <td>₹942.16</td>
+                            <td>₹1006.96</td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td class="profit">₹194.38</td>
+                            <td class="profit">6.88%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:HCLTECH-EQ</td>
+                            <td>2025-11-28 19:48:56</td>
+                            <td>2025-11-28 19:49:18</td>
+                            <td>0</td>
+                            <td>₹962.55</td>
+                            <td>₹1011.42</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹97.75</td>
+                            <td class="profit">5.08%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:SBILIFE-EQ</td>
+                            <td>2025-11-28 19:48:28</td>
+                            <td>2025-11-28 19:49:20</td>
+                            <td>0</td>
+                            <td>₹1131.20</td>
+                            <td>₹1191.34</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹60.14</td>
+                            <td class="profit">5.32%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:CIPLA-EQ</td>
+                            <td>2025-11-28 19:48:32</td>
+                            <td>2025-11-28 19:49:22</td>
+                            <td>0</td>
+                            <td>₹889.45</td>
+                            <td>₹934.14</td>
+                            <td>5</td>
+                            <td>3</td>
+                            <td class="profit">₹223.45</td>
+                            <td class="profit">5.02%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:SUNPHARMA-EQ</td>
+                            <td>2025-11-28 19:49:04</td>
+                            <td>2025-11-28 19:49:25</td>
+                            <td>0</td>
+                            <td>₹931.29</td>
+                            <td>₹978.17</td>
+                            <td>4</td>
+                            <td>2</td>
+                            <td class="profit">₹187.49</td>
+                            <td class="profit">5.03%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:JSWSTEEL-EQ</td>
+                            <td>2025-11-28 19:49:13</td>
+                            <td>2025-11-28 19:49:28</td>
+                            <td>0</td>
+                            <td>₹695.26</td>
+                            <td>₹737.88</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹85.24</td>
+                            <td class="profit">6.13%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:NTPC-EQ</td>
+                            <td>2025-11-28 19:48:54</td>
+                            <td>2025-11-28 19:49:31</td>
+                            <td>0</td>
+                            <td>₹163.34</td>
+                            <td>₹172.54</td>
+                            <td>12</td>
+                            <td>0</td>
+                            <td class="profit">₹110.38</td>
+                            <td class="profit">5.63%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:GRASIM-EQ</td>
+                            <td>2025-11-28 19:49:21</td>
+                            <td>2025-11-28 19:49:33</td>
+                            <td>0</td>
+                            <td>₹1659.98</td>
+                            <td>₹1749.51</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹89.52</td>
+                            <td class="profit">5.39%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:DRREDDY-EQ</td>
+                            <td>2025-11-28 19:49:12</td>
+                            <td>2025-11-28 19:49:34</td>
+                            <td>0</td>
+                            <td>₹888.44</td>
+                            <td>₹941.65</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹106.43</td>
+                            <td class="profit">5.99%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:TATASTEEL-EQ</td>
+                            <td>2025-11-28 19:48:30</td>
+                            <td>2025-11-28 19:49:35</td>
+                            <td>0</td>
+                            <td>₹100.22</td>
+                            <td>₹105.98</td>
+                            <td>23</td>
+                            <td>4</td>
+                            <td class="profit">₹132.47</td>
+                            <td class="profit">5.75%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:HINDALCO-EQ</td>
+                            <td>2025-11-28 19:49:13</td>
+                            <td>2025-11-28 19:49:36</td>
+                            <td>0</td>
+                            <td>₹396.92</td>
+                            <td>₹417.91</td>
+                            <td>5</td>
+                            <td>0</td>
+                            <td class="profit">₹104.93</td>
+                            <td class="profit">5.29%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:POWERGRID-EQ</td>
+                            <td>2025-11-28 19:49:23</td>
+                            <td>2025-11-28 19:49:37</td>
+                            <td>0</td>
+                            <td>₹157.91</td>
+                            <td>₹167.08</td>
+                            <td>12</td>
+                            <td>0</td>
+                            <td class="profit">₹110.02</td>
+                            <td class="profit">5.81%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:TECHM-EQ</td>
+                            <td>2025-11-28 19:49:31</td>
+                            <td>2025-11-28 19:49:38</td>
+                            <td>0</td>
+                            <td>₹969.21</td>
+                            <td>₹1021.04</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹103.66</td>
+                            <td class="profit">5.35%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ADANIPORTS-EQ</td>
+                            <td>2025-11-28 19:49:41</td>
+                            <td>2025-11-28 19:49:43</td>
+                            <td>0</td>
+                            <td>₹703.08</td>
+                            <td>₹744.62</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹83.07</td>
+                            <td class="profit">5.91%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:INFY-EQ</td>
+                            <td>2025-11-28 19:48:36</td>
+                            <td>2025-11-28 19:49:44</td>
+                            <td>0</td>
+                            <td>₹1177.80</td>
+                            <td>₹1241.29</td>
+                            <td>8</td>
+                            <td>7</td>
+                            <td class="profit">₹507.91</td>
+                            <td class="profit">5.39%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:HDFCBANK-EQ</td>
+                            <td>2025-11-28 19:49:10</td>
+                            <td>2025-11-28 19:49:44</td>
+                            <td>0</td>
+                            <td>₹791.28</td>
+                            <td>₹837.00</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹91.44</td>
+                            <td class="profit">5.78%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:BPCL-EQ</td>
+                            <td>2025-11-28 19:49:26</td>
+                            <td>2025-11-28 19:49:46</td>
+                            <td>0</td>
+                            <td>₹155.90</td>
+                            <td>₹167.37</td>
+                            <td>12</td>
+                            <td>0</td>
+                            <td class="profit">₹137.69</td>
+                            <td class="profit">7.36%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ONGC-EQ</td>
+                            <td>2025-11-28 19:49:22</td>
+                            <td>2025-11-28 19:49:51</td>
+                            <td>0</td>
+                            <td>₹139.59</td>
+                            <td>₹147.51</td>
+                            <td>15</td>
+                            <td>1</td>
+                            <td class="profit">₹118.87</td>
+                            <td class="profit">5.68%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:WIPRO-EQ</td>
+                            <td>2025-11-28 19:49:35</td>
+                            <td>2025-11-28 19:49:54</td>
+                            <td>0</td>
+                            <td>₹186.61</td>
+                            <td>₹199.23</td>
+                            <td>10</td>
+                            <td>0</td>
+                            <td class="profit">₹126.18</td>
+                            <td class="profit">6.76%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:SBIN-EQ</td>
+                            <td>2025-11-28 19:49:39</td>
+                            <td>2025-11-28 19:49:56</td>
+                            <td>0</td>
+                            <td>₹546.04</td>
+                            <td>₹579.89</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td class="profit">₹101.52</td>
+                            <td class="profit">6.20%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ICICIBANK-EQ</td>
+                            <td>2025-11-28 19:49:28</td>
+                            <td>2025-11-28 19:49:57</td>
+                            <td>0</td>
+                            <td>₹917.49</td>
+                            <td>₹971.55</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹108.12</td>
+                            <td class="profit">5.89%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:KOTAKBANK-EQ</td>
+                            <td>2025-11-28 19:49:30</td>
+                            <td>2025-11-28 19:49:58</td>
+                            <td>0</td>
+                            <td>₹1849.84</td>
+                            <td>₹1964.16</td>
+                            <td>2</td>
+                            <td>1</td>
+                            <td class="profit">₹228.65</td>
+                            <td class="profit">6.18%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:NTPC-EQ</td>
+                            <td>2025-11-28 19:49:55</td>
+                            <td>2025-11-28 19:49:59</td>
+                            <td>0</td>
+                            <td>₹173.28</td>
+                            <td>₹182.01</td>
+                            <td>11</td>
+                            <td>0</td>
+                            <td class="profit">₹96.07</td>
+                            <td class="profit">5.04%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:POWERGRID-EQ</td>
+                            <td>2025-11-28 19:49:54</td>
+                            <td>2025-11-28 19:50:02</td>
+                            <td>0</td>
+                            <td>₹161.24</td>
+                            <td>₹173.43</td>
+                            <td>12</td>
+                            <td>0</td>
+                            <td class="profit">₹146.29</td>
+                            <td class="profit">7.56%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ADANIPORTS-EQ</td>
+                            <td>2025-11-28 19:49:45</td>
+                            <td>2025-11-28 19:50:03</td>
+                            <td>0</td>
+                            <td>₹725.82</td>
+                            <td>₹770.78</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹89.92</td>
+                            <td class="profit">6.19%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:TECHM-EQ</td>
+                            <td>2025-11-28 19:50:02</td>
+                            <td>2025-11-28 19:50:08</td>
+                            <td>0</td>
+                            <td>₹1029.09</td>
+                            <td>₹1099.54</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹70.45</td>
+                            <td class="profit">6.85%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:TRENT-EQ</td>
+                            <td>2025-11-28 19:49:53</td>
+                            <td>2025-11-28 19:50:11</td>
+                            <td>0</td>
+                            <td>₹1663.42</td>
+                            <td>₹1785.13</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹121.71</td>
+                            <td class="profit">7.32%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:HCLTECH-EQ</td>
+                            <td>2025-11-28 19:49:50</td>
+                            <td>2025-11-28 19:50:13</td>
+                            <td>0</td>
+                            <td>₹1027.09</td>
+                            <td>₹1079.20</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹52.11</td>
+                            <td class="profit">5.07%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:COALINDIA-EQ</td>
+                            <td>2025-11-28 19:49:25</td>
+                            <td>2025-11-28 19:50:30</td>
+                            <td>0</td>
+                            <td>₹190.63</td>
+                            <td>₹208.67</td>
+                            <td>10</td>
+                            <td>0</td>
+                            <td class="profit">₹180.34</td>
+                            <td class="profit">9.46%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:JSWSTEEL-EQ</td>
+                            <td>2025-11-28 19:50:23</td>
+                            <td>2025-11-28 19:50:31</td>
+                            <td>0</td>
+                            <td>₹765.08</td>
+                            <td>₹807.43</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹84.71</td>
+                            <td class="profit">5.54%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:TATACONSUM-EQ</td>
+                            <td>2025-11-28 19:49:49</td>
+                            <td>2025-11-28 19:50:32</td>
+                            <td>0</td>
+                            <td>₹821.46</td>
+                            <td>₹866.46</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹90.01</td>
+                            <td class="profit">5.48%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:AXISBANK-EQ</td>
+                            <td>2025-11-28 19:49:46</td>
+                            <td>2025-11-28 19:50:39</td>
+                            <td>0</td>
+                            <td>₹968.14</td>
+                            <td>₹1019.24</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹102.21</td>
+                            <td class="profit">5.28%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:SBIN-EQ</td>
+                            <td>2025-11-28 19:50:09</td>
+                            <td>2025-11-28 19:50:42</td>
+                            <td>0</td>
+                            <td>₹552.75</td>
+                            <td>₹582.30</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td class="profit">₹88.65</td>
+                            <td class="profit">5.35%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:BAJFINANCE-EQ</td>
+                            <td>2025-11-28 19:50:04</td>
+                            <td>2025-11-28 19:50:47</td>
+                            <td>0</td>
+                            <td>₹721.93</td>
+                            <td>₹773.31</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹102.76</td>
+                            <td class="profit">7.12%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:NESTLEIND-EQ</td>
+                            <td>2025-11-28 19:50:34</td>
+                            <td>2025-11-28 19:50:49</td>
+                            <td>0</td>
+                            <td>₹1069.37</td>
+                            <td>₹1123.54</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹54.17</td>
+                            <td class="profit">5.07%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:BAJAJFINSV-EQ</td>
+                            <td>2025-11-28 19:50:05</td>
+                            <td>2025-11-28 19:50:58</td>
+                            <td>0</td>
+                            <td>₹1518.78</td>
+                            <td>₹1632.82</td>
+                            <td>2</td>
+                            <td>1</td>
+                            <td class="profit">₹228.10</td>
+                            <td class="profit">7.51%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:SBILIFE-EQ</td>
+                            <td>2025-11-28 19:50:57</td>
+                            <td>2025-11-28 19:51:08</td>
+                            <td>0</td>
+                            <td>₹1265.86</td>
+                            <td>₹1343.38</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹77.51</td>
+                            <td class="profit">6.12%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:SUNPHARMA-EQ</td>
+                            <td>2025-11-28 19:50:26</td>
+                            <td>2025-11-28 19:51:29</td>
+                            <td>0</td>
+                            <td>₹1091.61</td>
+                            <td>₹1149.89</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹58.28</td>
+                            <td class="profit">5.34%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:BPCL-EQ</td>
+                            <td>2025-11-28 19:50:07</td>
+                            <td>2025-11-28 19:51:30</td>
+                            <td>0</td>
+                            <td>₹156.37</td>
+                            <td>₹168.21</td>
+                            <td>19</td>
+                            <td>7</td>
+                            <td class="profit">₹224.93</td>
+                            <td class="profit">7.57%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:HDFCLIFE-EQ</td>
+                            <td>2025-11-28 19:51:02</td>
+                            <td>2025-11-28 19:51:41</td>
+                            <td>0</td>
+                            <td>₹617.44</td>
+                            <td>₹648.40</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td class="profit">₹92.88</td>
+                            <td class="profit">5.01%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:CIPLA-EQ</td>
+                            <td>2025-11-28 19:50:39</td>
+                            <td>2025-11-28 19:51:42</td>
+                            <td>0</td>
+                            <td>₹1170.16</td>
+                            <td>₹1229.58</td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td class="profit">₹178.27</td>
+                            <td class="profit">5.08%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ADANIPORTS-EQ</td>
+                            <td>2025-11-28 19:51:01</td>
+                            <td>2025-11-28 19:51:48</td>
+                            <td>0</td>
+                            <td>₹782.87</td>
+                            <td>₹830.08</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹94.43</td>
+                            <td class="profit">6.03%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:AXISBANK-EQ</td>
+                            <td>2025-11-28 19:51:42</td>
+                            <td>2025-11-28 19:51:50</td>
+                            <td>0</td>
+                            <td>₹987.09</td>
+                            <td>₹1058.43</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹142.67</td>
+                            <td class="profit">7.23%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ICICIBANK-EQ</td>
+                            <td>2025-11-28 19:50:52</td>
+                            <td>2025-11-28 19:51:54</td>
+                            <td>0</td>
+                            <td>₹927.89</td>
+                            <td>₹975.21</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹94.65</td>
+                            <td class="profit">5.10%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:SBIN-EQ</td>
+                            <td>2025-11-28 19:51:09</td>
+                            <td>2025-11-28 19:51:56</td>
+                            <td>0</td>
+                            <td>₹555.78</td>
+                            <td>₹586.44</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td class="profit">₹91.98</td>
+                            <td class="profit">5.52%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:JSWSTEEL-EQ</td>
+                            <td>2025-11-28 19:50:45</td>
+                            <td>2025-11-28 19:52:00</td>
+                            <td>0</td>
+                            <td>₹778.54</td>
+                            <td>₹830.59</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹104.10</td>
+                            <td class="profit">6.69%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:INDUSINDBK-EQ</td>
+                            <td>2025-11-28 19:51:53</td>
+                            <td>2025-11-28 19:52:07</td>
+                            <td>0</td>
+                            <td>₹1450.00</td>
+                            <td>₹1534.66</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹84.66</td>
+                            <td class="profit">5.84%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:TECHM-EQ</td>
+                            <td>2025-11-28 19:50:54</td>
+                            <td>2025-11-28 19:52:08</td>
+                            <td>0</td>
+                            <td>₹1144.08</td>
+                            <td>₹1235.19</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹91.11</td>
+                            <td class="profit">7.96%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:WIPRO-EQ</td>
+                            <td>2025-11-28 19:50:49</td>
+                            <td>2025-11-28 19:52:10</td>
+                            <td>0</td>
+                            <td>₹198.68</td>
+                            <td>₹213.62</td>
+                            <td>10</td>
+                            <td>0</td>
+                            <td class="profit">₹149.45</td>
+                            <td class="profit">7.52%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:RELIANCE-EQ</td>
+                            <td>2025-11-28 19:50:25</td>
+                            <td>2025-11-28 19:52:11</td>
+                            <td>0</td>
+                            <td>₹1179.03</td>
+                            <td>₹1269.65</td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td class="profit">₹271.86</td>
+                            <td class="profit">7.69%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:CIPLA-EQ</td>
+                            <td>2025-11-28 19:51:47</td>
+                            <td>2025-11-28 19:52:13</td>
+                            <td>0</td>
+                            <td>₹1148.54</td>
+                            <td>₹1212.85</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹64.31</td>
+                            <td class="profit">5.60%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:HDFCBANK-EQ</td>
+                            <td>2025-11-28 19:50:20</td>
+                            <td>2025-11-28 19:52:14</td>
+                            <td>0</td>
+                            <td>₹770.28</td>
+                            <td>₹820.89</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹101.23</td>
+                            <td class="profit">6.57%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:ONGC-EQ</td>
+                            <td>2025-11-28 19:52:07</td>
+                            <td>2025-11-28 19:52:16</td>
+                            <td>0</td>
+                            <td>₹175.53</td>
+                            <td>₹185.34</td>
+                            <td>11</td>
+                            <td>0</td>
+                            <td class="profit">₹107.96</td>
+                            <td class="profit">5.59%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:KOTAKBANK-EQ</td>
+                            <td>2025-11-28 19:50:17</td>
+                            <td>2025-11-28 19:52:18</td>
+                            <td>0</td>
+                            <td>₹1761.74</td>
+                            <td>₹1882.61</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹120.88</td>
+                            <td class="profit">6.86%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:NESTLEIND-EQ</td>
+                            <td>2025-11-28 19:51:51</td>
+                            <td>2025-11-28 19:52:19</td>
+                            <td>0</td>
+                            <td>₹1182.23</td>
+                            <td>₹1263.43</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="profit">₹81.20</td>
+                            <td class="profit">6.87%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>NSE:BHARTIARTL-EQ</td>
+                            <td>2025-11-28 19:52:14</td>
+                            <td>2025-11-28 19:52:21</td>
+                            <td>0</td>
+                            <td>₹958.16</td>
+                            <td>₹1022.41</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td class="profit">₹128.50</td>
+                            <td class="profit">6.71%</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            const dates = ["2023-01-02", "2023-01-03", "2023-01-04", "2023-01-05", "2023-01-06", "2023-01-09", "2023-01-10", "2023-01-11", "2023-01-12", "2023-01-13", "2023-01-16", "2023-01-17", "2023-01-18", "2023-01-19", "2023-01-20", "2023-01-23", "2023-01-24", "2023-01-25", "2023-01-27", "2023-01-30", "2023-01-31", "2023-02-01", "2023-02-02", "2023-02-03", "2023-02-06", "2023-02-07", "2023-02-08", "2023-02-09", "2023-02-10", "2023-02-13", "2023-02-14", "2023-02-15", "2023-02-16", "2023-02-17", "2023-02-20", "2023-02-21", "2023-02-22", "2023-02-23", "2023-02-24", "2023-02-27", "2023-02-28", "2023-03-01", "2023-03-02", "2023-03-03", "2023-03-06", "2023-03-08", "2023-03-09", "2023-03-10", "2023-03-13", "2023-03-14", "2023-03-15", "2023-03-16", "2023-03-17", "2023-03-20", "2023-03-21", "2023-03-22", "2023-03-23", "2023-03-24", "2023-03-27", "2023-03-28", "2023-03-29", "2023-03-31", "2023-04-03", "2023-04-05", "2023-04-06", "2023-04-10", "2023-04-11", "2023-04-12", "2023-04-13", "2023-04-17", "2023-04-18", "2023-04-19", "2023-04-20", "2023-04-21", "2023-04-24", "2023-04-25", "2023-04-26", "2023-04-27", "2023-04-28", "2023-05-02", "2023-05-03", "2023-05-04", "2023-05-05", "2023-05-08", "2023-05-09", "2023-05-10", "2023-05-11", "2023-05-12", "2023-05-15", "2023-05-16", "2023-05-17", "2023-05-18", "2023-05-19", "2023-05-22", "2023-05-23", "2023-05-24", "2023-05-25", "2023-05-26", "2023-05-29", "2023-05-30", "2023-05-31", "2023-06-01", "2023-06-02", "2023-06-05", "2023-06-06", "2023-06-07", "2023-06-08", "2023-06-09", "2023-06-12", "2023-06-13", "2023-06-14", "2023-06-15", "2023-06-16", "2023-06-19", "2023-06-20", "2023-06-21", "2023-06-22", "2023-06-23", "2023-06-26", "2023-06-27", "2023-06-28", "2023-06-30", "2023-07-03", "2023-07-04", "2023-07-05", "2023-07-06", "2023-07-07", "2023-07-10", "2023-07-11", "2023-07-12", "2023-07-13", "2023-07-14", "2023-07-17", "2023-07-18", "2023-07-19", "2023-07-20", "2023-07-21", "2023-07-24", "2023-07-25", "2023-07-26", "2023-07-27", "2023-07-28", "2023-07-31", "2023-08-01", "2023-08-02", "2023-08-03", "2023-08-04", "2023-08-07", "2023-08-08", "2023-08-09", "2023-08-10", "2023-08-11", "2023-08-14", "2023-08-16", "2023-08-17", "2023-08-18", "2023-08-21", "2023-08-22", "2023-08-23", "2023-08-24", "2023-08-25", "2023-08-28", "2023-08-29", "2023-08-30", "2023-08-31", "2023-09-01", "2023-09-04", "2023-09-05", "2023-09-06", "2023-09-07", "2023-09-08", "2023-09-11", "2023-09-12", "2023-09-13", "2023-09-14", "2023-09-15", "2023-09-18", "2023-09-20", "2023-09-21", "2023-09-22", "2023-09-25", "2023-09-26", "2023-09-27", "2023-09-28", "2023-09-29", "2023-10-03", "2023-10-04", "2023-10-05", "2023-10-06", "2023-10-09", "2023-10-10", "2023-10-11", "2023-10-12", "2023-10-13", "2023-10-16", "2023-10-17", "2023-10-18", "2023-10-19", "2023-10-20", "2023-10-23", "2023-10-25", "2023-10-26", "2023-10-27", "2023-10-30", "2023-10-31", "2023-11-01", "2023-11-02", "2023-11-03", "2023-11-06", "2023-11-07", "2023-11-08", "2023-11-09", "2023-11-10", "2023-11-13", "2023-11-15", "2023-11-16", "2023-11-17", "2023-11-20", "2023-11-21", "2023-11-22", "2023-11-23", "2023-11-24", "2023-11-28", "2023-11-29", "2023-11-30", "2023-12-01", "2023-12-04", "2023-12-05", "2023-12-06", "2023-12-07", "2023-12-08", "2023-12-11", "2023-12-12", "2023-12-13", "2023-12-14", "2023-12-15", "2023-12-18", "2023-12-19", "2023-12-20", "2023-12-21", "2023-12-22", "2023-12-26", "2023-12-27", "2023-12-28", "2023-12-29"];
+            const portfolioValues = [40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 39980.0, 39613.037841796875, 39428.128021240234, 39525.83984375, 39609.35372924805, 39825.66946411133, 40436.608001708984, 40427.319396972656, 40306.07116699219, 39986.299407958984, 40087.28218078613, 40200.10238647461, 40296.50539398193, 40066.46870422363, 39789.374504089355, 39617.80256652832, 38772.05214691162, 38728.61666107178, 38340.34745025635, 37793.7515335083, 38574.88092803955, 39974.8888092041, 40201.579666137695, 42034.0034866333, 41975.77111053467, 41960.17448425293, 41918.95886993408, 41854.74578857422, 41653.826095581055, 41532.666900634766, 41586.65263366699, 41291.86183929443, 41468.455909729004, 41099.02536773682, 41288.530822753906, 41450.26885986328, 41463.99969482422, 41171.53776550293, 41234.18991851807, 41170.124435424805, 41497.14687347412, 41837.15943145752, 41783.802085876465, 41872.87708282471, 42049.83489227295, 42231.77257537842, 42408.34532928467, 42572.16149139404, 42538.74044036865, 42165.67060089111, 42275.961738586426, 42024.72154998779, 41942.77498626709, 41882.65566253662, 41946.94358062744, 42034.90637969971, 41977.84670257568, 42313.56345367432, 42529.53360748291, 42907.758796691895, 42769.253746032715, 42980.15340423584, 42693.38040924072, 42911.61193084717, 42909.36547088623, 42836.96945953369, 42807.57070159912, 42575.69895172119, 42716.08400726318, 42661.70853424072, 42371.74225616455, 42193.54941558838, 42369.80091094971, 42796.31775665283, 42906.892723083496, 43003.40842437744, 42961.89415740967, 43339.6319732666, 43476.128494262695, 43426.257904052734, 43215.25718688965, 43192.77717590332, 43413.42630767822, 43532.4884185791, 43329.642921447754, 43671.68522644043, 43546.668937683105, 43276.505378723145, 43588.85787200928, 43803.575538635254, 43926.776054382324, 43757.313385009766, 43856.25231933594, 43731.88055419922, 43879.44152832031, 43941.55799865723, 43680.84901428223, 43331.25405883789, 43443.537536621094, 43619.70243835449, 43882.39518737793, 44343.915924072266, 44432.763900756836, 44458.92166137695, 44486.383880615234, 44632.01496887207, 44405.15776062012, 44318.17933654785, 44240.82095336914, 44248.812759399414, 44091.35890197754, 44301.88914489746, 44502.36097717285, 44433.84022521973, 44552.56344604492, 44729.146896362305, 44579.32588195801, 44590.046813964844, 44532.97296142578, 44642.88815307617, 44449.399322509766, 44453.06427001953, 44536.9299621582, 44622.1305847168, 44315.73715209961, 44010.97198486328, 44104.830627441406, 44129.77294921875, 44106.97830200195, 44410.33688354492, 44251.32400512695, 43970.66537475586, 43684.48080444336, 43625.24334716797, 43508.02947998047, 43273.57489013672, 43542.369079589844, 43449.981536865234, 43561.52816772461, 43578.975524902344, 43481.22482299805, 43619.14807128906, 43954.55972290039, 43946.70492553711, 43478.308349609375, 44076.75065612793, 44257.39219665527, 44321.24203491211, 44436.53109741211, 44586.061599731445, 44571.65287780762, 45019.012145996094, 44543.51591491699, 44791.22850036621, 45447.8748626709, 45500.581283569336, 45421.93461608887, 45005.23124694824, 44902.03788757324, 44513.330307006836, 44661.75639343262, 44593.25819396973, 44584.30815124512, 43995.247299194336, 44478.926696777344, 44059.40986633301, 43756.27598571777, 43840.65303039551, 44300.28401184082, 44058.09190368652, 44562.50538635254, 44970.72200012207, 44763.56294250488, 44771.67491149902, 44964.062103271484, 45004.324768066406, 44868.91825866699, 44542.886489868164, 44084.290130615234, 43215.19691467285, 42822.85484313965, 41935.88053894043, 42122.1083984375, 41873.83184814453, 41943.8992767334, 41740.31700134277, 42156.00700378418, 42528.78680419922, 42818.40774536133, 42827.491287231445, 43103.33090209961, 42818.66744995117, 42762.630279541016, 42889.80682373047, 43405.08987426758, 43486.865631103516, 43477.70864868164, 43242.89517211914, 43525.8557434082, 43571.846588134766, 43574.46633911133, 43357.954681396484, 43621.41082763672, 44090.88278198242, 44132.4309387207, 44331.240631103516, 44859.7880859375, 44995.649353027344, 45373.49725341797, 45298.34503173828, 45265.989318847656, 45861.42428588867, 45581.37319946289, 45663.472564697266, 45924.4850769043, 46573.12823486328, 46389.252853393555, 46188.625228881836, 44953.28176879883, 45149.07633972168, 45338.47009277344, 45485.522216796875, 45488.78161621094, 45865.6953125, 45739.54522705078];
+            const capitalDeployed = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1809.075439453125, 2994.66650390625, 4392.862640380859, 5641.76953125, 6282.164276123047, 6538.480010986328, 6740.362396240234, 8674.135803222656, 10490.494232177734, 11906.019470214844, 12583.224411010742, 13276.154724121094, 13372.557731628418, 14882.861129760742, 16502.13240814209, 18330.81071472168, 18907.985832214355, 19936.79680633545, 20918.542121887207, 21583.811317443848, 23746.922523498535, 26042.43785095215, 23980.59294128418, 15446.583534240723, 13709.88109588623, 14357.09294128418, 14736.819465637207, 15090.410400390625, 16203.061386108398, 16568.027801513672, 17663.6883392334, 17766.401969909668, 18977.83374786377, 19006.69214630127, 21149.89390563965, 22171.908920288086, 23466.27732849121, 23574.703063964844, 24208.113273620605, 25916.280700683594, 24499.461700439453, 26725.39259338379, 28407.132537841797, 30504.810592651367, 29749.703201293945, 30048.996154785156, 31246.87139892578, 31566.032470703125, 32412.490447998047, 31119.90315246582, 31007.466384887695, 31906.310546875, 31019.471649169922, 29811.311737060547, 31020.273239135742, 33031.529861450195, 34120.28988647461, 32968.48204040527, 28927.801498413086, 27276.48797607422, 27137.98292541504, 25996.691299438477, 26779.914642333984, 28411.590866088867, 28916.070236206055, 29525.62857055664, 31293.10530090332, 33065.84063720703, 34616.74058532715, 35237.64831542969, 35883.56271362305, 36381.14001464844, 37483.38870239258, 35581.93734741211, 33689.66954040527, 33786.18524169922, 33861.93347930908, 34748.3176574707, 36863.42477416992, 34077.76628112793, 33866.765563964844, 35770.59689331055, 33989.36894989014, 34108.431060791016, 34060.778953552246, 36257.79183959961, 36577.738441467285, 38265.9945602417, 36527.90357208252, 36742.621238708496, 35136.31369781494, 34989.64317321777, 32670.98991394043, 32316.03630065918, 30478.64549255371, 30176.8134765625, 29916.1044921875, 30992.665908813477, 31104.94938659668, 31281.114288330078, 30074.576446533203, 20625.80616760254, 20532.280364990234, 22514.70863342285, 20553.69337463379, 20699.324462890625, 22135.380096435547, 23095.487365722656, 23665.558853149414, 22127.915161132812, 23653.878051757812, 25819.23745727539, 25973.514739990234, 26548.23617553711, 25589.763229370117, 24485.95947265625, 21065.85171508789, 19730.06527709961, 20302.64779663086, 21047.965393066406, 21903.566162109375, 20474.939666748047, 20501.10919189453, 22176.903198242188, 23808.318725585938, 24117.52944946289, 24810.083038330078, 25455.282745361328, 26050.321838378906, 25217.119567871094, 25681.183349609375, 24954.55859375, 25272.309326171875, 25816.51254272461, 27481.034271240234, 27838.792755126953, 28706.97183227539, 30175.139221191406, 30886.120239257812, 32390.526824951172, 33842.93701171875, 35213.75796508789, 36660.78106689453, 37789.14514160156, 37489.84858703613, 38258.9889831543, 36543.89469909668, 35012.8772277832, 33415.24563598633, 34654.14222717285, 34639.73350524902, 35087.0927734375, 34784.13348388672, 36257.14172363281, 34895.30480957031, 34948.01123046875, 33142.47430419922, 34302.84783935547, 35393.367248535156, 36188.16003417969, 36816.73156738281, 36806.36447143555, 38673.19567871094, 38254.72348022461, 39902.480392456055, 39652.41387939453, 40635.142669677734, 41807.82781982422, 40192.295837402344, 41535.8356628418, 43912.562561035156, 44490.75485229492, 44283.595794677734, 44291.707763671875, 44484.094955444336, 44888.33009338379, 44752.923583984375, 44426.89181518555, 43968.29545593262, 43099.202239990234, 42706.86016845703, 41819.88586425781, 42006.11372375488, 41757.837173461914, 41827.90460205078, 41624.322326660156, 42040.01232910156, 42412.7921295166, 42702.41307067871, 42147.6506652832, 40742.91552734375, 41022.71759033203, 41527.93103027344, 42221.84829711914, 43312.87390136719, 43394.649658203125, 43385.49267578125, 43219.677185058594, 40410.882080078125, 41036.671325683594, 42207.829528808594, 42564.241149902344, 41765.0055847168, 41339.85388183594, 42851.404357910156, 43639.16271972656, 42829.93844604492, 41821.60330200195, 42199.45120239258, 42724.5246887207, 41649.88040161133, 42245.315368652344, 41965.26428222656, 43998.1862487793, 42744.53628540039, 42177.99060058594, 41234.154220581055, 38683.86289978027, 38191.98049926758, 37357.1639251709, 37217.95520019531, 36156.47869873047, 35513.22235107422, 33865.321228027344, 34859.68054199219];
+            const cashBalance = [40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 40000, 38170.924560546875, 36618.371337890625, 35035.265380859375, 33884.0703125, 33327.189453125, 33287.189453125, 33696.24560546875, 31753.18359375, 29815.576934814453, 28080.27993774414, 27504.05776977539, 26923.947662353516, 26923.947662353516, 25183.60757446289, 23287.242095947266, 21286.99185180664, 19864.066314697266, 18791.819854736328, 17421.80532836914, 16209.940216064453, 14827.958404541016, 13932.450958251953, 16220.986724853516, 26587.419952392578, 28265.890014648438, 27603.08154296875, 27182.139404296875, 26764.335388183594, 25450.764709472656, 24964.639099121094, 23922.964294433594, 23525.459869384766, 22490.622161865234, 22092.333221435547, 20138.636917114258, 19278.359939575195, 17997.722366333008, 17596.834701538086, 17026.07664489746, 15253.843734741211, 16997.685173034668, 15111.76683807373, 13376.669548034668, 11368.06649017334, 12300.131690979004, 12182.776420593262, 11161.473930358887, 11006.129020690918, 10126.249992370605, 11045.767448425293, 11268.49535369873, 10118.411003112793, 10923.303337097168, 12071.343925476074, 10926.6703414917, 9003.376518249512, 7857.556816101074, 9345.081413269043, 13601.732109069824, 15631.270820617676, 15631.270820617676, 16983.462104797363, 15913.465766906738, 14500.0210647583, 13993.295234680176, 13311.34088897705, 11514.4654006958, 9509.85831451416, 8099.343421936035, 7424.060218811035, 6488.179542541504, 5812.409400939941, 4886.412208557129, 7214.380409240723, 9217.223182678223, 9217.223182678223, 9099.960678100586, 8591.314315795898, 6612.703720092773, 9348.491622924805, 9348.491622924805, 7422.180282592773, 9424.057357788086, 9424.057357788086, 9268.863967895508, 7413.89338684082, 6968.93049621582, 5010.510818481445, 7060.954299926758, 7060.954299926758, 8790.462356567383, 8767.670211791992, 11185.262405395508, 11415.844253540039, 13400.796035766602, 13764.744522094727, 13764.744522094727, 12338.588150024414, 12338.588150024414, 12338.588150024414, 13807.818740844727, 23718.109756469727, 23900.4835357666, 21944.2130279541, 23932.690505981445, 23932.690505981445, 22269.77766418457, 21222.691970825195, 20575.262100219727, 22120.8975982666, 20437.480850219727, 18482.65168762207, 18528.846237182617, 17885.604049682617, 18962.800216674805, 20243.187423706055, 23513.474166870117, 24859.981536865234, 24230.325164794922, 23594.922760009766, 22545.83316040039, 23978.124603271484, 24035.820770263672, 22445.22738647461, 20507.418426513672, 19893.44253540039, 19294.747589111328, 18674.490203857422, 18056.656463623047, 19193.217315673828, 18570.140655517578, 19016.10678100586, 18412.171478271484, 17808.73080444336, 16026.995208740234, 15434.782135009766, 14835.397247314453, 13274.842315673828, 12675.407928466797, 11188.448699951172, 9638.287811279297, 8405.390106201172, 7293.778656005859, 6157.559783935547, 5988.459762573242, 5817.761672973633, 7713.497497558594, 9308.364807128906, 11021.285461425781, 9931.919372558594, 9931.919372558594, 9931.919372558594, 9759.382431030273, 8534.086776733398, 10552.570053100586, 10552.570053100586, 12279.460311889648, 10702.383407592773, 9508.670639038086, 8325.170272827148, 7845.024826049805, 7786.89372253418, 5911.11247253418, 5740.523818969727, 4576.446304321289, 4406.995986938477, 3121.133316040039, 2032.825210571289, 4107.988174438477, 2522.2562408447266, 649.9428253173828, 479.96714782714844, 479.96714782714844, 479.96714782714844, 479.96714782714844, 115.99467468261719, 115.99467468261719, 115.99467468261719, 115.99467468261719, 115.99467468261719, 115.99467468261719, 115.99467468261719, 115.99467468261719, 115.99467468261719, 115.99467468261719, 115.99467468261719, 115.99467468261719, 115.99467468261719, 115.99467468261719, 679.8406219482422, 2360.4153747558594, 1795.9498596191406, 1234.6992492675781, 667.9585266113281, 92.21597290039062, 92.21597290039062, 92.21597290039062, 23.217987060546875, 3114.973663330078, 2535.175262451172, 1366.6368103027344, 793.7135314941406, 1856.4052429199219, 2751.0289001464844, 1281.0265808105469, 692.0779113769531, 2029.8496398925781, 3174.0460510253906, 3174.0460510253906, 2573.820343017578, 3616.108917236328, 3616.108917236328, 3616.108917236328, 1665.2863159179688, 3179.9487915039062, 4395.137634277344, 5155.0986328125, 7504.7623291015625, 6761.30126953125, 7791.912414550781, 8120.514892578125, 9329.043518066406, 9975.559265136719, 12000.374084472656, 10879.864685058594];
+
+            // Equity Curve
+            new Chart(document.getElementById('equityCurve'), {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Portfolio Value',
+                        data: portfolioValues,
+                        borderColor: '#007bff',
+                        tension: 0.1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: 'index' }
+                }
+            });
+
+            // Allocation Chart
+            new Chart(document.getElementById('allocationChart'), {
+                type: 'bar',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Capital Deployed',
+                            data: capitalDeployed,
+                            backgroundColor: '#28a745',
+                            stack: 'Stack 0'
+                        },
+                        {
+                            label: 'Cash Balance',
+                            data: cashBalance,
+                            backgroundColor: '#ffc107',
+                            stack: 'Stack 0'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: 'index' },
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true }
+                    }
+                }
+            });
+        </script>
+    </body>
+    </html>
+    

@@ -1,612 +1,376 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nifty Shop Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root {
-            --background: #f8fafc; /* slate-50 */
-            --foreground: #0f172a; /* slate-900 */
-            --card: #ffffff;
-            --card-foreground: #0f172a;
-            --popover: #ffffff;
-            --popover-foreground: #0f172a;
-            --primary: #0f172a; /* slate-900 */
-            --primary-foreground: #f8fafc; /* slate-50 */
-            --secondary: #e2e8f0; /* slate-200 */
-            --secondary-foreground: #1e293b; /* slate-800 */
-            --muted: #e2e8f0; /* slate-200 */
-            --muted-foreground: #64748b; /* slate-500 */
-            --accent: #e2e8f0; /* slate-200 */
-            --accent-foreground: #1e293b; /* slate-800 */
-            --destructive: #ef4444; /* red-500 */
-            --destructive-foreground: #f8fafc; /* slate-50 */
-            --border: #e2e8f0; /* slate-200 */
-            --input: #e2e8f0; /* slate-200 */
-            --ring: #0f172a; /* slate-900 */
-            --radius: 0.5rem;
-        }
+{% extends "base.html" %}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: var(--foreground);
-            margin: 0;
-            padding: 0;
-            line-height: 1.5;
-        }
-        .navbar {
-            background-color: var(--primary);
-            padding: 1rem 1.5rem;
-            color: var(--primary-foreground);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .navbar a {
-            color: var(--primary-foreground);
-            text-decoration: none;
-            margin-left: 1.5rem;
-            font-weight: 500;
-            transition: color 0.2s ease;
-            padding: 0.5rem 0;
-        }
-        .navbar a:hover {
-            color: var(--accent);
-        }
-        .navbar a.active {
-            border-bottom: 2px solid var(--accent);
-        }
-        .logout-button {
-            background-color: #dc2626; /* red-700 */
-            color: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: var(--radius);
-            margin-left: 1.5rem;
-            font-weight: 500;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            border: 1px solid transparent;
-        }
-        .logout-button:hover {
-            background-color: #b91c1c; /* red-800 */
-            color: white;
-            border-color: #b91c1c;
-            transform: translateY(-1px);
-        }
-        .dashboard-metrics {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 2rem;
-            gap: 1rem;
-        }
-        .metric-card {
-            background-color: var(--secondary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            text-align: center;
-            flex: 1;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .metric-card h3 {
-            margin-top: 0;
-            color: var(--muted-foreground);
-            font-size: 0.9em;
-            text-transform: uppercase;
-        }
-        .metric-card p {
-            font-size: 2em;
-            font-weight: 700;
-            margin: 0.5rem 0 0;
-            color: var(--foreground);
-        }
-        .profit-positive {
-            color: #22c55e; /* green-500 */
-        }
-        .profit-negative {
-            color: #ef4444; /* red-500 */
-        }
-        .profit-neutral {
-            color: var(--foreground);
-        }
-        .chart-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-            gap: 1rem;
-            max-width: 800px;
-            margin: auto;
-        }
+{% block title %}Dashboard - Nifty Shop{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Real-time overview of your trading performance{% endblock %}
 
-        .chart-card {
-            background-color: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            flex-basis: 400px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            background-color: var(--card);
-            padding: 2rem;
-            border-radius: var(--radius);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 1px solid var(--border);
-        }
-        h1 {
-            color: var(--primary);
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.4rem;
-            margin-top: 0;
-            font-size: 1.5em; /* Final reduction */
-            text-align: center;
-            margin-bottom: 0.8rem; /* Final reduction */
-            font-weight: 600;
-        }
-        h3 {
-            color: var(--foreground);
-            margin-top: 0.5rem;
-            margin-bottom: 0.2rem;
-            font-size: 1em; /* Increased font size for h3 */
-            font-weight: 600;
-        }
-        .day-section {
-            background-color: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 0.75rem; /* Increased and even padding */
-            margin-bottom: 0.75rem; /* Consistent margin */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 0.5rem; /* Reduced margin */
-            font-size: 0.8rem; /* Increased font size for tables */
-        }
-        th, td {
-            padding: 0.3rem 0.5rem; /* Further reduced and consistent padding */
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        th {
-            background-color: var(--muted);
-            color: var(--muted-foreground);
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-        }
-        tr:last-child td {
-            border-bottom: none;
-        }
-        tbody tr:hover {
-            background-color: var(--secondary);
-        }
-
-        .log-level-indicator, .trade-action-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-        .log-level-INFO { background-color: #3b82f6; /* blue-500 */ }
-        .log-level-WARNING { background-color: #f59e0b; /* amber-500 */ }
-        .log-level-ERROR { background-color: #ef4444; /* red-500 */ }
-
-        .trade-action-BUY { background-color: #22c55e; /* green-500 */ }
-        .trade-action-SELL { background-color: #ef4444; /* red-500 */ }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            gap: 1rem;
-        }
-        .pagination button {
-            background-color: var(--primary);
-            color: var(--primary-foreground);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .pagination button:hover:not(:disabled) {
-            background-color: var(--primary-foreground);
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            transform: translateY(-1px);
-        }
-        .pagination button:disabled {
-            background-color: var(--muted);
-            color: var(--muted-foreground);
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        .no-data-message {
-            text-align: center;
-            padding: 4rem 1.5rem;
-            color: var(--muted-foreground);
-            font-size: 1.2em;
-            background-color: var(--muted);
-            border-radius: var(--radius);
-            border: 1px dashed var(--border);
-            margin-top: 2rem;
-        }
-        .no-data-message p {
-            margin: 0;
-        }
-
-        details {
-            margin-top: 1.5rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background-color: var(--secondary);
-        }
-        summary {
-            padding: 0.3rem 0.5rem; /* Consistent with th, td */
-            font-weight: 600;
-            cursor: pointer;
-            background-color: var(--muted);
-            border-bottom: 1px solid var(--border);
-            border-radius: var(--radius) var(--radius) 0 0;
-        }
-        details[open] summary {
-            border-bottom: 1px solid var(--border);
-        }
-        details .content {
-            padding: 0.5rem; /* Final reduction and consistent padding */
-            background-color: var(--card);
-            border-radius: 0 0 var(--radius) var(--radius);
-        }
-        .sort-icon {
-            margin-left: 5px;
-            cursor: pointer;
-        }
-    .navbar .nav-links {
-            display: flex;
-        }
-
-        .navbar .mobile-nav-toggle {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            .navbar .nav-links {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background-color: var(--primary);
-                padding: 1rem 0;
-            }
-
-            .navbar .nav-links.active {
-                display: flex;
-            }
-
-            .navbar .mobile-nav-toggle {
-                display: block;
-                cursor: pointer;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="navbar">
-        <div>Nifty Shop Bot</div>
-        <div class="nav-links">
-            <a href="/" class="{% if active_page == 'dashboard' %}active{% endif %}">Dashboard</a>
-            <a href="/trading-overview" class="{% if active_page == 'trading_overview' %}active{% endif %}">Trading Overview</a>
-            <a href="/logs" class="{% if active_page == 'logs' %}active{% endif %}">Logs</a>
-            <a href="/token-refresh" class="{% if active_page == 'token_refresh' %}active{% endif %}">Token Refresh</a>
-            <a href="/run-strategy" class="{% if active_page == 'run_strategy' %}active{% endif %}">Strategy</a>
-            <a href="/logout" class="logout-button">Logout</a>
+{% block content %}
+<!-- Metrics Grid -->
+<div class="metrics-grid">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Holdings P&L</h3>
+            <i data-feather="dollar-sign" class="text-muted" style="width: 16px;"></i>
         </div>
-        <div class="mobile-nav-toggle">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <p class="metric-value {% if holdings_pnl > 0 %}text-success{% elif holdings_pnl < 0 %}text-danger{% endif %}">
+            ₹{{ '%.2f' | format(holdings_pnl) }}
+        </p>
+        <div class="metric-trend">
+            <span class="text-muted">Unrealized P&L</span>
         </div>
     </div>
 
-    <div class="container">
-        <h1>Nifty Shop Dashboard</h1>
-
-        <div class="dashboard-metrics">
-            <div class="metric-card">
-                <h3>Holdings P&L</h3>
-                <p class="{% if holdings_pnl > 0 %}profit-positive{% elif holdings_pnl < 0 %}profit-negative{% else %}profit-neutral{% endif %}">₹{{ '%.2f' | format(holdings_pnl) }}</p>
-            </div>
-            <div class="metric-card">
-                <h3>Open Positions</h3>
-                <p>{{ open_positions_count }}</p>
-            </div>
-            <div class="metric-card">
-                <h3>Recent Trades (Today)</h3>
-                <p>{{ recent_trades_count }}</p>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Open Positions</h3>
+            <i data-feather="layers" class="text-muted" style="width: 16px;"></i>
         </div>
+        <p class="metric-value">{{ open_positions_count }}</p>
+        <div class="metric-trend">
+            <span class="text-muted">Active trades</span>
+        </div>
+    </div>
 
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Today's Trades</h3>
+            <i data-feather="activity" class="text-muted" style="width: 16px;"></i>
+        </div>
+        <p class="metric-value">{{ recent_trades_count }}</p>
+        <div class="metric-trend">
+            <span class="text-muted">Executed today</span>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="charts-grid">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Daily P&L Performance</h3>
+        </div>
         <div class="chart-container">
-            <div class="chart-card">
-                <h3>Daily P&L</h3>
-                <canvas id="dailyPnlChart"></canvas>
+            <canvas id="dailyPnlChart"></canvas>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Capital Utilization</h3>
+        </div>
+        <div style="padding: 1.5rem;">
+            <!-- Progress Bar -->
+            <div style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span class="text-muted small">Used: ₹{{ '{:,.0f}'.format(capital_utilization.used) }}</span>
+                    <span class="text-muted small">Available: ₹{{ '{:,.0f}'.format(capital_utilization.available)
+                        }}</span>
+                </div>
+                <div
+                    style="width: 100%; height: 24px; background-color: #1e293b; border-radius: 12px; overflow: hidden; position: relative;">
+                    <div
+                        style="width: {{ capital_utilization.used_percentage }}%; height: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); transition: width 0.3s ease;">
+                    </div>
+                    <div
+                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 0.75rem; font-weight: 600;">
+                        {{ '{:.1f}'.format(capital_utilization.used_percentage) }}% Used
+                    </div>
+                </div>
             </div>
-            <div class="chart-card">
-                <h3>Portfolio Allocation</h3>
-                <canvas id="portfolioAllocationChart"></canvas>
+
+            <!-- Metrics Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div style="text-align: center; padding: 1rem; background-color: #1e293b; border-radius: 8px;">
+                    <div class="text-muted small" style="margin-bottom: 0.5rem;">Total Capital</div>
+                    <div style="font-size: 1.25rem; font-weight: 600; color: #3b82f6;">₹{{
+                        '{:,.0f}'.format(capital_utilization.total) }}</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background-color: #1e293b; border-radius: 8px;">
+                    <div class="text-muted small" style="margin-bottom: 0.5rem;">Avg Position Size</div>
+                    <div style="font-size: 1.25rem; font-weight: 600; color: #10b981;">₹{{
+                        '{:,.0f}'.format(capital_utilization.avg_position_size) }}</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background-color: #1e293b; border-radius: 8px;">
+                    <div class="text-muted small" style="margin-bottom: 0.5rem;">Current Positions</div>
+                    <div style="font-size: 1.25rem; font-weight: 600; color: #f59e0b;">{{
+                        capital_utilization.current_positions }}</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background-color: #1e293b; border-radius: 8px;">
+                    <div class="text-muted small" style="margin-bottom: 0.5rem;">Can Open</div>
+                    <div style="font-size: 1.25rem; font-weight: 600; color: #8b5cf6;">{{
+                        capital_utilization.positions_can_open }}</div>
+                </div>
             </div>
         </div>
-
-        <h2>Recent Trading Activity</h2>
-        {% if daily_data %}
-            {% for date_str, data in daily_data.items() %}
-                <div class="day-section">
-                    <h2>Activity for {{ date_str }}</h2>
-
-                    <h3>Executed Trades:</h3>
-                    {% if data.executed_trades %}
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Action</th>
-                                    <th>Qty</th>
-                                    <th>Symbol</th>
-                                    <th>Price</th>
-                                    <th>Order ID</th>
-                                    <th>Status</th>
-                                    <th>Comment</th>
-                                    <th>Profit (₹)</th>
-                                    <th>Profit (%)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for trade in data.executed_trades %}
-                                    <tr>
-                                        <td>
-                                            <span class="trade-action-indicator trade-action-{{ trade.action }}"></span>
-                                            {{ trade.action }}
-                                        </td>
-                                        <td>{{ trade.quantity }}</td>
-                                        <td>{{ trade.symbol }}</td>
-                                        <td>₹{{ '%.2f' | format(trade.price) }}</td>
-                                        <td>{{ trade.order_id }}</td>
-                                        <td>{{ 'FILLED' if trade.filled else 'PENDING/FAILED' }}</td>
-                                        <td>{% if trade.comment %}{{ trade.comment }}{% else %}-{% endif %}</td>
-                                        <td>{% if trade.profit is not none %}₹{{ '%.2f' | format(trade.profit) }}{% else %}-{% endif %}</td>
-                                        <td>{% if trade.profit_pct is not none %}{{ '%.1f' | format(trade.profit_pct) }}%{% else %}-{% endif %}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    {% else %}
-                        <p>No executed trades for this day.</p>
-                    {% endif %}
-
-                    <details>
-                        <summary>View Logs</summary>
-                        <div class="content">
-                            {% if data.logs %}
-                                <table class="logs-table">
-                                    <thead>
-                                        <tr>
-                                            <th data-sort-key="timestamp">Time <span class="sort-icon">&#8597;</span></th>
-                                            <th>Level</th>
-                                            <th>Message</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for log in data.logs %}
-                                            <tr>
-                                                <td>{{ log.timestamp.strftime('%H:%M') }}</td>
-                                                <td>
-                                                    <span class="log-level-indicator log-level-{{ log.level }}"></span>
-                                                    {{ log.level }}
-                                                </td>
-                                                <td>{{ log.message }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            {% else %}
-                                <p>No logs for this day.</p>
-                            {% endif %}
-                        </div>
-                    </details>
-
-                    <details>
-                        <summary>View Cancelled Orders</summary>
-                        <div class="content">
-                            {% if data.cancelled_trades %}
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Timestamp</th>
-                                            <th>Action</th>
-                                            <th>Qty</th>
-                                            <th>Symbol</th>
-                                            <th>Price</th>
-                                            <th>Order ID</th>
-                                            <th>Status</th>
-                                            <th>Comment</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for trade in data.cancelled_trades %}
-                                            <tr>
-                                                <td>{{ trade.date.strftime('%H:%M') }}</td>
-                                                <td>
-                                                    <span class="trade-action-indicator trade-action-{{ trade.action }}"></span>
-                                                    {{ trade.action }}
-                                                </td>
-                                                <td>{{ trade.quantity }}</td>
-                                                <td>{{ trade.symbol }}</td>
-                                                <td>₹{{ '%.2f' | format(trade.price) }}</td>
-                                                <td>{{ trade.order_id }}</td>
-                                                <td>{{ 'FILLED' if trade.filled else 'PENDING/FAILED' }}</td>
-                                                <td>{% if trade.comment %}{{ trade.comment }}{% else %}-{% endif %}</td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            {% else %}
-                                <p>No cancelled orders for this day.</p>
-                            {% endif %}
-                        </div>
-                    </details>
-
-                </div>
-            {% endfor %}
-
-            <div class="pagination">
-                <button {% if page == 1 %}disabled{% endif %} onclick="window.location.href='/?page={{ page - 1 }}'">Previous Days</button>
-                <button {% if not has_more_days %}disabled{% endif %} onclick="window.location.href='/?page={{ page + 1 }}'">Show More Days</button>
-            </div>
-        {% else %}
-            <div class="no-data-message">
-                <p>No trading activity found. Please ensure the bot is running and generating data.</p>
-            </div>
-        {% endif %}
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sortableHeaders = document.querySelectorAll('.logs-table th[data-sort-key]');
+</div>
 
-            sortableHeaders.forEach(header => {
-                header.addEventListener('click', () => {
-                    const table = header.closest('table');
-                    const tbody = table.querySelector('tbody');
-                    const rows = Array.from(tbody.querySelectorAll('tr'));
-                    const sortKey = header.dataset.sortKey;
-                    const currentSort = header.dataset.sortDir || 'desc';
-                    const newSort = currentSort === 'asc' ? 'desc' : 'asc';
-                    header.dataset.sortDir = newSort;
+<div class="card mb-4">
+    <div class="card-header">
+        <h3 class="card-title">Cumulative P&L Growth</h3>
+    </div>
+    <div class="chart-container" style="height: 350px;">
+        <canvas id="cumulativePnlChart"></canvas>
+    </div>
+</div>
 
-                    rows.sort((a, b) => {
-                        const aVal = a.cells[0].textContent.trim();
-                        const bVal = b.cells[0].textContent.trim();
+<!-- Recent Activity Section -->
+<h2 class="page-title" style="font-size: 1.5rem; margin-bottom: 1.5rem;">Recent Activity</h2>
 
-                        if (newSort === 'asc') {
-                            return aVal.localeCompare(bVal);
-                        } else {
-                            return bVal.localeCompare(aVal);
+{% if daily_data %}
+{% for date_str, data in daily_data.items() %}
+<div class="card mb-4">
+    <div class="card-header" style="border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+        <div class="flex-between w-100">
+            <div class="flex-center">
+                <i data-feather="calendar" class="text-muted mr-2" style="width: 18px; margin-right: 8px;"></i>
+                <span style="font-weight: 600; font-size: 1.1rem;">{{ date_str }}</span>
+            </div>
+            <div class="flex-center gap-4">
+                <span class="badge badge-info">{{ data.executed_trades|length }} Trades</span>
+                <span class="badge badge-warning">{{ data.logs|length }} Logs</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding-top: 1rem;">
+        <!-- Trades Table -->
+        <h4 style="margin: 0.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase;">
+            Executed Trades</h4>
+        {% if data.executed_trades %}
+        <div class="table-container" style="margin-bottom: 1.5rem;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Symbol</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trade in data.executed_trades %}
+                    <tr>
+                        <td>
+                            <span
+                                class="badge {% if trade.action == 'BUY' %}badge-success{% else %}badge-danger{% endif %}">
+                                {{ trade.action }}
+                            </span>
+                        </td>
+                        <td style="font-weight: 500;">{{ trade.symbol }}</td>
+                        <td>{{ trade.quantity }}</td>
+                        <td>₹{{ '%.2f' | format(trade.price) }}</td>
+                        <td>
+                            {% if trade.filled %}
+                            <span class="text-success flex-center" style="justify-content: flex-start;">
+                                <i data-feather="check-circle" style="width: 14px; margin-right: 4px;"></i> Filled
+                            </span>
+                            {% else %}
+                            <span class="text-warning">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if trade.profit is not none %}
+                            <span
+                                class="{% if trade.profit > 0 %}text-success{% elif trade.profit < 0 %}text-danger{% endif %}"
+                                style="font-weight: 600;">
+                                ₹{{ '%.2f' | format(trade.profit) }}
+                            </span>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted" style="font-style: italic; margin-bottom: 1.5rem;">No trades executed on this day.</p>
+        {% endif %}
+
+        <!-- Logs Toggle -->
+        <details class="custom-details">
+            <summary class="btn btn-outline btn-sm" style="display: inline-flex; width: auto; font-size: 0.8rem;">
+                <i data-feather="list" style="width: 14px; margin-right: 6px;"></i> View System Logs
+            </summary>
+            <div class="mt-4 table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Level</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in data.logs %}
+                        <tr>
+                            <td style="white-space: nowrap; color: var(--text-muted);">{{
+                                log.timestamp.strftime('%H:%M:%S') }}</td>
+                            <td>
+                                <span
+                                    class="badge {% if log.level == 'INFO' %}badge-info{% elif log.level == 'WARNING' %}badge-warning{% elif log.level == 'ERROR' %}badge-danger{% endif %}">
+                                    {{ log.level }}
+                                </span>
+                            </td>
+                            <td style="font-family: monospace; font-size: 0.85rem;">{{ log.message }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </details>
+    </div>
+</div>
+{% endfor %}
+
+<div class="flex-center mt-4 gap-2">
+    <button class="btn btn-outline" {% if page==1 %}disabled{% endif %}
+        onclick="window.location.href='/?page={{ page - 1 }}'">
+        <i data-feather="chevron-left" style="width: 16px; margin-right: 4px;"></i> Previous
+    </button>
+    <button class="btn btn-outline" {% if not has_more_days %}disabled{% endif %}
+        onclick="window.location.href='/?page={{ page + 1 }}'">
+        Next <i data-feather="chevron-right" style="width: 16px; margin-left: 4px;"></i>
+    </button>
+</div>
+
+{% else %}
+<div class="card flex-center" style="padding: 4rem; flex-direction: column;">
+    <div style="background: var(--bg-hover); padding: 1rem; border-radius: 50%; margin-bottom: 1rem;">
+        <i data-feather="inbox" style="width: 32px; height: 32px; color: var(--text-muted);"></i>
+    </div>
+    <h3 class="text-muted">No trading activity found</h3>
+    <p class="text-dim">Ensure the bot is running and generating data.</p>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Daily P&L Chart
+        const dailyPnlCtx = document.getElementById('dailyPnlChart').getContext('2d');
+        const gradient = dailyPnlCtx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.2)'); // Blue with opacity
+        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+
+        new Chart(dailyPnlCtx, {
+            type: 'line',
+            data: {
+                labels: {{ chart_labels | safe }},
+        datasets: [{
+            label: 'Daily P&L',
+            data: {{ chart_values | safe }},
+        backgroundColor: gradient,
+        borderColor: '#3b82f6',
+        borderWidth: 2,
+        pointBackgroundColor: '#1e293b',
+        pointBorderColor: '#3b82f6',
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        fill: true,
+        tension: 0.4
+                }]
+            },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: '#1e293b',
+                titleColor: '#f8fafc',
+                bodyColor: '#cbd5e1',
+                borderColor: '#334155',
+                borderWidth: 1,
+                padding: 10,
+                callbacks: {
+                    label: function (context) {
+                        let label = context.dataset.label || '';
+                        if (label) label += ': ';
+                        if (context.parsed.y !== null) {
+                            label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
                         }
-                    });
-
-                    rows.forEach(row => tbody.appendChild(row));
-                });
-            });
+                        return label;
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                grid: { color: '#334155', drawBorder: false },
+                ticks: { color: '#94a3b8' }
+            },
+            x: {
+                grid: { display: false },
+                ticks: { color: '#94a3b8' }
+            }
+        }
+    }
         });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-            const navLinks = document.querySelector('.nav-links');
 
-            mobileNavToggle.addEventListener('click', function() {
-                navLinks.classList.toggle('active');
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Daily P&L Chart
-            const dailyPnlCtx = document.getElementById('dailyPnlChart').getContext('2d');
-            const gradient = dailyPnlCtx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(75, 192, 192, 0.5)');
-            gradient.addColorStop(1, 'rgba(75, 192, 192, 0)');
+    // Cumulative P&L Chart
+    const cumulativePnlData = {{ cumulative_pnl_data | safe }};
+    const cumulativePnlCtx = document.getElementById('cumulativePnlChart').getContext('2d');
 
-            const dailyPnlChart = new Chart(dailyPnlCtx, {
-                type: 'line',
-                data: {
-                    labels: {{ chart_labels | safe }},
-                    datasets: [{
-                        label: 'Daily P&L',
-                        data: {{ chart_values | safe }},
-                        backgroundColor: gradient,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 2,
-                        fill: true,
-                        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(75, 192, 192, 1)'
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.y !== null) {
-                                        label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
-                                    }
-                                    const trades = {{ chart_trades | safe }};
-                                    label += ` (${trades[context.dataIndex]} trades)`;
-                                    return label;
-                                }
+    // Create gradient
+    const pnlGradient = cumulativePnlCtx.createLinearGradient(0, 0, 0, 300);
+    pnlGradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)'); // Emerald with opacity
+    pnlGradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+    new Chart(cumulativePnlCtx, {
+        type: 'line',
+        data: {
+            labels: cumulativePnlData.map(d => d.date),
+            datasets: [{
+                label: 'Cumulative P&L',
+                data: cumulativePnlData.map(d => d.pnl),
+                borderColor: '#10b981',
+                backgroundColor: pnlGradient,
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 0,
+                pointHoverRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function (context) {
+                            let label = context.dataset.label || '';
+                            if (label) label += ': ';
+                            if (context.parsed.y !== null) {
+                                label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
                             }
+                            return label;
                         }
                     }
                 }
-            });
-
-            // Portfolio Allocation Chart
-            const portfolioData = {{ portfolio_data | safe }};
-            const portfolioLabels = portfolioData.map(p => `${p.symbol} (${p.percentage.toFixed(2)}%)`);
-            const portfolioValues = portfolioData.map(p => p.value);
-
-            const portfolioAllocationCtx = document.getElementById('portfolioAllocationChart').getContext('2d');
-            const portfolioAllocationChart = new Chart(portfolioAllocationCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: portfolioLabels,
-                    datasets: [{
-                        label: 'Portfolio Allocation',
-                        data: portfolioValues,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.7)',
-                            'rgba(54, 162, 235, 0.7)',
-                            'rgba(255, 206, 86, 0.7)',
-                            'rgba(75, 192, 192, 0.7)',
-                            'rgba(153, 102, 255, 0.7)',
-                            'rgba(255, 159, 64, 0.7)'
-                        ],
-                        borderColor: '#fff',
-                        borderWidth: 2
-                    }]
+            },
+            scales: {
+                y: {
+                    grid: { color: '#334155', drawBorder: false },
+                    ticks: { color: '#94a3b8' }
                 },
-                options: {
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                        }
-                    }
+                x: {
+                    grid: { display: false },
+                    ticks: { display: false }
                 }
-            });
-        });
-    </script>
-</body>
-</html>
+            }
+        }
+    });
+    });
+</script>
+{% endblock %}

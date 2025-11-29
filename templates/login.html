@@ -1,168 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - Nifty Shop</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-        :root {
-            --background: #f8fafc; /* slate-50 */
-            --foreground: #0f172a; /* slate-900 */
-            --card: #ffffff;
-            --card-foreground: #0f172a;
-            --primary: #0f172a; /* slate-900 */
-            --primary-foreground: #f8fafc; /* slate-50 */
-            --border: #e2e8f0; /* slate-200 */
-            --input: #e2e8f0; /* slate-200 */
-            --ring: #0f172a; /* slate-900 */
-            --radius: 0.5rem;
-            --destructive: #ef4444; /* red-500 */
-            --destructive-foreground: #f8fafc; /* slate-50 */
-            --success: #22c55e; /* green-500 */
-            --info: #3b82f6; /* blue-500 */
-            --warning: #f59e0b; /* amber-500 */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: var(--foreground);
-            margin: 0;
-            padding: 0;
-            line-height: 1.5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .login-container {
-            background-color: var(--card);
-            padding: 2rem;
-            border-radius: var(--radius);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 1px solid var(--border);
+        .login-card {
             width: 100%;
             max-width: 400px;
+            padding: 2.5rem;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .login-header {
             text-align: center;
+            margin-bottom: 2rem;
         }
-        h1 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            font-size: 1.8em;
+
+        .login-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
+
+        .login-subtitle {
+            color: var(--text-muted);
+        }
+
         .form-group {
-            margin-bottom: 1rem;
-            text-align: left;
+            margin-bottom: 1.5rem;
         }
-        .form-group-inline {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        .forgot-password {
-            font-size: 0.9rem;
-            color: var(--muted-foreground);
-            text-decoration: none;
-        }
-        .forgot-password:hover {
-            text-decoration: underline;
-        }
-        label {
+
+        .form-label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
-            color: var(--foreground);
+            color: var(--text-main);
         }
-        input[type="text"],
-        input[type="password"] {
-            width: calc(100% - 20px);
-            padding: 0.75rem 10px;
-            border: 1px solid var(--input);
-            border-radius: var(--radius);
-            font-size: 1rem;
-            background-color: var(--input);
-            color: var(--foreground);
-        }
-        input[type="text"]:focus,
-        input[type="password"]:focus {
-            outline: none;
-            border-color: var(--ring);
-            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.2);
-        }
-        .btn-login {
-            background-color: var(--primary);
-            color: var(--primary-foreground);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: background-color 0.2s ease, transform 0.1s ease;
+
+        .form-input {
             width: 100%;
-            margin-top: 1.5rem;
-        }
-        .btn-login:hover {
-            background-color: var(--primary-foreground);
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            transform: translateY(-1px);
-        }
-        .flash-message {
             padding: 0.75rem 1rem;
-            margin-bottom: 1rem;
-            border-radius: var(--radius);
-            font-weight: 500;
-            text-align: left;
+            background-color: var(--bg-app);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
         }
-        .flash-message.danger {
-            background-color: var(--destructive);
-            color: var(--destructive-foreground);
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
-        .flash-message.success {
-            background-color: var(--success);
-            color: var(--primary-foreground);
-        }
-        .flash-message.info {
-            background-color: var(--info);
-            color: var(--primary-foreground);
-        }
-        .flash-message.warning {
-            background-color: var(--warning);
-            color: var(--primary-foreground);
+
+        .btn-block {
+            width: 100%;
+            padding: 0.875rem;
+            font-size: 1rem;
         }
     </style>
 </head>
+
 <body>
-    <div class="login-container">
-        <h1>Login</h1>
+    <div class="login-card animate-fade-in">
+        <div class="login-header">
+            <h1 class="login-title">Nifty Shop</h1>
+            <p class="login-subtitle">Algorithmic Trading Bot</p>
+        </div>
+
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="flash-message {{ category }}">{{ message }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
+        {% if messages %}
+        <div class="mb-4">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} p-3 rounded mb-2 text-sm"
+                style="background: {% if category == 'danger' %}rgba(239, 68, 68, 0.1){% else %}rgba(16, 185, 129, 0.1){% endif %}; 
+                                    color: {% if category == 'danger' %}#ef4444{% else %}#10b981{% endif %};
+                                    border: 1px solid {% if category == 'danger' %}rgba(239, 68, 68, 0.2){% else %}rgba(16, 185, 129, 0.2){% endif %};">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         {% endwith %}
+
         <form method="POST" action="/login">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+                <label for="username" class="form-label">Username</label>
+                <div style="position: relative;">
+                    <i data-feather="user"
+                        style="position: absolute; left: 12px; top: 12px; width: 18px; color: var(--text-muted);"></i>
+                    <input type="text" id="username" name="username" class="form-input" style="padding-left: 2.5rem;"
+                        required placeholder="Enter your username">
+                </div>
             </div>
+
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <label for="password" class="form-label">Password</label>
+                <div style="position: relative;">
+                    <i data-feather="lock"
+                        style="position: absolute; left: 12px; top: 12px; width: 18px; color: var(--text-muted);"></i>
+                    <input type="password" id="password" name="password" class="form-input"
+                        style="padding-left: 2.5rem;" required placeholder="Enter your password">
+                </div>
             </div>
-            <div class="form-group-inline">
-                <input type="checkbox" id="remember" name="remember">
-                <label for="remember">Remember Me</label>
-                <a href="#" class="forgot-password">Forgot Password?</a>
-            </div>
-            <button type="submit" class="btn-login">Login</button>
+
+            <button type="submit" class="btn btn-primary btn-block">
+                Sign In
+            </button>
         </form>
     </div>
+
+    <script>
+        feather.replace();
+    </script>
 </body>
+
 </html>

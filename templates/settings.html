@@ -1,0 +1,770 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Nifty Shop{% endblock %}
+
+{% block head %}
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    slate: { 800: '#1e293b', 900: '#0f172a' },
+                    blue: { 500: '#3b82f6', 600: '#2563eb' }
+                }
+            }
+        }
+    }
+</script>
+<style>
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #1e293b;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #475569;
+        border-radius: 4px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .dialog-overlay {
+        animation: fadeIn 0.2s ease-out;
+    }
+
+    .dialog-content {
+        animation: slideIn 0.3s ease-out;
+    }
+
+    .custom-options {
+        transition: all 0.2s ease;
+        transform-origin: top;
+        transform: scaleY(0);
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .custom-select.open .custom-options {
+        transform: scaleY(1);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .custom-select.open .custom-arrow {
+        transform: rotate(180deg);
+    }
+
+    .custom-arrow {
+        transition: transform 0.2s ease;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-900 text-slate-200 p-4 md:p-8 font-sans">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-white mb-2">Settings</h1>
+                <p class="text-slate-400">Configure your trading bot parameters</p>
+            </div>
+            <button id="editConfigBtn" onclick="openEditDialog()"
+                class="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium shadow-lg shadow-blue-500/20">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                Edit Configuration
+            </button>
+        </div>
+
+        <!-- BROKER ACCOUNTS SECTION -->
+        <div class="mb-8">
+            {% include 'brokers.html' %}
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <!-- RIGHT COLUMN - Strategy Visualization -->
+            <div class="xl:col-span-1 order-2 xl:order-2 space-y-6">
+                <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-xl p-6">
+                    <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" class="text-blue-500">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                        Strategy Simulation
+                    </h2>
+                    <div
+                        class="relative h-64 w-full bg-slate-900/50 rounded-lg border border-slate-700/50 p-2 overflow-hidden">
+                        <canvas id="strategyChart"></canvas>
+                    </div>
+                    <div class="mt-4 p-3 bg-blue-900/20 border border-blue-500/20 rounded-lg">
+                        <p class="text-xs text-blue-300">
+                            <span class="font-semibold">Scenario:</span> Price starts at ₹225.
+                            Bot buys at <span id="vizEntryPrice" class="font-bold text-white">--</span>,
+                            averages at <span id="vizAvgPrice" class="font-bold text-white">--</span>,
+                            exits at <span id="vizExitPrice" class="font-bold text-white">--</span>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-xl p-6">
+                    <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" class="text-slate-400">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        How it Works
+                    </h2>
+                    <div class="text-sm text-slate-300 space-y-3">
+                        <p>The bot monitors the <span id="vizMaText" class="font-bold text-white">30-Day</span> Moving
+                            Average.</p>
+                        <ul class="list-disc pl-4 space-y-1 text-slate-400">
+                            <li><span class="text-green-400 font-medium">Entry:</span> Buys when price dips <span
+                                    id="vizEntryText" class="font-bold text-white">2%</span> below MA.</li>
+                            <li><span class="text-orange-400 font-medium">Average Down:</span> Buys more if price drops
+                                another <span id="vizAvgText" class="font-bold text-white">3%</span>.</li>
+                            <li><span class="text-red-400 font-medium">Exit:</span> Sells when profit hits <span
+                                    id="vizTargetText" class="font-bold text-white">5%</span>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEFT COLUMN - Settings Form -->
+            <div class="xl:col-span-2 order-1 xl:order-1">
+                <form method="POST" action="{{ url_for('settings') }}" id="settingsForm"
+                    class="bg-slate-800 rounded-xl border border-slate-700 shadow-xl p-6 md:p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                        <div class="space-y-8">
+                            <div>
+                                <h2 class="text-lg font-semibold text-white mb-4 border-b border-slate-700 pb-2">Trading
+                                    Configuration</h2>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-300 mb-1.5">Trading
+                                            Mode</label>
+                                        <div class="relative custom-select" id="trading_mode_select">
+                                            <input type="hidden" name="trading_mode"
+                                                value="{{ settings.trading_mode }}">
+                                            <div
+                                                class="custom-select-trigger w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 flex justify-between items-center cursor-pointer disabled:opacity-60">
+                                                <span class="selected-text">{% if settings.trading_mode == 'NORMAL'
+                                                    %}Normal (Buy & Sell){% elif settings.trading_mode == 'EXIT_ONLY'
+                                                    %}Exit Only{% else %}Paused{% endif %}</span>
+                                                <div class="custom-arrow text-slate-400">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2">
+                                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="custom-options absolute top-full left-0 w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-50 mt-1">
+                                                <div class="custom-option px-4 py-2.5 hover:bg-slate-700 cursor-pointer"
+                                                    data-value="NORMAL">Normal (Buy & Sell)</div>
+                                                <div class="custom-option px-4 py-2.5 hover:bg-slate-700 cursor-pointer"
+                                                    data-value="EXIT_ONLY">Exit Only</div>
+                                                <div class="custom-option px-4 py-2.5 hover:bg-slate-700 cursor-pointer"
+                                                    data-value="PAUSED">Paused</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-semibold text-white mb-4 border-b border-slate-700 pb-2">Capital
+                                    & Position Sizing</h2>
+                                <div class="space-y-5">
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-300 mb-1.5">Total Capital
+                                            (₹)</label>
+                                        <input type="number" name="capital" value="{{ settings.capital|int }}" required
+                                            disabled
+                                            class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 disabled:opacity-60">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-300 mb-1.5">Trade Amount
+                                            (₹)</label>
+                                        <input type="number" name="trade_amount" value="{{ settings.trade_amount|int }}"
+                                            required disabled
+                                            class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 disabled:opacity-60">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-300 mb-1.5">Max Open
+                                            Positions</label>
+                                        <div class="relative custom-select" id="max_positions_select">
+                                            <input type="hidden" name="max_positions"
+                                                value="{{ settings.max_positions }}">
+                                            <div
+                                                class="custom-select-trigger w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 flex justify-between items-center cursor-pointer disabled:opacity-60">
+                                                <span class="selected-text">{% if settings.max_positions == -1
+                                                    %}Unlimited (Default){% elif settings.max_positions == 10 %}10{%
+                                                    else %}Custom ({{ settings.max_positions }}){% endif %}</span>
+                                                <div class="custom-arrow text-slate-400">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2">
+                                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="custom-options absolute top-full left-0 w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-50 mt-1">
+                                                <div class="custom-option px-4 py-2.5 hover:bg-slate-700 cursor-pointer"
+                                                    data-value="-1">Unlimited (Default)</div>
+                                                <div class="custom-option px-4 py-2.5 hover:bg-slate-700 cursor-pointer"
+                                                    data-value="10">10</div>
+                                                <div class="custom-option px-4 py-2.5 hover:bg-slate-700 cursor-pointer"
+                                                    data-value="custom">Custom</div>
+                                            </div>
+                                        </div>
+                                        <!-- Custom Input with +/- buttons -->
+                                        <div id="customPositionsContainer" class="mt-3 hidden">
+                                            <div class="flex items-center gap-2">
+                                                <button type="button" onclick="adjustCustomPositions(-1)"
+                                                    class="w-10 h-10 bg-slate-700 hover:bg-slate-600 text-white rounded-lg flex items-center justify-center text-xl font-bold transition-colors">−</button>
+                                                <input type="number" id="customPositionsInput" min="1" max="100"
+                                                    value="{{ settings.max_positions if settings.max_positions > 0 and settings.max_positions != 10 else 5 }}"
+                                                    class="w-20 bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 text-center text-lg font-medium">
+                                                <button type="button" onclick="adjustCustomPositions(1)"
+                                                    class="w-10 h-10 bg-slate-700 hover:bg-slate-600 text-white rounded-lg flex items-center justify-center text-xl font-bold transition-colors">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-8">
+                            <div>
+                                <h2 class="text-lg font-semibold text-white mb-4 border-b border-slate-700 pb-2">
+                                    Strategy Parameters</h2>
+                                <div class="space-y-5">
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-300 mb-1.5">MA Period
+                                            (Days)</label>
+                                        <input type="number" name="ma_period" id="input_ma_period"
+                                            value="{{ settings.ma_period }}" required disabled
+                                            class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 disabled:opacity-60 viz-input">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-300 mb-1.5">Entry Threshold
+                                            (%)</label>
+                                        <input type="number" name="entry_threshold" id="input_entry_threshold"
+                                            value="{{ settings.entry_threshold|int }}" required disabled
+                                            class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 disabled:opacity-60 viz-input">
+                                        <p class="mt-1 text-xs text-slate-500">Use negative (e.g., -2)</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-300 mb-1.5">Exit Target
+                                            Profit (%)</label>
+                                        <input type="number" step="0.1" name="target_profit" id="input_target_profit"
+                                            value="{{ settings.target_profit }}" required disabled
+                                            class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 disabled:opacity-60 viz-input">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-300 mb-1.5">Averaging
+                                            Threshold (%)</label>
+                                        <input type="number" step="0.1" name="averaging_threshold"
+                                            id="input_averaging_threshold" value="{{ settings.averaging_threshold }}"
+                                            required disabled
+                                            class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 disabled:opacity-60 viz-input">
+                                        <p class="mt-1 text-xs text-slate-500">Use negative (e.g., -3.0)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-semibold text-white mb-4 border-b border-slate-700 pb-2">Alerts
+                                </h2>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-300 mb-1.5">Email for
+                                            Alerts</label>
+                                        <input type="email" name="alert_email" value="{{ settings.alert_email }}"
+                                            placeholder="your-email@example.com" disabled
+                                            class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 disabled:opacity-60">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="actionButtons"
+                        class="hidden mt-10 pt-6 border-t border-slate-700 flex justify-end items-center gap-3">
+                        <button type="button" onclick="cancelEditing()"
+                            class="px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-700 rounded-lg">Cancel</button>
+                        <button type="button" onclick="openResetDialog()"
+                            class="px-4 py-2 text-orange-400 hover:text-orange-300 hover:bg-slate-700 rounded-lg">Reset
+                            to Defaults</button>
+                        <button type="button" onclick="openSaveDialog()"
+                            class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow-lg">Save
+                            Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dialog Overlay -->
+<div id="dialogOverlay"
+    class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 dialog-overlay">
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+<script>
+    var defaultSettings = {{ default_settings| tojson }};
+    var initialFormState = {};
+    var strategyChart = null;
+
+    function initVisualization() {
+        Chart.register(ChartDataLabels);
+        var ctx = document.getElementById('strategyChart').getContext('2d');
+        strategyChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: 50 }, function (_, i) { return i + 1; }),
+                datasets: [
+                    {
+                        label: 'Moving Average',
+                        data: [],
+                        borderColor: '#94a3b8',
+                        borderDash: [4, 4],
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: false,
+                        tension: 0.4,
+                        datalabels: { display: false }
+                    },
+                    {
+                        label: 'Price',
+                        data: [],
+                        borderColor: '#3b82f6',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.3,
+                        fill: false,
+                        datalabels: {
+                            align: 'top',
+                            color: '#fff',
+                            backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                            borderRadius: 4,
+                            font: { weight: 'bold', size: 10 },
+                            padding: 5,
+                            formatter: function (v, ctx) { return ctx.dataset.pointLabels ? ctx.dataset.pointLabels[ctx.dataIndex] : ''; },
+                            display: function (ctx) { return ctx.dataset.pointLabels && ctx.dataset.pointLabels[ctx.dataIndex]; }
+                        }
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: true, labels: { color: '#cbd5e1', usePointStyle: true, boxWidth: 6 } },
+                    tooltip: { enabled: true, mode: 'index', intersect: false }
+                },
+                scales: {
+                    x: { display: false },
+                    y: { display: true, grid: { color: '#334155' }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+                },
+                animation: false
+            }
+        });
+        updateVisualization();
+        document.querySelectorAll('.viz-input').forEach(function (input) {
+            input.addEventListener('input', updateVisualization);
+        });
+    }
+
+    function updateVisualization() {
+        if (!strategyChart) return;
+        var entryThreshold = parseFloat(document.getElementById('input_entry_threshold').value) || -2;
+        var avgThreshold = parseFloat(document.getElementById('input_averaging_threshold').value) || -3;
+        var targetProfit = parseFloat(document.getElementById('input_target_profit').value) || 5;
+        var maPeriod = document.getElementById('input_ma_period').value || 30;
+
+        document.getElementById('vizEntryText').textContent = Math.abs(entryThreshold) + '%';
+        document.getElementById('vizMaText').textContent = maPeriod + '-Day';
+        document.getElementById('vizAvgText').textContent = Math.abs(avgThreshold) + '%';
+        document.getElementById('vizTargetText').textContent = targetProfit + '%';
+
+        var basePrice = 225;
+        var days = 50;
+        var priceData = [];
+        var pointLabels = [];
+        var pointRadii = [];
+        var pointColors = [];
+
+        for (var i = 0; i < days; i++) {
+            pointLabels.push(null);
+            pointRadii.push(0);
+            pointColors.push('#3b82f6');
+        }
+
+        var buyIndex = 15, avgIndex = 25, exitIndex = 40;
+        var buyPrice = basePrice * (1 + entryThreshold / 100);
+        var avgPrice = basePrice * (1 + (entryThreshold + avgThreshold) / 100);
+        var avgCost = (buyPrice + avgPrice) / 2;
+        var exitPrice = avgCost * (1 + targetProfit / 100);
+
+        document.getElementById('vizEntryPrice').textContent = '₹' + buyPrice.toFixed(1);
+        document.getElementById('vizAvgPrice').textContent = '₹' + avgPrice.toFixed(1);
+        document.getElementById('vizExitPrice').textContent = '₹' + exitPrice.toFixed(1);
+
+        generateWigglyPath(priceData, 0, buyIndex, basePrice, buyPrice, 1.5);
+        pointLabels[buyIndex] = 'BUY @ ₹' + buyPrice.toFixed(1);
+        pointRadii[buyIndex] = 6;
+        pointColors[buyIndex] = '#4ade80';
+
+        generateWigglyPath(priceData, buyIndex + 1, avgIndex, buyPrice, avgPrice, 1.2);
+        pointLabels[avgIndex] = 'AVG @ ₹' + avgPrice.toFixed(1);
+        pointRadii[avgIndex] = 6;
+        pointColors[avgIndex] = '#fb923c';
+
+        generateWigglyPath(priceData, avgIndex + 1, exitIndex, avgPrice, exitPrice, 1.8);
+        pointLabels[exitIndex] = 'EXIT @ ₹' + exitPrice.toFixed(1);
+        pointRadii[exitIndex] = 6;
+        pointColors[exitIndex] = '#f87171';
+
+        generateWigglyPath(priceData, exitIndex + 1, days - 1, exitPrice, exitPrice + 2, 1.5);
+
+        var maWindow = 5;
+        var maData = [];
+        for (var i = 0; i < priceData.length; i++) {
+            var sum = 0, count = 0;
+            for (var j = Math.max(0, i - maWindow); j <= Math.min(priceData.length - 1, i + maWindow); j++) {
+                sum += priceData[j];
+                count++;
+            }
+            maData.push(sum / count);
+        }
+
+        strategyChart.data.datasets[0].data = maData;
+        strategyChart.data.datasets[1].data = priceData;
+        strategyChart.data.datasets[1].pointLabels = pointLabels;
+        strategyChart.data.datasets[1].pointRadius = pointRadii;
+        strategyChart.data.datasets[1].pointBackgroundColor = pointColors;
+        strategyChart.data.datasets[1].pointBorderColor = pointColors;
+        strategyChart.update();
+    }
+
+    function generateWigglyPath(arr, startIdx, endIdx, startVal, endVal, volatility) {
+        if (startIdx > endIdx) return;
+        if (arr.length === 0) arr.push(startVal);
+        var steps = endIdx - startIdx + 1;
+        var currentVal = startVal;
+        for (var i = 1; i <= steps; i++) {
+            var progress = i / steps;
+            var targetLinear = startVal + (endVal - startVal) * progress;
+            var noise = (Math.random() - 0.5) * volatility * 2;
+            var pullFactor = progress * progress;
+            currentVal = targetLinear + noise * (1 - pullFactor);
+            if (i === steps) currentVal = endVal;
+            arr.push(currentVal);
+        }
+    }
+
+    function setupCustomSelect(containerId, callback) {
+        var container = document.getElementById(containerId);
+        if (!container) return;
+        var trigger = container.querySelector('.custom-select-trigger');
+        var options = container.querySelectorAll('.custom-option');
+        var displaySpan = container.querySelector('.selected-text');
+        var hiddenInput = container.querySelector('input[type="hidden"]');
+
+        trigger.addEventListener('click', function (e) {
+            if (trigger.hasAttribute('disabled')) return;
+            e.stopPropagation();
+            closeAllSelects(container);
+            container.classList.toggle('open');
+        });
+
+        options.forEach(function (option) {
+            option.addEventListener('click', function (e) {
+                e.stopPropagation();
+                displaySpan.textContent = this.textContent;
+                container.classList.remove('open');
+                if (hiddenInput) hiddenInput.value = this.getAttribute('data-value');
+                if (callback) callback(this.getAttribute('data-value'));
+            });
+        });
+    }
+
+    function closeAllSelects(except) {
+        document.querySelectorAll('.custom-select').forEach(function (c) {
+            if (c !== except) c.classList.remove('open');
+        });
+    }
+    document.addEventListener('click', function () { closeAllSelects(null); });
+
+    function showDialog(title, desc, confirmText, action, destructive) {
+        var overlay = document.getElementById('dialogOverlay');
+        var btnClass = destructive ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700';
+        overlay.innerHTML = '<div class="bg-slate-800 rounded-xl border border-slate-700 shadow-2xl w-full max-w-md overflow-hidden dialog-content"><div class="p-6"><h3 class="text-xl font-bold text-white mb-2">' + title + '</h3><p class="text-slate-400 text-sm">' + desc + '</p></div><div class="bg-slate-900/50 px-6 py-4 flex justify-end gap-3 border-t border-slate-700"><button onclick="closeDialog()" class="px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-700 rounded-lg text-sm font-medium">Cancel</button><button id="dialogConfirmBtn" class="px-4 py-2 text-white rounded-lg shadow-lg text-sm font-medium ' + btnClass + '">' + confirmText + '</button></div></div>';
+        document.getElementById('dialogConfirmBtn').onclick = action;
+        overlay.classList.remove('hidden');
+    }
+
+    function closeDialog() { document.getElementById('dialogOverlay').classList.add('hidden'); }
+
+    function openEditDialog() {
+        showDialog('Enable Editing Mode?', 'Changing settings can affect your trading strategies.', 'Enable Editing', function () { closeDialog(); enableEditing(); }, false);
+    }
+
+    function openResetDialog() {
+        showDialog('Reset to Defaults', 'This will reset all settings to factory defaults.', 'Confirm Reset', function () { closeDialog(); resetToDefaults(); saveSettings(true); }, true);
+    }
+
+    function openSaveDialog() {
+        var form = document.getElementById('settingsForm');
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+        showDialog('Save Changes', 'This will update your trading configuration immediately.', 'Confirm Save', function () { closeDialog(); saveSettings(false); }, false);
+    }
+
+    function captureFormState() {
+        var form = document.getElementById('settingsForm');
+        var formData = new FormData(form);
+        var state = {};
+        formData.forEach(function (v, k) { state[k] = v; });
+        return state;
+    }
+
+    function enableEditing() {
+        document.querySelectorAll('#settingsForm input').forEach(function (input) { input.disabled = false; });
+        document.querySelectorAll('.custom-select-trigger').forEach(function (el) { el.removeAttribute('disabled'); });
+        document.getElementById('actionButtons').classList.remove('hidden');
+        document.getElementById('editConfigBtn').classList.add('hidden');
+        initialFormState = captureFormState();
+        showToast('Editing Enabled', 'You can now modify your configuration.', 'info');
+    }
+
+    function disableEditing() {
+        document.querySelectorAll('#settingsForm input').forEach(function (input) { input.disabled = true; });
+        document.querySelectorAll('.custom-select-trigger').forEach(function (el) { el.setAttribute('disabled', 'true'); });
+        document.getElementById('actionButtons').classList.add('hidden');
+        document.getElementById('editConfigBtn').classList.remove('hidden');
+        document.getElementById('customPositionsContainer').classList.add('hidden');
+    }
+
+    function cancelEditing() {
+        for (var key in initialFormState) {
+            var input = document.querySelector('[name="' + key + '"]');
+            if (input && input.type !== 'hidden') input.value = initialFormState[key];
+        }
+        disableEditing();
+        showToast('Changes Discarded', 'Your configuration has been reverted.', 'info');
+        updateVisualization();
+    }
+
+    function resetToDefaults() {
+        document.querySelector('input[name="capital"]').value = parseInt(defaultSettings.capital);
+        document.querySelector('input[name="trade_amount"]').value = parseInt(defaultSettings.trade_amount);
+        document.querySelector('input[name="ma_period"]').value = defaultSettings.ma_period;
+        document.querySelector('input[name="entry_threshold"]').value = parseInt(defaultSettings.entry_threshold);
+        document.querySelector('input[name="target_profit"]').value = defaultSettings.target_profit;
+        document.querySelector('input[name="averaging_threshold"]').value = defaultSettings.averaging_threshold;
+        document.querySelector('input[name="alert_email"]').value = defaultSettings.alert_email;
+        document.querySelector('input[name="max_positions"]').value = defaultSettings.max_positions;
+        // Reset max positions dropdown
+        var maxPosSelect = document.getElementById('max_positions_select');
+        maxPosSelect.querySelector('.selected-text').textContent = 'Unlimited (Default)';
+        document.getElementById('customPositionsContainer').classList.add('hidden');
+        updateVisualization();
+    }
+
+    function saveSettings(isReset) {
+        var form = document.getElementById('settingsForm');
+        fetch(form.action, { method: 'POST', body: new FormData(form) })
+            .then(function (res) {
+                if (res.ok) {
+                    showToast(isReset ? 'Settings Reset' : 'Settings Saved', 'Your configuration has been updated.', 'success');
+                    disableEditing();
+                } else {
+                    showToast('Error', 'Failed to save settings.', 'error');
+                }
+            })
+            .catch(function () { showToast('Error', 'An unexpected error occurred.', 'error'); });
+    }
+
+    function showToast(title, desc, type) {
+        var container = document.getElementById('toastContainer');
+        var toast = document.createElement('div');
+        var colors = { success: 'border-green-500', error: 'border-red-500', info: 'border-blue-500' };
+        toast.className = 'bg-slate-800 border-l-4 ' + colors[type] + ' text-white p-4 rounded shadow-lg min-w-[300px]';
+        toast.innerHTML = '<h4 class="font-semibold text-sm">' + title + '</h4><p class="text-xs text-slate-400 mt-1">' + desc + '</p>';
+        container.appendChild(toast);
+        setTimeout(function () { toast.remove(); }, 5000);
+    }
+
+    // Max Positions Custom Input Functions
+    function adjustCustomPositions(delta) {
+        var input = document.getElementById('customPositionsInput');
+        var newVal = Math.max(1, Math.min(100, parseInt(input.value) + delta));
+        input.value = newVal;
+        updateMaxPositionsValue(newVal);
+    }
+
+    function updateMaxPositionsValue(value) {
+        var hiddenInput = document.querySelector('input[name="max_positions"]');
+        hiddenInput.value = value;
+        var displaySpan = document.querySelector('#max_positions_select .selected-text');
+        displaySpan.textContent = 'Custom (' + value + ')';
+    }
+
+    function handleMaxPositionsChange(value) {
+        var customContainer = document.getElementById('customPositionsContainer');
+        if (value === 'custom') {
+            customContainer.classList.remove('hidden');
+            var customInput = document.getElementById('customPositionsInput');
+            updateMaxPositionsValue(customInput.value);
+        } else {
+            customContainer.classList.add('hidden');
+        }
+    }
+
+    // Broker Management Functions
+    function toggleBroker(brokerId) {
+        fetch('/broker/' + brokerId + '/toggle', { method: 'POST' })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.success) {
+                    showToast('Success', data.message, 'success');
+                    setTimeout(function () { location.reload(); }, 1000);
+                } else {
+                    showToast('Error', data.message, 'error');
+                }
+            })
+            .catch(function () { showToast('Error', 'Failed to toggle broker', 'error'); });
+    }
+
+    function setDefaultBroker(brokerId) {
+        fetch('/broker/' + brokerId + '/set-default', { method: 'POST' })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.success) {
+                    showToast('Success', data.message, 'success');
+                    setTimeout(function () { location.reload(); }, 1000);
+                } else {
+                    showToast('Error', data.message, 'error');
+                }
+            })
+            .catch(function () { showToast('Error', 'Failed to set default broker', 'error'); });
+    }
+
+    function editBrokerName(brokerId, currentName) {
+        var newName = prompt('Enter new display name:', currentName);
+        if (newName && newName.trim() !== currentName) {
+            fetch('/broker/' + brokerId + '/update-name', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ display_name: newName.trim() })
+            })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.success) {
+                        showToast('Success', data.message, 'success');
+                        setTimeout(function () { location.reload(); }, 1000);
+                    } else {
+                        showToast('Error', data.message, 'error');
+                    }
+                })
+                .catch(function () { showToast('Error', 'Failed to update name', 'error'); });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        setupCustomSelect('trading_mode_select');
+        setupCustomSelect('max_positions_select', handleMaxPositionsChange);
+        disableEditing();
+        initVisualization();
+
+        // Custom positions input change handler
+        var customInput = document.getElementById('customPositionsInput');
+        customInput.addEventListener('change', function () {
+            var val = Math.max(1, Math.min(100, parseInt(this.value) || 1));
+            this.value = val;
+            updateMaxPositionsValue(val);
+        });
+
+        // Show custom container if currently has custom value
+        var currentMaxPos = parseInt(document.querySelector('input[name="max_positions"]').value);
+        if (currentMaxPos !== -1 && currentMaxPos !== 10) {
+            document.getElementById('customPositionsContainer').classList.remove('hidden');
+        }
+
+        // Broker mode select change handler
+        document.querySelectorAll('.broker-mode-select').forEach(function (select) {
+            select.addEventListener('change', function () {
+                var brokerId = this.dataset.brokerId;
+                var newMode = this.value;
+                var originalValue = this.dataset.originalValue;
+                var selectEl = this;
+                fetch('/broker/' + brokerId + '/update-mode', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ trading_mode: newMode })
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        if (data.success) {
+                            showToast('Success', data.message, 'success');
+                            selectEl.dataset.originalValue = newMode;
+                        } else {
+                            showToast('Error', data.message, 'error');
+                            selectEl.value = originalValue;
+                        }
+                    })
+                    .catch(function () {
+                        showToast('Error', 'Failed to update mode', 'error');
+                        selectEl.value = originalValue;
+                    });
+            });
+            select.dataset.originalValue = select.value;
+        });
+    });
+</script>
+{% endblock %}

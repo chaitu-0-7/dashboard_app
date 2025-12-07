@@ -57,6 +57,11 @@
                     <i data-feather="key" class="nav-icon"></i>
                     Tokens & API
                 </a>
+                <a href="{{ url_for('settings') }}"
+                    class="nav-item {% if active_page == 'settings' %}active{% endif %}">
+                    <i data-feather="settings" class="nav-icon"></i>
+                    Settings
+                </a>
             </nav>
 
             <div class="sidebar-footer">

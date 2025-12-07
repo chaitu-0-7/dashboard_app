@@ -9,3 +9,5 @@ Werkzeug
 pandas
 numpy
 pytz
+kiteconnect
+yfinance

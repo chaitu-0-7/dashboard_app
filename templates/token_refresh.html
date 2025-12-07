@@ -5,168 +5,101 @@
 {% block page_subtitle %}Manage your broker API authentication tokens{% endblock %}
 
 {% block content %}
-<!-- Fyers Section -->
-<div class="card mb-4">
-    <div class="card-header">
-        <h3 class="card-title">Fyers Connection</h3>
-        {% if fyers_status == 'VALID' %}
-        <span class="badge badge-success">Connected</span>
-        {% elif fyers_status == 'EXPIRED_ACCESS_TOKEN_REFRESHABLE' %}
-        <span class="badge badge-warning">Refresh Required</span>
-        {% else %}
-        <span class="badge badge-danger">Disconnected</span>
-        {% endif %}
+<div class="mb-4">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-white">API Connection Status</h2>
     </div>
 
-    <div class="p-4">
-        {% if fyers_status == 'VALID' %}
-        <div class="flex-center flex-column p-4 mb-4"
-            style="background: rgba(16, 185, 129, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(16, 185, 129, 0.2);">
-            <i data-feather="check-circle" class="text-success mb-2" style="width: 32px; height: 32px;"></i>
-            <h3 class="text-success m-0">Fyers Connected</h3>
-            <p class="text-muted text-center mt-2">Your Fyers API token is valid and active.</p>
-        </div>
+    {% if not brokers %}
+    <div class="text-center p-8 border border-dashed border-slate-700 rounded-lg text-slate-500">
+        <p class="mb-2">No brokers connected yet. Go to Settings to add one.</p>
+    </div>
+    {% endif %}
 
-        <div class="mt-4"
-            style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px;">
-            <form action="/refresh-token-action" method="post" style="margin: 0;">
-                <button type="submit" class="btn btn-outline">
-                    <i data-feather="refresh-cw" style="width: 16px; margin-right: 6px;"></i> Try Auto-Refresh
-                </button>
-            </form>
-
-            <button id="manual-auth-button-valid" class="btn btn-primary">
-                <i data-feather="key" style="width: 16px; margin-right: 6px;"></i> Login with Fyers
-            </button>
-        </div>
-
-        {% elif fyers_status == 'EXPIRED_ACCESS_TOKEN_REFRESHABLE' %}
-        <div class="flex-center flex-column p-4 mb-4"
-            style="background: rgba(245, 158, 11, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(245, 158, 11, 0.2);">
-            <i data-feather="alert-triangle" class="text-warning mb-2" style="width: 32px; height: 32px;"></i>
-            <h3 class="text-warning m-0">Token Expired</h3>
-            <p class="text-muted text-center mt-2">The access token has expired but can be refreshed automatically.</p>
-        </div>
-
-        <div class="text-center">
-            <form action="/refresh-token-action" method="post">
-                <button type="submit" class="btn btn-primary">
-                    <i data-feather="refresh-cw" style="width: 16px; margin-right: 6px;"></i> Refresh Token Now
-                </button>
-            </form>
-        </div>
-
-        {% else %}
-        <div class="flex-center flex-column p-4 mb-4"
-            style="background: rgba(239, 68, 68, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(239, 68, 68, 0.2);">
-            <i data-feather="x-circle" class="text-danger mb-2" style="width: 32px; height: 32px;"></i>
-            <h3 class="text-danger m-0">Fyers Disconnected</h3>
-            <p class="text-muted text-center mt-2">
-                {% if fyers_status == 'EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED' %}
-                Refresh token expired. Manual re-authorization required.
-                {% else %}
-                No tokens found. Please authorize the application.
+    {% for broker in brokers %}
+    <div class="card mb-4">
+        <div class="card-header flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <h3 class="card-title mb-0">{{ broker.name }} ({{ broker.type|title }})</h3>
+                {% if broker.type == 'fyers' %}
+                <span class="badge badge-primary text-xs">Fyers</span>
+                {% elif broker.type == 'zerodha' %}
+                <span class="badge badge-warning text-xs">Zerodha</span>
                 {% endif %}
-            </p>
+            </div>
+
+            {% if broker.status == 'VALID' %}
+            <span class="badge badge-success">Connected</span>
+            {% elif 'REFRESHABLE' in broker.status %}
+            <span class="badge badge-warning">Refresh Required</span>
+            {% else %}
+            <span class="badge badge-danger">Disconnected</span>
+            {% endif %}
         </div>
 
-        <div class="mt-4"
-            style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px;">
-            <form action="/refresh-token-action" method="post" style="margin: 0;">
-                <button type="submit" class="btn btn-outline">
+        <div class="p-4">
+            <!-- Status Visual -->
+            {% if broker.status == 'VALID' %}
+            <div class="flex-center flex-column p-4 mb-4"
+                style="background: rgba(16, 185, 129, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(16, 185, 129, 0.2);">
+                <i data-feather="check-circle" class="text-success mb-2" style="width: 32px; height: 32px;"></i>
+                <h3 class="text-success m-0">{{ broker.name }} Connected</h3>
+                <p class="text-muted text-center mt-2">API token is valid.</p>
+                {% if broker.last_update %}
+                <p class="text-xs text-muted mt-1">Updated: {{ broker.last_update.strftime('%Y-%m-%d %H:%M') }}</p>
+                {% endif %}
+            </div>
+            {% elif 'REFRESHABLE' in broker.status %}
+            <div class="flex-center flex-column p-4 mb-4"
+                style="background: rgba(245, 158, 11, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(245, 158, 11, 0.2);">
+                <i data-feather="alert-triangle" class="text-warning mb-2" style="width: 32px; height: 32px;"></i>
+                <h3 class="text-warning m-0">Refresh Required</h3>
+                <p class="text-muted text-center mt-2">Access token expired but can be refreshed.</p>
+                {% if broker.last_update %}
+                <p class="text-xs text-muted mt-1">Old Token: {{ broker.last_update.strftime('%Y-%m-%d %H:%M') }}</p>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="flex-center flex-column p-4 mb-4"
+                style="background: rgba(239, 68, 68, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(239, 68, 68, 0.2);">
+                <i data-feather="x-circle" class="text-danger mb-2" style="width: 32px; height: 32px;"></i>
+                <h3 class="text-danger m-0">Disconnected</h3>
+                <p class="text-muted text-center mt-2">
+                    {% if broker.status == 'EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED' %}
+                    Refresh token expired. Manual re-login required.
+                    {% elif broker.status == 'EXPIRED/MISSING' and broker.type == 'zerodha' %}
+                    Zerodha token expired (Daily reset). Please re-login.
+                    {% else %}
+                    No valid tokens found. Please authorize.
+                    {% endif %}
+                </p>
+            </div>
+            {% endif %}
+
+            <!-- Actions -->
+            <div class="mt-4 flex flex-wrap justify-center items-center gap-3">
+                {% if broker.type == 'fyers' %}
+                <button onclick="refreshBrokerToken('{{ broker.broker_id }}')" class="btn btn-outline">
                     <i data-feather="refresh-cw" style="width: 16px; margin-right: 6px;"></i> Try Auto-Refresh
                 </button>
-            </form>
-
-            <button id="manual-auth-button" class="btn btn-primary">
-                <i data-feather="key" style="width: 16px; margin-right: 6px;"></i> Login with Fyers
-            </button>
-        </div>
-        {% endif %}
-    </div>
-</div>
-
-<div id="manual-auth-section" class="card mb-4"
-    style="opacity: 0; max-height: 0; overflow: hidden; transition: all 0.5s ease-in-out;">
-    <div class="card-header">
-        <h3 class="card-title">Manual Authorization (Fyers)</h3>
-    </div>
-    <div class="p-4">
-        <div class="mb-4">
-            <h4 class="text-main mb-2" style="font-size: 1rem;">Step 1: Generate Auth Code</h4>
-            <p class="text-muted text-sm mb-3">Click the button below to log in to Fyers and generate an authorization
-                code. Copy the code from the URL after redirection.</p>
-            <a href="{{ fyers_auth_url }}" target="_blank" class="btn btn-outline">
-                <i data-feather="external-link" style="width: 16px; margin-right: 6px;"></i> Open Fyers Login
-            </a>
-        </div>
-
-        <div class="mb-4">
-            <h4 class="text-main mb-2" style="font-size: 1rem;">Step 2: Enter Code</h4>
-            <p class="text-muted text-sm mb-3">Paste the <code>auth_code</code> from the redirected URL here.</p>
-
-            <form id="auth-code-form" action="/token-callback" method="get" class="flex-center gap-2"
-                style="align-items: stretch;">
-                <input type="text" name="code" placeholder="Paste Auth Code here..."
-                    style="flex: 1; padding: 0.75rem; background: var(--bg-app); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius-md);">
-                <button type="submit" class="btn btn-primary">Connect</button>
-            </form>
-            <p class="text-danger mt-2 text-sm" id="auth-code-error" style="display:none;">Please enter a valid Auth
-                Code.</p>
+                <a href="{{ broker.auth_url }}" class="btn btn-primary">
+                    <i data-feather="key" style="width: 16px; margin-right: 6px;"></i> Login with Fyers
+                </a>
+                {% elif broker.type == 'zerodha' %}
+                {% if broker.status == 'VALID' %}
+                <a href="{{ broker.auth_url }}" class="btn btn-outline">
+                    <i data-feather="refresh-cw" style="width: 16px; margin-right: 6px;"></i> Re-authenticate Zerodha
+                </a>
+                {% else %}
+                <a href="{{ broker.auth_url }}" class="btn btn-primary">
+                    <i data-feather="key" style="width: 16px; margin-right: 6px;"></i> Login with Zerodha
+                </a>
+                {% endif %}
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
-
-<!-- Zerodha Section -->
-<div class="card mb-4">
-    <div class="card-header">
-        <h3 class="card-title">Zerodha Kite Connection</h3>
-        {% if zerodha_status == 'VALID' %}
-        <span class="badge badge-success">Connected</span>
-        {% else %}
-        <span class="badge badge-danger">Disconnected</span>
-        {% endif %}
-    </div>
-
-    <div class="p-4">
-        {% if zerodha_status == 'VALID' %}
-        <div class="flex-center flex-column p-4 mb-4"
-            style="background: rgba(16, 185, 129, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(16, 185, 129, 0.2);">
-            <i data-feather="check-circle" class="text-success mb-2" style="width: 32px; height: 32px;"></i>
-            <h3 class="text-success m-0">Zerodha Connected</h3>
-            <p class="text-muted text-center mt-2">Your Zerodha API token is valid and active.</p>
-        </div>
-
-        <div class="mt-4"
-            style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px;">
-            <a href="{{ zerodha_auth_url }}" class="btn btn-outline">
-                <i data-feather="refresh-cw" style="width: 16px; margin-right: 6px;"></i> Re-authenticate Zerodha
-            </a>
-        </div>
-
-        {% else %}
-        <div class="flex-center flex-column p-4 mb-4"
-            style="background: rgba(239, 68, 68, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(239, 68, 68, 0.2);">
-            <i data-feather="x-circle" class="text-danger mb-2" style="width: 32px; height: 32px;"></i>
-            <h3 class="text-danger m-0">Zerodha Disconnected</h3>
-            <p class="text-muted text-center mt-2">No valid Zerodha token found. Please authorize.</p>
-        </div>
-
-        <div class="mt-4"
-            style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px;">
-            <a href="{{ zerodha_auth_url }}" class="btn btn-primary">
-                <i data-feather="key" style="width: 16px; margin-right: 6px;"></i> Login with Zerodha
-            </a>
-        </div>
-
-        <div class="mt-3 text-center">
-            <p class="text-muted text-sm">
-                <i data-feather="info" style="width: 14px; margin-right: 4px;"></i>
-                Zerodha tokens expire daily at 6 AM IST. You'll need to re-login each day.
-            </p>
-        </div>
-        {% endif %}
-    </div>
+    {% endfor %}
 </div>
 
 {% if request.args.get('status') %}
@@ -189,6 +122,43 @@
 
 {% block scripts %}
 <script>
+    feather.replace();
+
+    // Client-side refresh logic (reusing backend API)
+    function refreshBrokerToken(brokerId) {
+        // Show loading state if possible
+        const btn = event.currentTarget;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="animate-spin" data-feather="loader" style="width: 16px; margin-right: 6px;"></i> Refreshing...';
+        feather.replace();
+        btn.disabled = true;
+
+        fetch('/broker/' + brokerId + '/refresh', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else if (data.success) {
+                    // Show success and reload
+                    btn.innerHTML = '<i data-feather="check" style="width: 16px; margin-right: 6px;"></i> Success';
+                    feather.replace();
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    alert('Refresh Failed: ' + data.message);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            })
+            .catch(e => {
+                alert('Error refreshing token');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         // Auto-hide success messages after 5 seconds
         const alerts = document.querySelectorAll('.alert');
@@ -199,51 +169,6 @@
                 setTimeout(() => alert.remove(), 300);
             }, 5000);
         });
-
-        // Fyers Manual Auth Logic
-        const manualAuthButton = document.getElementById('manual-auth-button');
-        const manualAuthButtonValid = document.getElementById('manual-auth-button-valid');
-        const manualAuthSection = document.getElementById('manual-auth-section');
-        const authCodeForm = document.getElementById('auth-code-form');
-        const initialFyersStatus = "{{ fyers_status }}";
-
-        function toggleAuthSection() {
-            // Smooth animation
-            manualAuthSection.style.opacity = '1';
-            manualAuthSection.style.maxHeight = '1000px'; // Large enough to fit content
-
-            setTimeout(() => {
-                manualAuthSection.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-        }
-
-        if (manualAuthButton) {
-            manualAuthButton.addEventListener('click', toggleAuthSection);
-        }
-
-        if (manualAuthButtonValid) {
-            manualAuthButtonValid.addEventListener('click', toggleAuthSection);
-        }
-
-        if (initialFyersStatus === 'EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED' || initialFyersStatus === 'NO_TOKENS_FOUND') {
-            // Optional: Auto-show if strictly required
-            // manualAuthSection.style.opacity = '1';
-            // manualAuthSection.style.maxHeight = '1000px';
-        }
-
-        if (authCodeForm) {
-            authCodeForm.addEventListener('submit', function (event) {
-                const input = authCodeForm.querySelector('input[name="code"]');
-                const errorMessage = document.getElementById('auth-code-error');
-
-                if (!input.value.trim()) {
-                    errorMessage.style.display = 'block';
-                    event.preventDefault();
-                } else {
-                    errorMessage.style.display = 'none';
-                }
-            });
-        }
     });
 </script>
 <style>
@@ -265,6 +190,20 @@
 
     .shadow-lg {
         box-shadow: var(--shadow-lg);
+    }
+
+    .animate-spin {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
     }
 
     .animate-fade-in {

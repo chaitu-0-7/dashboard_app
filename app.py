@@ -590,82 +590,207 @@ def api_logs():
 @app.route('/token-refresh')
 @login_required
 def token_refresh():
-    # Show status for both brokers
-    fyers_status = "UNKNOWN"
-    zerodha_status = "UNKNOWN"
+    brokers_data = []
     
-    # Fyers Status Calculation
-    fyers_tokens = load_tokens('fyers')
-    fyers_status = "NO_TOKENS_FOUND"
+    # Fetch all enabled/configured brokers
+    db_brokers = list(db['broker_accounts'].find({}))
     
-    if fyers_tokens:
-        generated_at = fyers_tokens.get('generated_at')
+    for broker in db_brokers:
+        b_type = broker['broker_type']
+        b_data = {
+            'broker_id': broker['broker_id'],
+            'name': broker.get('display_name', b_type.capitalize()),
+            'type': b_type,
+            'status': 'UNKNOWN',
+            'last_update': None,
+            'auth_url': '#',
+            'features': []
+        }
         
-        # Handle integer/float timestamp (Unix time)
+        # Timestamp logic
+        generated_at = broker.get('token_generated_at')
         if isinstance(generated_at, (int, float)):
-            generated_at = datetime.fromtimestamp(generated_at, tz=UTC)
-        # Handle string timestamp
-        elif isinstance(generated_at, str):
-            try:
-                generated_at = datetime.fromisoformat(generated_at)
-            except ValueError:
-                generated_at = datetime.now(UTC) # Fallback
+             generated_at = datetime.fromtimestamp(generated_at, tz=UTC)
+        elif not isinstance(generated_at, datetime) and generated_at:
+             # Try parsing string? or just None
+             generated_at = None
         
-        # Ensure it is a datetime object
-        if not isinstance(generated_at, datetime):
-             generated_at = datetime.now(UTC)
-
-        if generated_at.tzinfo is None:
-            generated_at = generated_at.replace(tzinfo=UTC)
-            
-        now = datetime.now(UTC)
-        elapsed = (now - generated_at).total_seconds()
+        if generated_at and generated_at.tzinfo is None:
+             generated_at = generated_at.replace(tzinfo=UTC)
+             
+        b_data['last_update'] = generated_at
         
-        if elapsed < ACCESS_TOKEN_VALIDITY:
-             # Access token is valid
-             # Verify with API to be sure
-             if is_token_valid('fyers', fyers_tokens):
-                 fyers_status = "VALID"
+        # Refresh logic
+        refresh_token = broker.get('refresh_token')
+        
+        if b_type == 'fyers':
+             # Status Calc
+             if not generated_at:
+                 b_data['status'] = "NO_TOKENS_FOUND"
              else:
-                 # Token invalid despite time, maybe revoked
-                 fyers_status = "EXPIRED_ACCESS_TOKEN_REFRESHABLE"
-        elif elapsed < REFRESH_TOKEN_VALIDITY:
-            # Access token expired, but refresh token valid
-            fyers_status = "EXPIRED_ACCESS_TOKEN_REFRESHABLE"
-        else:
-            # Both expired
-            fyers_status = "EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED"
-    else:
-        fyers_status = "NO_TOKENS_FOUND"
-        
-    # Zerodha
-    zerodha_tokens = load_tokens('zerodha')
-    if zerodha_tokens and is_token_valid('zerodha', zerodha_tokens):
-        zerodha_status = "VALID"
-    else:
-        zerodha_status = "EXPIRED/MISSING"
+                 now = datetime.now(UTC)
+                 elapsed = (now - generated_at).total_seconds()
+                 if elapsed < ACCESS_TOKEN_VALIDITY:
+                     b_data['status'] = "VALID"
+                 elif elapsed < REFRESH_TOKEN_VALIDITY:
+                     b_data['status'] = "EXPIRED_ACCESS_TOKEN_REFRESHABLE"
+                 else:
+                     b_data['status'] = "EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED"
+            
+             if not refresh_token:
+                 b_data['status'] = "NO_TOKENS_FOUND"
 
-    fyers_auth_url = fyers_connector.get_login_url(redirect_uri=FYERS_REDIRECT_URI)
-    zerodha_auth_url = zerodha_connector.get_login_url(redirect_uri=ZERODHA_REDIRECT_URI)
+             # Auth URL (Set session for update)
+             # Session setup happens ON CLICK usually, but for Fyers we need to set it here 
+             # OR use a bridge. Since we can't bridge Fyers easily (it's external), 
+             # we rely on the fact that ONLY ONE Fyers broker exists usually, OR we accept the limitation.
+             # Wait, with Multi-Broker, we MIGHT have 2 Fyers accounts.
+             # If we have 2, setting session['temp_token_data'] here will overwrite each other!
+             # CRITICAL: We need a bridge for Fyers too if we support multiple Fyers accounts.
+             # Solution: Create /broker/reauth/fyers/<id> bridge.
+             b_data['auth_url'] = url_for('broker_reauth_fyers', broker_id=broker['broker_id'])
+
+        elif b_type == 'zerodha':
+             if not generated_at:
+                 b_data['status'] = "EXPIRED/MISSING"
+             else:
+                 now = datetime.now(UTC)
+                 elapsed = (now - generated_at).total_seconds()
+                 if elapsed < (24 * 3600):
+                     b_data['status'] = "VALID"
+                 else:
+                     b_data['status'] = "EXPIRED/MISSING"
+                     
+             b_data['auth_url'] = url_for('broker_reauth_zerodha', broker_id=broker['broker_id'])
+        
+        brokers_data.append(b_data)
 
     return render_template('token_refresh.html', 
-                           fyers_status=fyers_status, 
-                           zerodha_status=zerodha_status,
-                           fyers_auth_url=fyers_auth_url,
-                           zerodha_auth_url=zerodha_auth_url,
+                           brokers=brokers_data,
                            active_page='token_refresh')
+
+@app.route('/refresh-token-action', methods=['POST'])
+@login_required
+def refresh_token_action():
+    # Attempt Fyers Refresh
+    fyers_broker = db['broker_accounts'].find_one({'broker_type': 'fyers'})
+    if not fyers_broker:
+         return redirect(url_for('token_refresh', status='failed', message='No Fyers broker found'))
+         
+    refresh_token = fyers_broker.get('refresh_token')
+    if not refresh_token:
+         return redirect(url_for('token_refresh', status='failed', message='No refresh token'))
+         
+    try:
+        client_id = fyers_broker.get('client_id') or fyers_broker.get('api_key')
+        secret_id = fyers_broker.get('secret_id') or fyers_broker.get('api_secret')
+        
+        connector = FyersConnector(api_key=client_id, api_secret=secret_id)
+        new_tokens = connector.refresh_token(refresh_token)
+        
+        db['broker_accounts'].update_one(
+            {'_id': fyers_broker['_id']},
+            {'$set': {
+                'access_token': new_tokens['access_token'],
+                'refresh_token': new_tokens.get('refresh_token', refresh_token),
+                'token_generated_at': datetime.now(UTC),
+                'token_status': 'valid'
+            }}
+        )
+        return redirect(url_for('token_refresh', status='refreshed', broker='fyers'))
+    except Exception as e:
+        return redirect(url_for('token_refresh', status='failed', message=str(e), broker='fyers'))
 
 @app.route('/token-callback')
 @login_required
 def token_callback():
-    # Fyers Callback
-    auth_code = request.args.get('code')
+    # Fyers Callback (Legacy Endpoint support)
+    auth_code = request.args.get('code') # Fyers usually sends 'code' or 'auth_code' depending on api v2/v3? v3 is 'auth_code' usually but let's check both
+    if not auth_code:
+         auth_code = request.args.get('auth_code')
+
     if auth_code:
         try:
-            token_response = fyers_connector.generate_session(auth_code, redirect_uri=FYERS_REDIRECT_URI)
+            # We need to know which Redirect URI was used to generate the auth code.
+            # If session data exists, use that. Else default to global.
+            temp_data = session.get('temp_broker_data')
+            redirect_uri = FYERS_REDIRECT_URI
+            
+            if temp_data and temp_data.get('redirect_uri'):
+                redirect_uri = temp_data['redirect_uri']
+
+            # Generate Session
+            # Note: We need api_key/secret. Legacy assumed global. New flow has them in session.
+            api_key = temp_data['client_id'] if temp_data else FYERS_CLIENT_ID
+            api_secret = temp_data['secret_id'] if temp_data else FYERS_SECRET_ID
+            
+            # Re-init connector if needed (Global connector uses global keys)
+            # If temp_data has different keys, we must create a temp connector
+            connector = fyers_connector
+            if temp_data:
+                 connector = FyersConnector(api_key=api_key, api_secret=api_secret)
+
+            token_response = connector.generate_session(auth_code, redirect_uri=redirect_uri)
             token_response["generated_at"] = int(time.time())
-            save_tokens('fyers', token_response)
-            return redirect(url_for('token_refresh', status='success', broker='fyers'))
+            
+            # Check for Multi-Broker Session Data
+            if temp_data and temp_data.get('type') == 'fyers':
+                # New Flow: Save to broker_accounts
+                mode = temp_data.get('mode', 'create')
+                
+                if mode == 'update':
+                    # Update Existing Broker
+                    broker_id = temp_data.get('broker_id')
+                    if not broker_id:
+                        raise Exception("Broker ID missing for update")
+                        
+                    db['broker_accounts'].update_one(
+                        {'broker_id': broker_id},
+                        {'$set': {
+                            'access_token': token_response['access_token'],
+                            'refresh_token': token_response.get('refresh_token'),
+                            'token_generated_at': datetime.now(UTC),
+                            'token_status': 'valid'
+                        }}
+                    )
+                    flash(f"Fyers broker re-connected successfully!", "success")
+                else:
+                    # Create New Broker
+                    broker_id = str(uuid.uuid4())
+                    
+                    is_default = False
+                    if db['broker_accounts'].count_documents({}) == 0:
+                        is_default = True
+                        
+                    new_broker = {
+                        "broker_id": broker_id,
+                        "broker_type": "fyers",
+                        "display_name": temp_data['display_name'],
+                        "enabled": True,
+                        "is_default": is_default,
+                        "trading_mode": "NORMAL",
+                        "created_at": datetime.now(UTC),
+                        "client_id": temp_data['client_id'],
+                        "secret_id": temp_data['secret_id'],
+                        "pin": temp_data['pin'],
+                        "redirect_uri": temp_data['redirect_uri'],
+                        "access_token": token_response['access_token'],
+                        "refresh_token": token_response.get('refresh_token'),
+                        "token_generated_at": datetime.now(UTC),
+                        "token_status": "valid",
+                        "last_run_at": None
+                    }
+                    db['broker_accounts'].insert_one(new_broker)
+                    flash(f"Fyers broker '{temp_data['display_name']}' added successfully!", "success")
+                
+                session.pop('temp_broker_data', None)
+                return redirect(url_for('settings'))
+
+            else:
+                # Fallback Legacy
+                save_tokens('fyers', token_response)
+                return redirect(url_for('token_refresh', status='success', broker='fyers'))
+
         except Exception as e:
             return redirect(url_for('token_refresh', status='failed', message=str(e), broker='fyers'))
     return redirect(url_for('token_refresh', status='failed', message='No code', broker='fyers'))
@@ -674,47 +799,82 @@ def token_callback():
 @login_required
 def zerodha_callback():
     # Zerodha Callback
-    # Zerodha sends 'request_token' as query param, and 'status'
     request_token = request.args.get('request_token')
     status = request.args.get('status')
     
     if status == 'success' and request_token:
         try:
+            # Generate Session
             token_response = zerodha_connector.generate_session(request_token)
-            save_tokens('zerodha', token_response)
-            return redirect(url_for('token_refresh', status='success', broker='zerodha'))
+            
+            # Check for Multi-Broker Session Data
+            temp_data = session.get('temp_broker_data')
+            
+            if temp_data and temp_data.get('type') == 'zerodha':
+                # New Flow: Save to broker_accounts
+                mode = temp_data.get('mode', 'create')
+                
+                if mode == 'update':
+                    # Update Existing Broker
+                    broker_id = temp_data.get('broker_id')
+                    if not broker_id:
+                        raise Exception("Broker ID missing for update")
+                        
+                    db['broker_accounts'].update_one(
+                        {'broker_id': broker_id},
+                        {'$set': {
+                            'access_token': token_response['access_token'],
+                            'refresh_token': token_response.get('refresh_token'), # Zerodha might not have refresh token in same way
+                            'token_generated_at': datetime.now(UTC),
+                            'token_status': 'valid'
+                        }}
+                    )
+                    flash(f"Zerodha broker re-connected successfully!", "success")
+                else:
+                    # Create New Broker
+                    broker_id = str(uuid.uuid4())
+                    
+                    # Determine if default
+                    is_default = False
+                    if db['broker_accounts'].count_documents({}) == 0:
+                        is_default = True
+                        
+                    new_broker = {
+                        "broker_id": broker_id,
+                        "broker_type": "zerodha",
+                        "display_name": temp_data['display_name'],
+                        "enabled": True,
+                        "is_default": is_default,
+                        "trading_mode": "NORMAL",
+                        "created_at": datetime.now(UTC),
+                        "api_key": temp_data['api_key'],
+                        "api_secret": temp_data['api_secret'],
+                        "access_token": token_response['access_token'],
+                        "refresh_token": token_response.get('refresh_token'),
+                        "token_generated_at": datetime.now(UTC),
+                        "token_status": "valid",
+                        "last_run_at": None
+                    }
+                    db['broker_accounts'].insert_one(new_broker)
+                    flash(f"Zerodha broker '{temp_data['display_name']}' added successfully!", "success")
+                
+                # Clear session
+                session.pop('temp_broker_data', None)
+                return redirect(url_for('settings'))  # Redirect to settings to see the new broker
+                
+            else:
+                # Fallback: Save to legacy collection (for safety/backward compat if no session)
+                # But warn user? Or just save to generic place?
+                # For now, let's just save via old helper as a fallback, but it won't show in UI.
+                save_tokens('zerodha', token_response)
+                return redirect(url_for('token_refresh', status='success', broker='zerodha'))
+
         except Exception as e:
              return redirect(url_for('token_refresh', status='failed', message=str(e), broker='zerodha'))
     else:
         return redirect(url_for('token_refresh', status='failed', message='Auth failed or denied', broker='zerodha'))
 
-@app.route('/refresh-token-action', methods=['POST'])
-@login_required
-def refresh_token_action():
-    # Only Fyers supports refresh token flow easily
-    tokens = load_tokens('fyers')
-    if tokens: # Add validity check
-        try:
-            refreshed_tokens = fyers_connector.refresh_token(tokens["refresh_token"])
-            token_data = {
-                "access_token": refreshed_tokens["access_token"],
-                "refresh_token": refreshed_tokens.get("refresh_token", tokens["refresh_token"]),
-                "generated_at": datetime.now(UTC)
-            }
-            save_tokens('fyers', token_data)
-            return redirect(url_for('token_refresh', status='refreshed', broker='fyers'))
-        except Exception as e:
-            # If refresh fails (e.g. invalid refresh token), we should force manual re-login
-            # We can delete the invalid tokens or just mark them as such
-            # For now, let's delete them to force "No tokens found" or handle specific error
-            error_msg = str(e)
-            if "Please provide valid refresh token" in error_msg or "-501" in error_msg:
-                 # Delete invalid tokens to force manual re-auth state
-                 fyers_tokens_collection.delete_one({"_id": "fyers_token_data"})
-                 return redirect(url_for('token_refresh', status='failed', message='Refresh token expired. Please re-login.', broker='fyers'))
-            
-            return redirect(url_for('token_refresh', status='refresh_failed', message=f'Failed: {e}', broker='fyers'))
-    return redirect(url_for('token_refresh', status='refresh_failed', message='No tokens', broker='fyers'))
+
 
 def run_executor(run_type="scheduled"):
     run_id = str(uuid.uuid4())
@@ -929,6 +1089,408 @@ def broker_update_name(broker_id):
         'success': True,
         'message': 'Display name updated successfully'
     })
+
+# --- Add Broker Routes ---
+
+@app.route('/add-broker')
+@login_required
+def add_broker():
+    return render_template('add_broker.html', active_page='settings')
+
+@app.route('/broker/setup/fyers', methods=['POST'])
+@login_required
+def setup_fyers():
+    """Step 1: Save temp credentials and redirect to Fyers Auth"""
+    display_name = request.form.get('display_name')
+    client_id = request.form.get('client_id')
+    secret_id = request.form.get('secret_id')
+    redirect_uri = request.form.get('redirect_uri')
+    pin = request.form.get('pin', '')
+    
+    if not all([display_name, client_id, secret_id, redirect_uri]):
+        flash("All fields are required", "danger")
+        return redirect(url_for('add_broker'))
+    
+    # Store in session for retrieval after callback
+    session['temp_broker_data'] = {
+        'type': 'fyers',
+        'display_name': display_name,
+        'client_id': client_id,
+        'secret_id': secret_id,
+        'redirect_uri': redirect_uri,
+        'pin': pin
+    }
+    
+    try:
+        connector = FyersConnector(api_key=client_id, api_secret=secret_id)
+        auth_url = connector.get_login_url(redirect_uri=redirect_uri)
+        return redirect(auth_url)
+    except Exception as e:
+        flash(f"Error generating auth URL: {str(e)}", "danger")
+        return redirect(url_for('add_broker'))
+
+@app.route('/broker/callback/fyers')
+@login_required
+def callback_fyers():
+    """Step 2: Handle Fyers Callback"""
+    auth_code = request.args.get('auth_code')
+    
+    if not auth_code:
+        # Fyers might send 'code' instead of 'auth_code' sometimes, or error
+        # Actually Fyers v3 sends 'auth_code' usually, but check documentation if needed. 
+        # Standard OAuth is 'code'. Fyers documentation says 'auth_code' in response? 
+        # Let's check query params.
+        # If user cancelled or error
+        if request.args.get('error'):
+            flash(f"Authorization failed: {request.args.get('error_description')}", "danger")
+            return redirect(url_for('add_broker'))
+        
+        # Fallback check
+        auth_code = request.args.get('code')
+        if not auth_code:
+             flash("No authorization code received from Fyers.", "danger")
+             return redirect(url_for('add_broker'))
+
+    temp_data = session.get('temp_broker_data')
+    if not temp_data or temp_data.get('type') != 'fyers':
+        flash("Session expired or invalid. Please try again.", "danger")
+        return redirect(url_for('add_broker'))
+    
+    try:
+        connector = FyersConnector(api_key=temp_data['client_id'], api_secret=temp_data['secret_id'])
+        # Exchange code for token
+        token_response = connector.generate_session(auth_code=auth_code, redirect_uri=temp_data['redirect_uri'])
+        
+        mode = temp_data.get('mode', 'create')
+        
+        if mode == 'update':
+            # Update existing broker
+            broker_id = temp_data.get('broker_id')
+            if not broker_id:
+                raise Exception("Broker ID missing for update")
+                
+            db['broker_accounts'].update_one(
+                {'broker_id': broker_id},
+                {'$set': {
+                    'access_token': token_response['access_token'],
+                    'refresh_token': token_response.get('refresh_token'),
+                    'token_generated_at': datetime.now(UTC),
+                    'token_status': 'valid',
+                    # Update credentials just in case they were changed in setup (if we support that flow later)
+                    # For now just tokens
+                }}
+            )
+            flash(f"Broker '{temp_data['display_name']}' re-connected successfully!", "success")
+            
+        else:
+            # Create New Broker
+            broker_id = str(uuid.uuid4())
+            new_broker = {
+                "broker_id": broker_id,
+                "broker_type": "fyers",
+                "display_name": temp_data['display_name'],
+                "enabled": True,
+                "is_default": False, 
+                "trading_mode": "NORMAL",
+                "created_at": datetime.now(UTC),
+                "client_id": temp_data['client_id'], 
+                "secret_id": temp_data['secret_id'],
+                "pin": temp_data['pin'],
+                "redirect_uri": temp_data['redirect_uri'],
+                "access_token": token_response['access_token'],
+                "refresh_token": token_response.get('refresh_token'),
+                "token_generated_at": datetime.now(UTC),
+                "token_status": "valid",
+                "last_run_at": None
+            }
+            
+            # If this is the first broker, make it default
+            if db['broker_accounts'].count_documents({}) == 0:
+                new_broker['is_default'] = True
+                
+            db['broker_accounts'].insert_one(new_broker)
+            flash(f"Broker '{temp_data['display_name']}' added successfully!", "success")
+        
+        # Clear session
+        session.pop('temp_broker_data', None)
+        return redirect(url_for('settings'))
+        
+    except Exception as e:
+        flash(f"Failed to complete setup: {str(e)}", "danger")
+        return redirect(url_for('settings')) # Redirect to settings on failure too? Or add_broker? 
+        # Better to go to settings if update failed. But adding new -> add_broker.
+        # Let's check mode or just default to add_broker if 'create'.
+        # If update fail, maybe settings is better.
+        if temp_data.get('mode') == 'update':
+             return redirect(url_for('settings'))
+        return redirect(url_for('add_broker'))
+
+@app.route('/broker/setup/zerodha', methods=['POST'])
+@login_required
+def setup_zerodha():
+    """Step 1: Save temp credentials and redirect to Zerodha Auth"""
+    display_name = request.form.get('display_name')
+    api_key = request.form.get('api_key')
+    api_secret = request.form.get('api_secret')
+    
+    if not all([display_name, api_key, api_secret]):
+        flash("All fields are required", "danger")
+        return redirect(url_for('add_broker'))
+    
+    # Store in session
+    session['temp_broker_data'] = {
+        'type': 'zerodha',
+        'display_name': display_name,
+        'api_key': api_key,
+        'api_secret': api_secret
+    }
+    
+    # Redirect to Kite Login
+    # Zerodha URL: https://kite.zerodha.com/connect/login?v=3&api_key=xxx
+    return redirect(f"https://kite.zerodha.com/connect/login?v=3&api_key={api_key}")
+
+@app.route('/broker/callback/zerodha')
+@login_required
+def callback_zerodha():
+    """Step 2: Handle Zerodha Callback"""
+    request_token = request.args.get('request_token')
+    status = request.args.get('status')
+    
+    if status == 'failure':
+        flash(f"Authorization failed: {request.args.get('message')}", "danger")
+        return redirect(url_for('add_broker'))
+        
+    if not request_token:
+        flash("No request token received from Zerodha.", "danger")
+        return redirect(url_for('add_broker'))
+        
+    temp_data = session.get('temp_broker_data')
+    if not temp_data or temp_data.get('type') != 'zerodha':
+        flash("Session expired or invalid. Please try again.", "danger")
+        return redirect(url_for('add_broker'))
+        
+    try:
+        connector = ZerodhaConnector(api_key=temp_data['api_key'], api_secret=temp_data['api_secret'])
+        # Exchange token
+        token_response = connector.generate_session(auth_code=request_token)
+        
+        mode = temp_data.get('mode', 'create')
+        
+        if mode == 'update':
+            # Update existing broker
+            broker_id = temp_data.get('broker_id')
+            if not broker_id:
+                raise Exception("Broker ID missing for update")
+                
+            db['broker_accounts'].update_one(
+                {'broker_id': broker_id},
+                {'$set': {
+                    'access_token': token_response['access_token'],
+                    'public_token': token_response.get('public_token'),
+                    'user_id': token_response.get('user_id'),
+                    'token_generated_at': datetime.now(UTC),
+                    'token_status': 'valid'
+                }}
+            )
+            flash(f"Broker '{temp_data['display_name']}' re-connected successfully!", "success")
+        
+        else:
+            # New Broker Logic
+            broker_id = str(uuid.uuid4())
+            new_broker = {
+                "broker_id": broker_id,
+                "broker_type": "zerodha",
+                "display_name": temp_data['display_name'],
+                "enabled": True,
+                "is_default": False,
+                "trading_mode": "NORMAL",
+                "created_at": datetime.now(UTC),
+                "api_key": temp_data['api_key'],
+                "api_secret": temp_data['api_secret'],
+                "access_token": token_response['access_token'],
+                "public_token": token_response.get('public_token'),
+                "user_id": token_response.get('user_id'),
+                "token_generated_at": datetime.now(UTC),
+                "token_status": "valid",
+                "last_run_at": None
+            }
+            
+            # If this is the first broker, make it default
+            if db['broker_accounts'].count_documents({}) == 0:
+                new_broker['is_default'] = True
+                
+            db['broker_accounts'].insert_one(new_broker)
+            flash(f"Broker '{temp_data['display_name']}' added successfully!", "success")
+        
+        session.pop('temp_broker_data', None)
+        return redirect(url_for('settings'))
+        
+    except Exception as e:
+        flash(f"Failed to complete setup: {str(e)}", "danger")
+        if temp_data.get('mode') == 'update':
+            return redirect(url_for('settings'))
+        return redirect(url_for('add_broker'))
+
+@app.route('/broker/<broker_id>/delete', methods=['POST'])
+@login_required
+def broker_delete(broker_id):
+    """Delete a broker account"""
+    if db is None:
+        return jsonify({'success': False, 'message': 'Database connection failed'}), 500
+    
+    # Check if broker exists
+    broker = db['broker_accounts'].find_one({'broker_id': broker_id})
+    if not broker:
+        return jsonify({'success': False, 'message': 'Broker not found'}), 404
+    
+    # Optional: Prevent deleting the only broker? 
+    # For now, allow it, but if it was default, we might need to reassess default
+    is_default = broker.get('is_default', False)
+    
+    db['broker_accounts'].delete_one({'broker_id': broker_id})
+    
+    # If we deleted the default broker, make another one default (if exists)
+    if is_default:
+        next_broker = db['broker_accounts'].find_one({})
+        if next_broker:
+            db['broker_accounts'].update_one(
+                {'_id': next_broker['_id']}, 
+                {'$set': {'is_default': True}}
+            )
+            
+    return jsonify({
+        'success': True,
+        'message': f"Broker '{broker.get('display_name')}' deleted successfully"
+    })
+
+@app.route('/broker/reauth/zerodha/<broker_id>')
+@login_required
+def broker_reauth_zerodha(broker_id):
+    """Bridge route to set session for Zerodha re-auth"""
+    broker = db['broker_accounts'].find_one({'broker_id': broker_id})
+    if not broker:
+        flash("Broker not found", "error")
+        return redirect(url_for('token_refresh'))
+        
+    session['temp_broker_data'] = {
+        'mode': 'update',
+        'type': 'zerodha',
+        'broker_id': broker['broker_id'],
+        'display_name': broker['display_name'],
+        'api_key': broker.get('api_key'),
+        'api_secret': broker.get('api_secret')
+    }
+    return redirect(f"https://kite.zerodha.com/connect/login?v=3&api_key={broker.get('api_key')}")
+
+@app.route('/broker/reauth/fyers/<broker_id>')
+@login_required
+def broker_reauth_fyers(broker_id):
+    """Bridge route to set session for Fyers re-auth"""
+    broker = db['broker_accounts'].find_one({'broker_id': broker_id})
+    if not broker:
+        flash("Broker not found", "error")
+        return redirect(url_for('token_refresh'))
+        
+    client_id = broker.get('client_id') or broker.get('api_key')
+    secret_id = broker.get('secret_id') or broker.get('api_secret')
+        
+    session['temp_broker_data'] = {
+        'mode': 'update',
+        'type': 'fyers',
+        'broker_id': broker['broker_id'],
+        'display_name': broker['display_name'],
+        'client_id': client_id,
+        'secret_id': secret_id,
+        'redirect_uri': broker.get('redirect_uri', FYERS_REDIRECT_URI),
+        'pin': broker.get('pin')
+    }
+    try:
+        connector = FyersConnector(api_key=client_id, api_secret=secret_id)
+        return redirect(connector.get_login_url(redirect_uri=broker.get('redirect_uri', FYERS_REDIRECT_URI)))
+    except Exception as e:
+        flash(f"Error generating login URL: {e}", "error")
+        return redirect(url_for('token_refresh'))
+
+@app.route('/broker/<broker_id>/refresh', methods=['POST'])
+@login_required
+def broker_refresh(broker_id):
+    """Refresh token for a broker (Manual trigger)"""
+    if db is None:
+        return jsonify({'success': False, 'message': 'Database connection failed'}), 500
+    
+    broker = db['broker_accounts'].find_one({'broker_id': broker_id})
+    if not broker:
+        return jsonify({'success': False, 'message': 'Broker not found'}), 404
+    
+    broker_type = broker.get('broker_type')
+    
+    # helper to start update flow
+    def start_manual_flow(b):
+         if b['broker_type'] == 'fyers':
+             # Setup session for Fyers
+             session['temp_broker_data'] = {
+                'mode': 'update',
+                'broker_id': b['broker_id'],
+                'type': 'fyers',
+                'display_name': b['display_name'],
+                'client_id': b['client_id'], # Keep existing creds
+                'secret_id': b['secret_id'],
+                'pin': b.get('pin'),
+                'redirect_uri': b['redirect_uri']
+             }
+             try:
+                 connector = FyersConnector(api_key=b['client_id'], api_secret=b['secret_id'])
+                 return jsonify({'redirect': connector.get_login_url(redirect_uri=b['redirect_uri'])})
+             except Exception as e:
+                 return jsonify({'success': False, 'message': str(e)}), 500
+                 
+         elif b['broker_type'] == 'zerodha':
+             # Setup session for Zerodha
+             session['temp_broker_data'] = {
+                'mode': 'update',
+                'broker_id': b['broker_id'],
+                'type': 'zerodha',
+                'display_name': b['display_name'],
+                'api_key': b['api_key'],
+                'api_secret': b['api_secret']
+             }
+             # Direct redirect URL for Zerodha
+             return jsonify({'redirect': f"https://kite.zerodha.com/connect/login?v=3&api_key={b['api_key']}"})
+             
+         return jsonify({'success': False, 'message': 'Unknown broker type'}), 400
+
+    # Logic per broker
+    if broker_type == 'fyers':
+        # Try auto-refresh first
+        refresh_token_str = broker.get('refresh_token')
+        if refresh_token_str:
+            try:
+                connector = FyersConnector(api_key=broker['client_id'], api_secret=broker['secret_id'])
+                new_tokens = connector.refresh_token(refresh_token_str)
+                
+                # Update DB
+                db['broker_accounts'].update_one(
+                    {'broker_id': broker_id},
+                    {'$set': {
+                        'access_token': new_tokens['access_token'],
+                        # refresh token might rotate or stay same
+                        'refresh_token': new_tokens.get('refresh_token', refresh_token_str), 
+                        'token_generated_at': datetime.now(UTC),
+                        'token_status': 'valid'
+                    }}
+                )
+                return jsonify({'success': True, 'message': 'Token refreshed successfully!'})
+            except Exception as e:
+                # If refresh fails, fall back to manual
+                return start_manual_flow(broker)
+        else:
+            return start_manual_flow(broker)
+            
+    elif broker_type == 'zerodha':
+        # Zerodha requires manual login daily
+        return start_manual_flow(broker)
+        
+    return jsonify({'success': False, 'message': 'Unsupported broker'}), 400
 
 @app.route('/run-logs/<run_id>')
 @login_required

@@ -716,6 +716,52 @@
         }
     }
 
+    function deleteBroker(brokerId, brokerName) {
+        showDialog(
+            'Delete Broker Account?',
+            'Are you sure you want to delete "' + brokerName + '"? This action cannot be undone.',
+            'Delete Broker',
+            function () {
+                closeDialog();
+                fetch('/broker/' + brokerId + '/delete', { method: 'POST' })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        if (data.success) {
+                            showToast('Deleted', data.message, 'success');
+                            setTimeout(function () { location.reload(); }, 1000);
+                        } else {
+                            showToast('Error', data.message, 'error');
+                        }
+                    })
+                    .catch(function () { showToast('Error', 'Failed to delete broker', 'error'); });
+            },
+            true // Destructive action
+        );
+    }
+
+    function refreshBrokerToken(brokerId) {
+        showToast('Info', 'Initiating refresh...', 'info');
+        fetch('/broker/' + brokerId + '/refresh', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.redirect) {
+                    // Manual flow required, redirect user
+                    window.location.href = data.redirect;
+                } else if (data.success) {
+                    showToast('Success', data.message, 'success');
+                    setTimeout(function () { location.reload(); }, 1000);
+                } else {
+                    showToast('Error', data.message, 'error');
+                }
+            })
+            .catch(function () {
+                showToast('Error', 'Failed to refresh token', 'error');
+            });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         setupCustomSelect('trading_mode_select');
         setupCustomSelect('max_positions_select', handleMaxPositionsChange);

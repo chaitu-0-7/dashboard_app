@@ -51,6 +51,7 @@
         </div>
 
         {% else %}
+        <!-- Disconnected State: Show manual auth section -->
         <div class="flex-center flex-column p-4 mb-4"
             style="background: rgba(239, 68, 68, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(239, 68, 68, 0.2);">
             <i data-feather="x-circle" class="text-danger mb-2" style="width: 32px; height: 32px;"></i>
@@ -64,16 +65,15 @@
             </p>
         </div>
 
-        <div class="text-center">
-            <button id="manual-auth-button" class="btn btn-primary">
-                <i data-feather="key" style="width: 16px; margin-right: 6px;"></i> Start Authorization
-            </button>
+        <div class="alert alert-warning mt-4" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-md); padding: 1rem;">
+            <p class="m-0"><strong>⚠️ Action Required:</strong> Your API authentication has expired. Please complete the authorization steps below to restore the connection.</p>
         </div>
         {% endif %}
     </div>
 </div>
 
-<div id="manual-auth-section" class="card" style="display: none;">
+<!-- Manual Authorization Section - Show based on token status -->
+<div id="manual-auth-section" class="card" {% if token_status not in ['EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED', 'NO_TOKENS_FOUND'] %}style="display: none;"{% endif %}>
     <div class="card-header">
         <h3 class="card-title">Manual Authorization</h3>
     </div>
@@ -103,11 +103,20 @@
     </div>
 </div>
 
+<!-- Status Messages -->
 {% if request.args.get('status') %}
 <div class="fixed-bottom-right p-4" style="position: fixed; bottom: 20px; right: 20px; z-index: 100;">
     {% if request.args.get('status') == 'success' or request.args.get('status') == 'refreshed' %}
     <div class="alert alert-success animate-fade-in shadow-lg">
         <i data-feather="check" style="width: 16px; margin-right: 6px;"></i> Token updated successfully!
+    </div>
+    {% elif request.args.get('status') == 'refresh_failed' %}
+    <div class="alert alert-danger animate-fade-in shadow-lg" style="max-width: 400px;">
+        <i data-feather="alert-circle" style="width: 16px; margin-right: 6px; vertical-align: top;"></i>
+        <div style="display: inline-block; vertical-align: top; margin-left: 6px;">
+            <strong>Refresh Failed</strong><br>
+            <small>{{ request.args.get('message', 'Unknown error') }}</small>
+        </div>
     </div>
     {% else %}
     <div class="alert alert-danger animate-fade-in shadow-lg">
@@ -123,22 +132,19 @@
 {% block scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const manualAuthButton = document.getElementById('manual-auth-button');
         const manualAuthSection = document.getElementById('manual-auth-section');
         const authCodeForm = document.getElementById('auth-code-form');
         const initialTokenStatus = "{{ token_status }}";
+        const refreshStatus = "{{ request.args.get('status', '') }}";
 
-        if (manualAuthButton) {
-            manualAuthButton.addEventListener('click', function () {
-                manualAuthSection.style.display = 'block';
-                manualAuthSection.scrollIntoView({ behavior: 'smooth' });
-            });
+        // Auto-scroll to manual auth section if it's visible and there was a refresh failure
+        if (manualAuthSection && manualAuthSection.style.display !== 'none' && refreshStatus === 'refresh_failed') {
+            setTimeout(function() {
+                manualAuthSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
         }
 
-        if (initialTokenStatus === 'EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED' || initialTokenStatus === 'NO_TOKENS_FOUND') {
-            manualAuthSection.style.display = 'block';
-        }
-
+        // Validate auth code form
         if (authCodeForm) {
             authCodeForm.addEventListener('submit', function (event) {
                 const input = authCodeForm.querySelector('input[name="code"]');
@@ -173,6 +179,21 @@
 
     .shadow-lg {
         box-shadow: var(--shadow-lg);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-in-out;
     }
 </style>
 {% endblock %}

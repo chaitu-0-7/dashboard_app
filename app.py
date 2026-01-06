@@ -135,9 +135,23 @@ def is_access_token_valid(token_data):
 def is_refresh_token_valid(generated_at):
     if generated_at is None:
         return False
-    return datetime.now(UTC) < generated_at + timedelta(seconds=REFRESH_TOKEN_VALIDITY)
+    validity_expiry = generated_at + timedelta(seconds=REFRESH_TOKEN_VALIDITY)
+    is_valid = datetime.now(UTC) < validity_expiry
+    
+    if not is_valid:
+        age_seconds = (datetime.now(UTC) - generated_at).total_seconds()
+        age_days = age_seconds / (24 * 60 * 60)
+        max_days = REFRESH_TOKEN_VALIDITY / (24 * 60 * 60)
+        print(f"[WARNING] Refresh token expired. Age: {age_days:.1f} days, Max: {max_days:.1f} days")
+    
+    return is_valid
 
 def refresh_access_token_custom(refresh_token, client_id, secret_id, pin):
+    # Validate inputs
+    if not refresh_token or not client_id or not secret_id or not pin:
+        print(f"[ERROR] Missing required credentials: refresh_token={bool(refresh_token)}, client_id={bool(client_id)}, secret_id={bool(secret_id)}, pin={bool(pin)}")
+        return None
+    
     app_id_hash = hashlib.sha256(f"{client_id}:{secret_id}".encode()).hexdigest()
     headers = {"Content-Type": "application/json"}
     payload = {
@@ -146,17 +160,37 @@ def refresh_access_token_custom(refresh_token, client_id, secret_id, pin):
         "refresh_token": refresh_token,
         "pin": pin
     }
-    resp = requests.post(REFRESH_TOKEN_URL, json=payload, headers=headers)
-    if resp.status_code == 200:
-        data = resp.json()
-        if data.get("code") == 200 and "access_token" in data:
-            token_data = {
-                "access_token": data["access_token"],
-                "refresh_token": data.get("refresh_token", refresh_token),
-                "generated_at": datetime.now(UTC)
-            }
-            save_tokens(token_data)
-            return token_data
+    
+    print("[INFO] Sending refresh token request to Fyers API...")
+    print(f"[DEBUG] URL: {REFRESH_TOKEN_URL}")
+    print(f"[DEBUG] Payload keys: {list(payload.keys())}")
+    
+    try:
+        resp = requests.post(REFRESH_TOKEN_URL, json=payload, headers=headers)
+        print(f"[INFO] Response status code: {resp.status_code}")
+        
+        if resp.status_code == 200:
+            data = resp.json()
+            print(f"[DEBUG] Response data: {data}")
+            
+            if data.get("code") == 200 and "access_token" in data:
+                token_data = {
+                    "access_token": data["access_token"],
+                    "refresh_token": data.get("refresh_token", refresh_token),
+                    "generated_at": datetime.now(UTC)
+                }
+                save_tokens(token_data)
+                print("[SUCCESS] Access token refreshed successfully.")
+                return token_data
+            else:
+                print(f"[ERROR] Unexpected response JSON during refresh: {data}")
+        else:
+            print(f"[ERROR] Failed refresh request. HTTP {resp.status_code}: {resp.text}")
+    except Exception as e:
+        print(f"[ERROR] Exception during token refresh: {type(e).__name__}: {str(e)}")
+        import traceback
+        traceback.print_exc()
+    
     return None
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -698,6 +732,9 @@ def token_refresh():
     token_status = "UNKNOWN"
     auth_url = fyers_session.generate_authcode() # Always generate auth_url
     tokens = load_tokens()
+    
+    # Check if there's a refresh failure status from redirect
+    refresh_failed = request.args.get('status') == 'refresh_failed'
 
     if tokens:
         generated_at = tokens.get("generated_at")
@@ -713,9 +750,15 @@ def token_refresh():
             if is_refresh_token_valid(generated_at):
                 token_status = "EXPIRED_ACCESS_TOKEN_REFRESHABLE"
             else:
+                # Refresh token has expired - manual auth required
                 token_status = "EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED"
     else:
         token_status = "NO_TOKENS_FOUND"
+    
+    # If refresh just failed, it's definitely because refresh token is invalid/expired
+    # Override to show manual auth section
+    if refresh_failed:
+        token_status = "EXPIRED_REFRESH_TOKEN_MANUAL_REQUIRED"
     
     generated_at_timestamp = int(generated_at.timestamp()) if isinstance(generated_at, datetime) else 0
 
@@ -741,14 +784,54 @@ def token_callback():
 @login_required
 def refresh_token_action():
     tokens = load_tokens()
-    if tokens and is_refresh_token_valid(tokens.get("generated_at")):
-        refreshed_tokens = refresh_access_token_custom(tokens["refresh_token"], CLIENT_ID, SECRET_ID, PIN)
-        if refreshed_tokens:
-            return redirect(url_for('token_refresh', status='refreshed'))
+    
+    if not tokens:
+        print("[ERROR] No tokens found in database")
+        return redirect(url_for('token_refresh', status='refresh_failed', message='No tokens found. Please authorize first.'))
+    
+    generated_at = tokens.get("generated_at")
+    # Ensure generated_at is a timezone-aware datetime object
+    if isinstance(generated_at, (int, float)):
+        generated_at = datetime.fromtimestamp(generated_at, tz=UTC)
+    elif isinstance(generated_at, datetime) and generated_at.tzinfo is None:
+        generated_at = UTC.localize(generated_at)
+    
+    if not is_refresh_token_valid(generated_at):
+        print("[ERROR] Refresh token has expired")
+        # Calculate age for better error message
+        if isinstance(generated_at, datetime):
+            age_seconds = (datetime.now(UTC) - generated_at).total_seconds()
+            age_days = age_seconds / (24 * 60 * 60)
+            max_days = REFRESH_TOKEN_VALIDITY / (24 * 60 * 60)
+            message = f'Refresh token expired ({age_days:.1f} of {max_days:.0f} days old). Please re-authorize.'
         else:
-            return redirect(url_for('token_refresh', status='refresh_failed', message='Failed to refresh token.'))
+            message = 'Refresh token expired. Please re-authorize.'
+        return redirect(url_for('token_refresh', status='refresh_failed', message=message))
+    
+    if "refresh_token" not in tokens:
+        print("[ERROR] Refresh token not found in token data")
+        return redirect(url_for('token_refresh', status='refresh_failed', message='Refresh token not found in database.'))
+    
+    print("[INFO] Attempting to refresh access token...")
+    refreshed_tokens = refresh_access_token_custom(tokens["refresh_token"], CLIENT_ID, SECRET_ID, PIN)
+    
+    if refreshed_tokens:
+        print("[SUCCESS] Token refresh successful")
+        return redirect(url_for('token_refresh', status='refreshed'))
     else:
-        return redirect(url_for('token_refresh', status='refresh_failed', message='Refresh token invalid or not found.'))
+        print("[ERROR] refresh_access_token_custom returned None")
+        # Check if this might be due to token age near expiry
+        if isinstance(generated_at, datetime):
+            age_seconds = (datetime.now(UTC) - generated_at).total_seconds()
+            age_days = age_seconds / (24 * 60 * 60)
+            max_days = REFRESH_TOKEN_VALIDITY / (24 * 60 * 60)
+            if age_days > (max_days * 0.9):  # Within 10% of expiry
+                message = f'Refresh token near expiry ({age_days:.1f} of {max_days:.0f} days old). Please re-authorize.'
+            else:
+                message = 'Failed to refresh token. Check logs or re-authorize.'
+        else:
+            message = 'Failed to refresh token. Check logs for details.'
+        return redirect(url_for('token_refresh', status='refresh_failed', message=message))
 
 def run_executor(run_type="scheduled"):
     run_id = str(uuid.uuid4())

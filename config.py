@@ -1,8 +1,9 @@
-# config.py - Non-sensitive application configurations
+import os
 
 # MongoDB Configuration
 MONGO_DB_NAME = 'nifty_shop'
-MONGO_ENV = 'prod' # or 'prod'
+MONGO_ENV = os.getenv('ENV', 'prod') # Defaults to 'prod' if not set
+print(f"DEBUG: Config loaded. ENV={os.getenv('ENV')}, MONGO_ENV={MONGO_ENV}")
 
 # Application Logging & UI
 APP_LOGS_PER_PAGE_HOME = 10

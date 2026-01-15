@@ -5,8 +5,9 @@ import os
 from pymongo import MongoClient
 from datetime import datetime
 import uuid
-from config import MONGO_DB_NAME, MONGO_ENV
 from dotenv import load_dotenv
+load_dotenv()
+from config import MONGO_DB_NAME, MONGO_ENV
 import pytz
 
 # Import Connector
@@ -156,6 +157,11 @@ def main():
                 text=True
             )
             
+            if result.stdout:
+                print(f"[SUBPROCESS OUTPUT] {result.stdout}")
+            if result.stderr:
+                print(f"[SUBPROCESS ERROR] {result.stderr}")
+                
             print(f"✅ Strategy completed for {display_name}")
             
             # Update last_run_at

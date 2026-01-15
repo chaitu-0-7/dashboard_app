@@ -4,6 +4,19 @@
 {% block page_title %}Trading Overview{% endblock %}
 {% block page_subtitle %}Detailed analysis of your trading performance{% endblock %}
 
+{% block header_actions %}
+{% if brokers and brokers|length > 1 %}
+<select id="brokerSelector" class="shadcn-select" onchange="window.location.href='?broker=' + this.value">
+    <option value="all" {% if selected_broker_id=='all' %}selected{% endif %}>All Brokers</option>
+    {% for b in brokers %}
+    <option value="{{ b.broker_id }}" {% if selected_broker_id==b.broker_id %}selected{% endif %}>
+        {{ b.display_name or b.broker_type|capitalize }}
+    </option>
+    {% endfor %}
+</select>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <!-- KPI Metrics -->
 <div class="metrics-grid">
@@ -112,6 +125,7 @@
                     <th>Qty</th>
                     <th>Avg Price</th>
                     <th>LTP</th>
+                    <th>Broker</th>
                     <th>P&L (₹)</th>
                     <th>P&L (%)</th>
                 </tr>
@@ -123,6 +137,16 @@
                     <td>{{ position.quantity }}</td>
                     <td>₹{{ '%.2f' | format(position.avg_price) }}</td>
                     <td>₹{{ '%.2f' | format(position.current_price) }}</td>
+                    <td>
+                        {% if position.broker_id %}
+                        <span class="badge badge-secondary" style="font-size: 0.75rem;">{{
+                            position.broker_id.split('_')[0] }}</span>
+                        {% elif position.broker %}
+                        <span class="badge badge-secondary" style="font-size: 0.75rem;">{{ position.broker }}</span>
+                        {% else %}
+                        <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
                     <td class="{% if position.pnl > 0 %}text-success{% elif position.pnl < 0 %}text-danger{% endif %}"
                         style="font-weight: 600;">
                         ₹{{ '%.2f' | format(position.pnl) }}
@@ -158,8 +182,10 @@
                     <th>Action</th>
                     <th>Qty</th>
                     <th>Price</th>
+                    <th>Broker</th>
                     <th>P&L (₹)</th>
                     <th>P&L (%)</th>
+                    <th>Actions</th> <!-- New Column -->
                 </tr>
             </thead>
             <tbody>
@@ -175,6 +201,14 @@
                     </td>
                     <td>{{ trade.quantity }}</td>
                     <td>₹{{ '%.2f' | format(trade.price) }}</td>
+                    <td>
+                        {% if trade.broker_id %}
+                        <span class="badge badge-secondary" style="font-size: 0.75rem;">{{ trade.broker_id.split('_')[0]
+                            }}</span>
+                        {% else %}
+                        <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
                     <td class="{% if trade.profit > 0 %}text-success{% elif trade.profit < 0 %}text-danger{% endif %}"
                         style="font-weight: 600;">
                         ₹{{ '%.2f' | format(trade.profit) }}
@@ -184,6 +218,15 @@
                             class="badge {% if trade.profit_pct > 0 %}badge-success{% elif trade.profit_pct < 0 %}badge-danger{% endif %}">
                             {{ '%.2f' | format(trade.profit_pct) }}%
                         </span>
+                    </td>
+                    <!-- New Actions Cell -->
+                    <td>
+                        {% if trade.order_id == 'MANUAL' %}
+                        <button class="btn btn-outline btn-sm" title="Edit Manual Trade"
+                            onclick="openEditModal('{{ trade._id|string }}', '{{ trade.symbol }}', '{{ trade.quantity }}', '{{ trade.price }}', '{{ trade.date.strftime('%Y-%m-%dT%H:%M') }}')">
+                            <i data-feather="edit-2" style="width: 14px;"></i>
+                        </button>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -215,12 +258,26 @@
             </thead>
             <tbody>
                 {% for trade in manually_closed_trades %}
-                <tr id="trade-row-{{ trade._id }}">
+                <tr id="trade-row-{{ trade._id }}"
+                    class="{% if trade.status == 'PENDING_MANUAL_PRICE' %}row-action-needed{% endif %}">
                     <td class="text-muted">{{ trade.date.strftime('%Y-%m-%d %H:%M') }}</td>
                     <td style="font-weight: 500;">{{ trade.symbol }}</td>
                     <td>{{ trade.quantity }}</td>
-                    <td>₹{{ trade.price }}</td>
-                    <td class="text-muted">{{ trade.comment }}</td>
+                    <td>
+                        {% if trade.price == 0 %}
+                        <span class="text-warning"><i data-feather="alert-circle"
+                                style="width:12px; vertical-align:middle;"></i> Update Price</span>
+                        {% else %}
+                        ₹{{ trade.price }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if trade.status == 'PENDING_MANUAL_PRICE' %}
+                        <span class="badge badge-warning">Action Needed</span>
+                        {% else %}
+                        <span class="text-muted">{{ trade.comment }}</span>
+                        {% endif %}
+                    </td>
                     <td>
                         <div class="flex-center gap-2" style="justify-content: flex-start;">
                             <button class="btn btn-outline btn-sm"
@@ -241,60 +298,63 @@
 {% endif %}
 
 <!-- Modals -->
-<div id="editModal" class="modal-overlay"
-    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center;">
-    <div class="card" style="width: 100%; max-width: 400px; margin: 2rem;">
-        <div class="card-header">
-            <h3 class="card-title">Edit Trade</h3>
-            <button onclick="closeEditModal()"
-                style="background: none; border: none; color: var(--text-muted); cursor: pointer;"><i
-                    data-feather="x"></i></button>
+<div id="editModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content card">
+        <div class="modal-header">
+            <h3 class="modal-title">Update Trade Details</h3>
+            <button onclick="closeEditModal()" class="btn-close"><i data-feather="x"></i></button>
         </div>
-        <div style="padding: 1rem 0;">
-            <p class="mb-4">Symbol: <strong id="edit-symbol" class="text-main"></strong></p>
-            <p class="mb-4">Quantity: <strong id="edit-quantity" class="text-main"></strong></p>
 
-            <div class="mb-4">
-                <label
-                    style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.875rem;">Close
-                    Price</label>
-                <input type="number" step="0.01" id="edit-price"
-                    style="width: 100%; padding: 0.5rem; background: var(--bg-app); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius-sm);">
+        <div class="modal-body">
+            <div class="trade-info-grid">
+                <div class="info-item">
+                    <span class="label">Symbol</span>
+                    <strong id="edit-symbol" class="value text-main"></strong>
+                </div>
+                <div class="info-item">
+                    <span class="label">Quantity</span>
+                    <strong id="edit-quantity" class="value text-main"></strong>
+                </div>
             </div>
 
-            <div class="mb-4">
-                <label
-                    style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.875rem;">Close
-                    Date</label>
-                <input type="datetime-local" id="edit-date"
-                    style="width: 100%; padding: 0.5rem; background: var(--bg-app); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius-sm);">
+            <div class="form-group">
+                <label for="edit-price">Close Price (₹)</label>
+                <input type="number" step="0.05" id="edit-price" placeholder="Enter exit price" class="form-input">
+                <small class="text-muted" style="display: block; margin-top: 0.25rem;">
+                    <i data-feather="info" style="width: 12px; vertical-align: middle;"></i>
+                    Set to <b>0</b> to revert to "Action Needed".
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-date">Close Date & Time</label>
+                <input type="datetime-local" id="edit-date" class="form-input">
             </div>
 
             <input type="hidden" id="edit-trade-id">
         </div>
-        <div class="flex-between">
+
+        <div class="modal-footer flex-between">
             <button class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
-            <button class="btn btn-primary" onclick="saveTrade()">Save Changes</button>
+            <button class="btn btn-primary" onclick="saveTrade()">Update Trade</button>
         </div>
     </div>
 </div>
 
-<div id="deleteModal" class="modal-overlay"
-    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center;">
-    <div class="card" style="width: 100%; max-width: 400px; margin: 2rem;">
-        <div class="card-header">
-            <h3 class="card-title">Delete Trade</h3>
-            <button onclick="closeDeleteModal()"
-                style="background: none; border: none; color: var(--text-muted); cursor: pointer;"><i
-                    data-feather="x"></i></button>
+<div id="deleteModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content card">
+        <div class="modal-header">
+            <h3 class="modal-title text-danger">Delete Trade</h3>
+            <button onclick="closeDeleteModal()" class="btn-close"><i data-feather="x"></i></button>
         </div>
-        <div style="padding: 1.5rem 0;">
-            <p class="text-muted">Are you sure you want to delete this trade? This action cannot be undone.</p>
+        <div class="modal-body">
+            <p class="text-muted">Are you sure you want to delete this manual trade record? This action cannot be
+                undone.</p>
             <input type="hidden" id="delete-trade-id">
         </div>
-        <div class="flex-between">
+        <div class="modal-footer flex-between">
             <button class="btn btn-outline" onclick="closeDeleteModal()">Cancel</button>
-            <button class="btn btn-danger" onclick="confirmDelete()">Delete Trade</button>
+            <button class="btn btn-danger" onclick="confirmDelete()">Delete Permanently</button>
         </div>
     </div>
 </div>

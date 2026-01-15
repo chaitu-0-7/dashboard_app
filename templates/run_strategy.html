@@ -10,11 +10,21 @@
     <p class="text-muted mb-4">Trigger the trading strategy manually. This will execute the analysis and place orders
         immediately.</p>
 
-    <form action="/execute-strategy" method="post" id="strategy-form">
-        <button class="btn btn-primary" type="submit" style="padding: 0.75rem 2rem; font-size: 1.1rem;">
+    <div class="strategy-controls" style="max-width: 600px; margin: 0 auto;">
+        <div class="form-group mb-3">
+            <select id="broker-select" class="form-control" style="max-width: 300px; margin: 0 auto; padding: 0.5rem;">
+                <option value="">Run for All Brokers</option>
+                {% for broker in brokers %}
+                <option value="{{ broker.broker_id }}">{{ broker.display_name }} ({{ broker.broker_type|upper }}) - {{
+                    broker.trading_mode }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button id="run-btn" class="btn btn-primary" onclick="triggerStrategy()"
+            style="padding: 0.75rem 2rem; font-size: 1.1rem;">
             <i data-feather="play" style="width: 18px; margin-right: 8px;"></i> Run Strategy Now
         </button>
-    </form>
+    </div>
 
     {% if request.args.get('status') == 'success' %}
     <div class="alert alert-success mt-4 animate-fade-in" style="display: inline-block;">
@@ -57,8 +67,8 @@
                 <div class="text-right">
                     <div class="text-sm text-muted">P&L</div>
                     <div style="font-weight: 600;"
-                        class="{% if run.total_pnl > 0 %}text-success{% elif run.total_pnl < 0 %}text-danger{% endif %}">
-                        ₹{{ '%.2f' | format(run.total_pnl) }}
+                        class="{% if run.total_pnl|default(0) > 0 %}text-success{% elif run.total_pnl|default(0) < 0 %}text-danger{% endif %}">
+                        ₹{{ '%.2f' | format(run.total_pnl|default(0)) }}
                     </div>
                 </div>
                 <i data-feather="chevron-down" class="text-muted transition-transform"></i>
@@ -114,10 +124,108 @@
 
 {% block scripts %}
 <script>
-    // Show loading modal when strategy form is submitted
-    document.getElementById('strategy-form').addEventListener('submit', function () {
-        document.getElementById('loading-modal').classList.add('show');
-    });
+    async function triggerStrategy() {
+        const btn = document.getElementById('run-btn');
+        const brokerSelect = document.getElementById('broker-select');
+        const originalText = btn.innerHTML;
+
+        // --- 1. SET LOADING STATE ---
+        btn.disabled = true;
+        brokerSelect.disabled = true;
+        btn.innerHTML = '<i data-feather="loader" class="spin"></i> Executing Strategy...';
+        feather.replace();
+
+        try {
+            // --- 2. START EXECUTION ---
+            const startResponse = await fetch('/trigger-strategy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ broker_id: brokerSelect.value || null })
+            });
+
+            const startData = await startResponse.json();
+
+            if (!startResponse.ok) {
+                showToast('Error', startData.message || 'Failed to start.', 'error');
+                resetButton(btn, originalText);
+                brokerSelect.disabled = false;
+                return;
+            }
+
+            const runId = startData.run_id;
+            // showToast('Started', 'Execution running in background...', 'info');
+
+            // --- 3. POLL STATUS ---
+            const pollInterval = setInterval(async () => {
+                try {
+                    const statusRes = await fetch(`/api/run-status/${runId}`);
+                    const statusData = await statusRes.json();
+
+                    if (statusData.status === 'completed' || statusData.status === 'failed') {
+                        clearInterval(pollInterval);
+
+                        // --- 4. FINISHED ---
+                        if (statusData.status === 'completed') {
+                            showToast('Completed', 'Strategy finished successfully.', 'success');
+                        } else {
+                            showToast('Failed', 'Strategy execution failed.', 'error');
+                        }
+
+                        // Reload page to show new run
+                        setTimeout(() => window.location.reload(), 2000);
+                    }
+                } catch (err) {
+                    console.error("Polling error:", err);
+                }
+            }, 2000); // Poll every 2s
+
+        } catch (error) {
+            showToast('Error', 'Network error occurred.', 'error');
+            console.error(error);
+            resetButton(btn, originalText);
+            brokerSelect.disabled = false;
+        }
+    }
+
+    function resetButton(btn, originalText) {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        feather.replace();
+    }
+
+    function showToast(title, message, type = 'info') {
+        // Simple toast implementation if not existing
+        // Assuming there isn't one, we create a temporary alert div at top right
+        const toast = document.createElement('div');
+        toast.className = `toast-notification ${type}`;
+        toast.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-left: 4px solid ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            min-width: 300px;
+            animation: slideIn 0.3s ease-out;
+        `;
+        toast.innerHTML = `
+            <div style="font-weight: bold; margin-bottom: 4px;">${title}</div>
+            <div style="font-size: 0.9rem; color: var(--text-muted);">${message}</div>
+        `;
+        document.body.appendChild(toast);
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-10px)';
+            toast.style.transition = 'all 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
         const runEntries = document.querySelectorAll('.run-entry');
@@ -151,7 +259,10 @@
                                     <td style="width: 100px;">
                                         <span class="badge ${badgeClass}">${log.level}</span>
                                     </td>
-                                    <td style="font-family: monospace; font-size: 0.85rem; color: var(--text-main);">${log.message}</td>
+                                    <td style="font-family: monospace; font-size: 0.85rem; color: var(--text-main);">
+                                        ${log.broker_id ? `<span class="badge badge-secondary" style="margin-right: 6px; font-size: 0.75rem;">${log.broker_id.split('_')[0]}</span>` : ''}
+                                        ${log.message}
+                                    </td>
                                 `;
                             });
                         } else {
@@ -274,6 +385,24 @@
 
     .text-sm {
         font-size: 0.875rem;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .badge-secondary {
+        background-color: var(--bg-hover);
+        color: var(--text-muted);
+        border: 1px solid var(--border);
     }
 </style>
 {% endblock %}

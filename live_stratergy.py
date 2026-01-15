@@ -12,9 +12,14 @@ IST = pytz.timezone('Asia/Kolkata')
 
 from typing import Dict, List, Optional
 import os
+import sys
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
+
+# Load environment variables BEFORE importing config
+load_dotenv()
+
 from config import MONGO_DB_NAME, MONGO_ENV, MAX_TRADE_VALUE, MA_PERIOD
 
 # Import Generic Connector
@@ -37,20 +42,32 @@ class DatabaseHandler:
 
 # --- Mongo Log Handler ---
 class MongoLogHandler(logging.Handler):
-    def __init__(self, db_handler: DatabaseHandler, run_id: str = None):
+    def __init__(self, db_handler: DatabaseHandler, run_id: str = None, broker_id: str = None):
         super().__init__()
         self.logs_collection = db_handler.get_logs_collection()
         self.run_id = run_id
+        self.broker_id = broker_id
 
     def emit(self, record):
-        log_entry = {
-            'timestamp': datetime.now(UTC),
-            'level': record.levelname,
-            'message': self.format(record)
-        }
-        if self.run_id:
-            log_entry['run_id'] = self.run_id
-        self.logs_collection.insert_one(log_entry)
+        try:
+            print(f"DEBUG: Handler writing to DB: {self.logs_collection.database.name}, Coll: {self.logs_collection.name}", file=sys.stderr)
+            
+            log_entry = {
+                'timestamp': datetime.now(UTC),
+                'level': record.levelname,
+                'message': self.format(record)
+            }
+            if self.run_id:
+                log_entry['run_id'] = self.run_id
+            if self.broker_id:
+                log_entry['broker_id'] = self.broker_id
+            
+            # Debug print
+            # print(f"DEBUG: Inserting log: {log_entry['message'][:50]}...", file=sys.stderr)
+            
+            self.logs_collection.insert_one(log_entry)
+        except Exception as e:
+            print(f"❌ MongoLogHandler Error: {e}", file=sys.stderr)
 
 # --- Rate Limit Handler (No Change) ---
 class RateLimitHandler:
@@ -99,11 +116,13 @@ class RateLimitHandler:
 class SimpleNiftyTrader:
     """Simplified NIFTY 50 mean reversion trader"""
     
-    def __init__(self, broker: BrokerConnector, data_source: DataSource, db_handler: DatabaseHandler, settings: Dict):
+    def __init__(self, broker: BrokerConnector, data_source: DataSource, db_handler: DatabaseHandler, settings: Dict, run_id: str = None, broker_id: str = None):
         self.broker = broker
         self.data_source = data_source
         self.db_handler = db_handler
         self.settings = settings
+        self.run_id = run_id
+        self.broker_id = broker_id # Store broker_id
         
         self.rate_limiter = RateLimitHandler()
         
@@ -146,6 +165,9 @@ class SimpleNiftyTrader:
             "NSE:TRENT-EQ"
         ]
     
+        # Session Metrics
+        self.session_trades_count = 0
+    
     def load_trades(self) -> List:
         """Load only FILLED trades from database"""
         try:
@@ -160,6 +182,13 @@ class SimpleNiftyTrader:
         try:
             trades_collection = self.db_handler.get_trades_collection()
             trade_data['created_at'] = datetime.now(UTC)
+            
+            # Inject Context
+            if self.broker_id:
+                trade_data['broker_id'] = self.broker_id
+            if self.run_id:
+                trade_data['run_id'] = self.run_id
+                
             if 'filled' not in trade_data:
                 trade_data['filled'] = False  # Default to not filled
             if 'status' not in trade_data:
@@ -463,6 +492,7 @@ class SimpleNiftyTrader:
                         {'$set': {'comment': comment}}
                     )
                     self.trades = self.load_trades()
+                    self.session_trades_count += 1
                     logging.info(f"✅ BUY executed and filled for {quantity} {symbol} at ₹{current_price:.2f}")
                     return True
                 else:
@@ -506,6 +536,7 @@ class SimpleNiftyTrader:
                         {'$set': {'comment': comment}}
                     )
                     self.trades = self.load_trades()
+                    self.session_trades_count += 1
                     logging.info(f"💰 SOLD and filled: {quantity} {symbol} at ₹{current_price:.2f}, Profit: ₹{profit:.2f}")
                     return True
                 else:
@@ -578,6 +609,7 @@ class SimpleNiftyTrader:
                         'symbol': symbol,
                         'action': 'SELL',
                         'price': 0, # To be updated by user
+                        'avg_price': avg_buy_price, # CRITICAL: Save this for profit calculation
                         'quantity': remaining_qty,
                         'date': datetime.now(UTC), # To be updated by user
                         'order_id': 'MANUAL',
@@ -744,11 +776,43 @@ class SimpleNiftyTrader:
                     self.try_averaging_down(current_positions)
             
             self.print_current_status(current_positions)
+        
+            # --- Finalize Run Stats ---
+            self.finalize_run_stats(current_positions)
             
         except Exception as e:
             logging.error(f"❌ Error in strategy execution: {e}")
         
         logging.info("✅ Daily strategy completed")
+
+    def finalize_run_stats(self, current_positions: Dict):
+        """Calculate aggregate stats and update the strategy run document."""
+        if not self.run_id:
+            logging.warning("No run_id provided, skipping finalization of run stats.")
+            return
+
+        try:
+            # Calculate Total Holdings P&L Snapshot
+            total_pnl = sum((pos['current_price'] - pos['avg_price']) * pos['quantity'] for pos in current_positions.values())
+            
+            update_data = {
+                'total_pnl': total_pnl,
+                'executed_trades_count': self.session_trades_count,
+                'end_time': datetime.now(UTC),
+                'status': 'COMPLETED'
+            }
+            
+            strategy_runs_col = self.db_handler.db[f"strategy_runs_{self.db_handler.env}"]
+            
+            # Update the document identified by run_id (String UUID)
+            strategy_runs_col.update_one(
+                {'run_id': self.run_id},
+                {'$set': update_data}
+            )
+            logging.info(f"📊 Updated strategy run {self.run_id} with stats: P&L={total_pnl:.2f}, Trades={self.session_trades_count}")
+            
+        except Exception as e:
+            logging.error(f"Failed to update run stats for run_id {self.run_id}: {e}", exc_info=True)
 
     def print_current_status(self, positions: Dict):
         """Print current portfolio status"""
@@ -849,37 +913,59 @@ def main():
     print(f"   Broker ID: {broker_config.get('broker_id')}")
     print(f"   Trading Mode: {broker_config.get('trading_mode', 'NORMAL')}")
     
-    # --- Fetch Settings from DB ---
-    user_settings_collection = db['user_settings']
-    settings = user_settings_collection.find_one({'_id': 'global_settings'})
+    # --- Fetch Settings from Broker Config ---
+    # STRICT MODE: All settings must come from DB. No fallbacks to config.py defaults.
     
-    if not settings:
-        logging.warning("No user settings found. Using defaults.")
-        settings = {
-            'ma_period': MA_PERIOD,
-            'trade_amount': MAX_TRADE_VALUE,
-            'max_positions': 10,
-            'entry_threshold': -2.0,
-            'target_profit': 5.0,
-            'averaging_threshold': -3.0,
-            'trading_mode': 'NORMAL'
-        }
-    
-    # Override trading_mode with broker-specific mode
-    settings['trading_mode'] = broker_config.get('trading_mode', settings.get('trading_mode', 'NORMAL'))
-
     # --- Setup Database and Logging ---
-    ENV = 'dev'  # Forced dev mode for testing
-    db_handler = DatabaseHandler(MONGO_URI, MONGO_DB_NAME, ENV)
+    db_handler = DatabaseHandler(MONGO_URI, MONGO_DB_NAME, MONGO_ENV)
     
+    # Ensure broker_id is set from config if not passed in args
+    if not broker_id and broker_config:
+        broker_id = broker_config.get('broker_id')
+        
+    # FORCE Re-configure logging to ensure Mongo handler is attached
+    # Get the root logger and remove existing handlers to avoid duplication if re-run (though main exits)
+    root_logger = logging.getLogger()
+    if root_logger.hasHandlers():
+        root_logger.handlers.clear()
+
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(message)s',
         handlers=[
             logging.StreamHandler(),
-            MongoLogHandler(db_handler, run_id)
+            MongoLogHandler(db_handler, run_id, broker_id)
         ]
     )
+
+    required_settings = [
+        'ma_period', 'trade_amount', 'max_positions', 
+        'entry_threshold', 'target_profit', 'averaging_threshold'
+    ]
+    
+    # Check for missing settings
+    missing_settings = [k for k in required_settings if k not in broker_config]
+    
+    if missing_settings:
+        logging.error(f"❌ CRITICAL: Missing strategy configuration for broker '{broker_config.get('display_name')}'.")
+        logging.error(f"   Missing fields: {missing_settings}")
+        logging.error("   Please configure this broker in the Settings page immediately.")
+        return
+
+    settings = {
+        'ma_period': int(broker_config['ma_period']),
+        'trade_amount': float(broker_config['trade_amount']),
+        'max_positions': int(broker_config['max_positions']),
+        'entry_threshold': float(broker_config['entry_threshold']),
+        'target_profit': float(broker_config['target_profit']),
+        'averaging_threshold': float(broker_config['averaging_threshold']),
+        'trading_mode': broker_config.get('trading_mode', 'NORMAL')
+    }
+    
+    logging.info(f"⚙️  Strategy Settings (Loaded from DB): {settings}")
+
+    # --- Setup Database and Logging ---
+
 
     # --- Initialize Connector based on broker type ---
     broker_type = broker_config.get('broker_type')
@@ -932,7 +1018,9 @@ def main():
         broker=broker_connector,
         data_source=data_source,
         db_handler=db_handler,
-        settings=settings
+        settings=settings,
+        run_id=run_id,
+        broker_id=broker_id
     )
     
     trader.run_daily_strategy()

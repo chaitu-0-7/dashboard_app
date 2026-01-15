@@ -4,6 +4,19 @@
 {% block page_title %}Dashboard{% endblock %}
 {% block page_subtitle %}Real-time overview of your trading performance{% endblock %}
 
+{% block header_actions %}
+{% if brokers and brokers|length > 1 %}
+<select id="brokerSelector" class="shadcn-select" onchange="window.location.href='?broker=' + this.value">
+    <option value="all" {% if selected_broker_id=='all' %}selected{% endif %}>All Brokers</option>
+    {% for b in brokers %}
+    <option value="{{ b.broker_id }}" {% if selected_broker_id==b.broker_id %}selected{% endif %}>
+        {{ b.display_name or b.broker_type|capitalize }}
+    </option>
+    {% endfor %}
+</select>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <!-- Metrics Grid -->
 <div class="metrics-grid">
@@ -143,6 +156,7 @@
                     <tr>
                         <th>Action</th>
                         <th>Symbol</th>
+                        <th>Broker</th>
                         <th>Qty</th>
                         <th>Price</th>
                         <th>Status</th>
@@ -158,7 +172,16 @@
                                 {{ trade.action }}
                             </span>
                         </td>
+                        </td>
                         <td style="font-weight: 500;">{{ trade.symbol }}</td>
+                        <td>
+                            {% if trade.broker_id %}
+                            <span class="badge badge-secondary" style="font-size: 0.75rem;">{{
+                                trade.broker_id.split('_')[0] }}</span>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
                         <td>{{ trade.quantity }}</td>
                         <td>₹{{ '%.2f' | format(trade.price) }}</td>
                         <td>
@@ -200,6 +223,7 @@
                     <thead>
                         <tr>
                             <th>Time</th>
+                            <th>Broker</th>
                             <th>Level</th>
                             <th>Message</th>
                         </tr>
@@ -209,6 +233,14 @@
                         <tr>
                             <td style="white-space: nowrap; color: var(--text-muted);">{{
                                 log.timestamp.strftime('%H:%M:%S') }}</td>
+                            <td>
+                                {% if log.broker_id %}
+                                <span class="badge badge-secondary" style="font-size: 0.75rem;">{{
+                                    log.broker_id.split('_')[0] }}</span>
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
                             <td>
                                 <span
                                     class="badge {% if log.level == 'INFO' %}badge-info{% elif log.level == 'WARNING' %}badge-warning{% elif log.level == 'ERROR' %}badge-danger{% endif %}">

@@ -176,6 +176,40 @@
             <div class="xl:col-span-2 order-1 xl:order-1">
                 <form method="POST" action="{{ url_for('settings') }}" id="settingsForm"
                     class="bg-slate-800 rounded-xl border border-slate-700 shadow-xl p-6 md:p-8">
+
+                    {% if current_broker %}
+                    <input type="hidden" name="broker_id" value="{{ current_broker.broker_id }}">
+
+                    <!-- Broker Selector -->
+                    <div class="mb-8 p-4 bg-slate-900/50 rounded-lg border border-slate-700">
+                        <label class="block text-sm font-medium text-slate-400 mb-2">Configure Broker</label>
+                        <div class="relative">
+                            <select onchange="window.location.href='?broker_id='+this.value"
+                                class="w-full bg-slate-800 border border-slate-600 text-white text-lg font-semibold rounded-lg px-4 py-3 appearance-none cursor-pointer hover:border-blue-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors">
+                                {% for b in broker_accounts %}
+                                <option value="{{ b.broker_id }}" {% if b.broker_id==current_broker.broker_id
+                                    %}selected{% endif %}>
+                                    {{ b.display_name }} ({{ b.broker_type|title }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div
+                                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div
+                        class="mb-8 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-yellow-500 text-sm">
+                        No brokers found. Please <a href="{{ url_for('add_broker') }}" class="underline font-bold">add a
+                            broker</a> first.
+                    </div>
+                    {% endif %}
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                         <div class="space-y-8">
                             <div>

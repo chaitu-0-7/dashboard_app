@@ -20,7 +20,11 @@
     <div class="card mb-4">
         <div class="card-header flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <h3 class="card-title mb-0">{{ broker.name }} ({{ broker.type|title }})</h3>
+                <h3 class="card-title mb-0 flex items-center gap-2">
+                    {{ broker.name }}
+                    <span class="text-sm font-normal text-slate-400">({{ broker.type|title }})</span>
+                </h3>
+
                 {% if broker.type == 'fyers' %}
                 <span class="badge badge-primary text-xs">Fyers</span>
                 {% elif broker.type == 'zerodha' %}
@@ -28,13 +32,25 @@
                 {% endif %}
             </div>
 
-            {% if broker.status == 'VALID' %}
-            <span class="badge badge-success">Connected</span>
-            {% elif 'REFRESHABLE' in broker.status %}
-            <span class="badge badge-warning">Refresh Required</span>
-            {% else %}
-            <span class="badge badge-danger">Disconnected</span>
-            {% endif %}
+
+
+            <div class="flex items-center gap-3">
+                {% if is_dev %}
+                <button onclick="invalidateToken('{{ broker.broker_id }}')"
+                    class="btn btn-sm btn-ghost text-red-500 hover:bg-red-500/10 hover:text-red-400 p-2"
+                    title="[DEV] Invalidate Token">
+                    <i data-feather="trash-2" style="width: 16px;"></i>
+                </button>
+                {% endif %}
+
+                {% if broker.status == 'VALID' %}
+                <span class="badge badge-success">Connected</span>
+                {% elif 'REFRESHABLE' in broker.status %}
+                <span class="badge badge-warning">Refresh Required</span>
+                {% else %}
+                <span class="badge badge-danger">Disconnected</span>
+                {% endif %}
+            </div>
         </div>
 
         <div class="p-4">
@@ -79,27 +95,106 @@
             <!-- Actions -->
             <div class="mt-4 flex flex-wrap justify-center items-center gap-3">
                 {% if broker.type == 'fyers' %}
-                <button onclick="refreshBrokerToken('{{ broker.broker_id }}')" class="btn btn-outline">
-                    <i data-feather="refresh-cw" style="width: 16px; margin-right: 6px;"></i> Try Auto-Refresh
-                </button>
-                <a href="{{ broker.auth_url }}" class="btn btn-primary">
-                    <i data-feather="key" style="width: 16px; margin-right: 6px;"></i> Login with Fyers
-                </a>
-                {% elif broker.type == 'zerodha' %}
+                <!-- Fyers Actions -->
+                <div class="w-100 flex flex-col gap-4">
+                    {% if 'REFRESHABLE' in broker.status or broker.status == 'VALID' %}
+                    <div class="flex justify-center">
+                        <button onclick="refreshBrokerToken('{{ broker.broker_id }}')" class="btn btn-outline">
+                            <i data-feather="refresh-cw" style="width: 16px; margin-right: 6px;"></i>
+                            {% if broker.status == 'VALID' %}Force Refresh{% else %}Auto-Refresh Token{% endif %}
+                        </button>
+                    </div>
+                    {% endif %}
+
+                    <div class="text-center mt-3">
+                        <button onclick="toggleManualAuth('{{ broker.broker_id }}')"
+                            class="btn btn-sm btn-outline text-muted hover:text-white">
+                            <i data-feather="key" style="width: 14px; margin-right: 6px;"></i>
+                            {% if broker.status == 'VALID' %}Re-Authenticate Manually{% else %}Start Manual
+                            Authorization{% endif %}
+                        </button>
+                    </div>
+
+                    <!-- Manual Auth Section (Hidden by default) -->
+                    <div id="manual-auth-section-{{ broker.broker_id }}" class="mt-4 hidden animate-fade-in">
+                        <div class="p-4 border border-slate-700 rounded-lg bg-slate-900/50">
+                            <h4
+                                class="text-white font-medium mb-4 flex items-center gap-2 border-b border-slate-700 pb-2">
+                                <i data-feather="key" class="text-blue-400" style="width: 16px;"></i>
+                                Manual Authorization
+                            </h4>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Step 1 -->
+                                <div class="relative pl-6 border-l-2 border-slate-700">
+                                    <div
+                                        class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-800 border-2 border-blue-500">
+                                    </div>
+                                    <h5 class="text-sm font-semibold text-blue-400 mb-2 uppercase tracking-wide">Step 1:
+                                        Get Auth Code</h5>
+                                    <p class="text-xs text-slate-400 mb-3">
+                                        Click below to open the Fyers login page. Login successfully, and you will be
+                                        redirected to a page that may fail to load.
+                                        <br><span class="text-slate-500 italic">Look at the URL bar of that failed
+                                            page.</span>
+                                    </p>
+                                    <a href="{{ broker.auth_url }}" target="_blank"
+                                        class="btn btn-sm btn-outline w-full justify-center group hover:border-blue-500">
+                                        <i data-feather="external-link" style="width: 14px; margin-right: 6px;"
+                                            class="group-hover:text-blue-400"></i>
+                                        Open Fyers Login
+                                    </a>
+                                </div>
+
+                                <!-- Step 2 -->
+                                <div class="relative pl-6 border-l-2 border-slate-700">
+                                    <div
+                                        class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-800 border-2 border-purple-500">
+                                    </div>
+                                    <h5 class="text-sm font-semibold text-purple-400 mb-2 uppercase tracking-wide">Step
+                                        2: Submit Code</h5>
+                                    <p class="text-xs text-slate-400 mb-3">
+                                        Copy the code from the URL parameter (e.g., <code>?auth_code=...</code>) and
+                                        paste it below.
+                                    </p>
+                                    <div class="flex flex-col gap-2">
+                                        <input type="text" id="auth_code_{{ broker.broker_id }}"
+                                            placeholder="Paste Code Here..." class="form-control-dark"
+                                            style="background-color: #1e293b; border: 1px solid #334155; color: white; border-radius: 0.5rem; padding: 10px 12px; width: 100%; outline: none;">
+                                        <button onclick="submitManualAuth('{{ broker.broker_id }}')"
+                                            class="btn btn-sm btn-primary justify-center">
+                                            Authorize
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+            {% elif broker.type == 'zerodha' %}
+            <!-- Zerodha Actions -->
+            <div class="flex justify-center">
                 {% if broker.status == 'VALID' %}
                 <a href="{{ broker.auth_url }}" class="btn btn-outline">
-                    <i data-feather="refresh-cw" style="width: 16px; margin-right: 6px;"></i> Re-authenticate Zerodha
+                    <i data-feather="refresh-cw" style="width: 16px; margin-right: 6px;"></i> Re-authenticate
+                    Zerodha
                 </a>
                 {% else %}
                 <a href="{{ broker.auth_url }}" class="btn btn-primary">
                     <i data-feather="key" style="width: 16px; margin-right: 6px;"></i> Login with Zerodha
                 </a>
                 {% endif %}
-                {% endif %}
             </div>
+            {% endif %}
         </div>
     </div>
-    {% endfor %}
+</div>
+{% endfor %}
 </div>
 
 {% if request.args.get('status') %}
@@ -157,6 +252,76 @@
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             });
+    }
+
+    function submitManualAuth(brokerId) {
+        const input = document.getElementById('auth_code_' + brokerId);
+        const code = input.value.trim();
+        if (!code) {
+            alert('Please enter the auth code.');
+            return;
+        }
+
+        const btn = event.currentTarget;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="animate-spin" data-feather="loader" style="width: 16px; margin-right: 6px;"></i> Verifying...';
+        feather.replace();
+        btn.disabled = true;
+
+        fetch('/broker/' + brokerId + '/manual-auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ auth_code: code })
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    btn.className = 'btn btn-success text-sm px-3 py-2';
+                    btn.innerHTML = '<i data-feather="check" style="width: 16px; margin-right: 6px;"></i> Success';
+                    feather.replace();
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    alert('Auth Failed: ' + data.message);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            })
+            .catch(e => {
+                alert('Error submitting code');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+    }
+
+    function invalidateToken(brokerId) {
+        if (!confirm('Are you sure you want to invalidate this token? (DEV ONLY)')) return;
+
+        const btn = event.currentTarget;
+        btn.innerHTML = 'Invalidating...';
+        btn.disabled = true;
+
+        fetch('/broker/' + brokerId + '/invalidate', { method: 'POST' })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                    btn.disabled = false;
+                    btn.innerHTML = 'Retry Invalidate';
+                }
+            });
+    }
+
+    function toggleManualAuth(brokerId) {
+        const section = document.getElementById('manual-auth-section-' + brokerId);
+        if (section.classList.contains('hidden')) {
+            section.classList.remove('hidden');
+            // Optional: Scroll into view
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            section.classList.add('hidden');
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -220,6 +385,12 @@
             opacity: 1;
             transform: translateY(0);
         }
+    }
+
+    .form-control-dark:focus {
+        border-color: #8b5cf6 !important;
+        /* Purple-500 */
+        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
     }
 </style>
 {% endblock %}

@@ -62,6 +62,18 @@
                     <i data-feather="settings" class="nav-icon"></i>
                     Settings
                 </a>
+
+                {% if g.user and g.user.role == 'admin' %}
+                <div style="height: 1px; background: var(--border); margin: 0.5rem 1rem;"></div>
+                <h6
+                    style="padding: 0 1rem; margin-bottom: 0.5rem; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">
+                    Admin</h6>
+                <a href="{{ url_for('admin_dashboard') }}"
+                    class="nav-item {% if active_page == 'admin_dashboard' %}active{% endif %}">
+                    <i data-feather="shield" class="nav-icon"></i>
+                    Admin Panel
+                </a>
+                {% endif %}
             </nav>
 
             <div class="sidebar-footer">
@@ -92,18 +104,35 @@
                 </div>
             </header>
 
-            <!-- Flash Messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-            <div class="flash-messages mb-4">
+            <!-- Toasts Container -->
+            <div class="toast-container">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
                 {% for category, message in messages %}
-                <div class="alert alert-{{ category }} animate-fade-in">
-                    {{ message }}
+                <div class="toast toast-{{ category }}">
+                    <div class="mt-1">
+                        {% if category == 'success' %}
+                        <i data-feather="check-circle" class="text-success w-5 h-5"></i>
+                        {% elif category == 'error' or category == 'destructive' %}
+                        <i data-feather="alert-circle" class="text-danger w-5 h-5"></i>
+                        {% elif category == 'warning' %}
+                        <i data-feather="alert-triangle" class="text-warning w-5 h-5"></i>
+                        {% else %}
+                        <i data-feather="info" class="text-primary w-5 h-5"></i>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <div class="font-medium text-sm text-main mb-0.5">Notification</div>
+                        <p class="text-sm text-muted m-0">{{ message }}</p>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="ml-auto text-muted hover:text-main">
+                        <i data-feather="x" class="w-4 h-4"></i>
+                    </button>
                 </div>
                 {% endfor %}
+                {% endif %}
+                {% endwith %}
             </div>
-            {% endif %}
-            {% endwith %}
 
             <div class="content-wrapper animate-fade-in">
                 {% block content %}{% endblock %}

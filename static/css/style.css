@@ -1182,6 +1182,7 @@ input[type=number] {
 .native-select-hidden {
     display: none;
 }
+
 /* Custom Dialog (Shadcn-like) */
 .custom-dialog-overlay {
     position: fixed;
@@ -1208,10 +1209,12 @@ input[type=number] {
 .custom-dialog {
     background-color: var(--bg-panel);
     border: 1px solid var(--border-light);
-    border-radius: 0.75rem; /* radius-lg */
+    border-radius: 0.75rem;
+    /* radius-lg */
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     width: 100%;
-    max-width: 32rem; /* max-w-lg */
+    max-width: 32rem;
+    /* max-w-lg */
     padding: 1.5rem;
     transform: scale(0.95);
     transition: all 0.2s ease-in-out;
@@ -1254,13 +1257,15 @@ input[type=number] {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    pointer-events: none; /* Allow clicks through container */
+    pointer-events: none;
+    /* Allow clicks through container */
 }
 
 .custom-toast {
     background-color: var(--bg-panel);
     border: 1px solid var(--border-light);
-    border-radius: 0.5rem; /* radius-md */
+    border-radius: 0.5rem;
+    /* radius-md */
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     padding: 1rem;
     display: flex;
@@ -1370,6 +1375,7 @@ input[type=number] {
     border-color: #e4e4e7;
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
 }
+
 /* Manual Trade Highlight */
 .row-action-needed {
     background-color: rgba(245, 158, 11, 0.1) !important;
@@ -1511,4 +1517,368 @@ input[type=number] {
     border-top: 1px solid #27272a;
     background: #18181b;
     border-radius: 0 0 8px 8px;
+}
+
+/* Modals / Dialogs (Shadcn Style) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease-out;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 500px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.95) translateY(10px);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.modal-header {
+    margin-bottom: 1rem;
+}
+
+.modal-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin: 0 0 0.25rem 0;
+}
+
+.modal-description {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    pointer-events: none;
+}
+
+.toast {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    min-width: 300px;
+    pointer-events: auto;
+    animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.toast-success {
+    border-left: 4px solid var(--success);
+}
+
+.toast-error,
+.toast-destructive {
+    border-left: 4px solid var(--danger);
+}
+
+.toast-warning {
+    border-left: 4px solid var(--warning);
+}
+
+
+/* Utility Keyframes needed for Admin UI */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Missing Utility Classes */
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    height: auto;
+}
+
+.text-xs {
+    font-size: 0.75rem;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.font-medium {
+    font-weight: 500;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.tracking-wide {
+    letter-spacing: 0.025em;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.h-full {
+    height: 100%;
+}
+
+.w-8 {
+    width: 2rem;
+}
+
+.h-8 {
+    height: 2rem;
+}
+
+.rounded-full {
+    border-radius: 9999px;
+}
+
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.gap-1 {
+    gap: 0.25rem;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
+.gap-3 {
+    gap: 0.75rem;
+}
+
+.bg-muted\/20 {
+    background-color: rgba(148, 163, 184, 0.2);
+}
+
+.hover\:bg-muted\/20:hover {
+    background-color: rgba(148, 163, 184, 0.2);
+}
+
+.border-b {
+    border-bottom: 1px solid var(--border);
+}
+
+/* Avatar Gradients */
+.bg-gradient-to-br {
+    background: linear-gradient(to bottom right, var(--primary-glow), rgba(59, 130, 246, 0.1));
+}
+
+/* Status Colors */
+.text-emerald-500 {
+    color: #10b981;
+}
+
+.bg-emerald-500\/10 {
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+.border-emerald-500\/20 {
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.text-amber-500 {
+    color: #f59e0b;
+}
+
+.bg-amber-500\/10 {
+    background-color: rgba(245, 158, 11, 0.1);
+}
+
+.border-amber-500\/20 {
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.group:hover .group-hover\:text-primary {
+    color: var(--primary);
+}
+
+.inline-flex {
+    display: inline-flex;
+}
+
+.rounded-md {
+    border-radius: var(--radius-md);
+}
+
+.transition-colors {
+    transition: color 0.15s ease-in-out;
+}
+
+/* Ghost Buttons (Shadcn Style) */
+.btn-ghost {
+    background-color: transparent;
+    color: var(--text-main);
+}
+
+.btn-ghost:hover {
+    background-color: var(--bg-hover);
+}
+
+.btn-ghost-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.btn-ghost-success:hover {
+    background-color: rgba(16, 185, 129, 0.2);
+}
+
+.btn-ghost-destructive {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+
+/* Badges (Shadcn Style) */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.badge-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.badge-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+.badge-danger {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+/* Dot Indicator */
+.badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.badge-dot.success {
+    background-color: #10b981;
+}
+
+.badge-dot.warning {
+    background-color: #f59e0b;
+}
+
+.badge-dot.danger {
+    background-color: #ef4444;
+}
+
+.badge-dot.pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
 }

@@ -170,3 +170,28 @@ The `.gitignore` file is configured to exclude the following types of files and 
 - Database files (`*.sqlite3`, `*.db`)
 - Project-specific text files (`files.txt`, `ideas.txt`, `PRD.md`)
 - OS-specific files (`.DS_Store`, `Thumbs.db`)
+
+## UI/UX Design Standards
+
+All UI components and interactions should adhere to the following premium design principles, inspired by **shadcn/ui** and **animate-ui.com**:
+
+### Design Philosophy
+- **Modern & Minimalist**: Use clean lines, generous whitespace, and a consistent color palette (Zinc/Slate scales).
+- **Component-Based**: styling should mimic shadcn/ui components (Cards, Dialogs, Tables, Badges). 
+- **Dark Mode First**: The application is optimized for dark mode with subtle borders and glassmorphism where appropriate.
+
+### Guidelines
+1.  **Typography**: Use `Inter` font family. Headings should be bold and tracking-tight.
+2.  **Colors**: Use semantic variables (`--primary`, `--muted`, `--destructive`) instead of hex codes.
+3.  **Borders**: Use subtle borders (`1px solid var(--border)`) for depth instead of heavy shadows.
+4.  **Buttons**: 
+    - Primary: Solid background, contrasting text, slight hover lift.
+    - Destructive: Red background for dangerous actions.
+    - Ghost/Outline: Transparent background, border only on hover.
+
+### Animations
+Animations should be smooth, subtle, and enhance the user experience without being distracting.
+- **Library**: Emulate **animate-ui.com** effects.
+- **Entry**: Elements should `fade-in` and `slide-up` gently upon loading (`duration-500ms`, `ease-out`).
+- **Hover**: Interactive elements should have micro-interactions (scale up 1.02x, brightness increase).
+- **Transitions**: All state changes (hover, focus, active) must have `transition: all 0.2s ease`.

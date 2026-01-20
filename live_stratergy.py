@@ -42,15 +42,16 @@ class DatabaseHandler:
 
 # --- Mongo Log Handler ---
 class MongoLogHandler(logging.Handler):
-    def __init__(self, db_handler: DatabaseHandler, run_id: str = None, broker_id: str = None):
+    def __init__(self, db_handler: DatabaseHandler, run_id: str = None, broker_id: str = None, username: str = None):
         super().__init__()
         self.logs_collection = db_handler.get_logs_collection()
         self.run_id = run_id
         self.broker_id = broker_id
+        self.username = username
 
     def emit(self, record):
         try:
-            print(f"DEBUG: Handler writing to DB: {self.logs_collection.database.name}, Coll: {self.logs_collection.name}", file=sys.stderr)
+#             print(f"DEBUG: Handler writing to DB: {self.logs_collection.database.name}, Coll: {self.logs_collection.name}", file=sys.stderr)
             
             log_entry = {
                 'timestamp': datetime.now(UTC),
@@ -61,9 +62,8 @@ class MongoLogHandler(logging.Handler):
                 log_entry['run_id'] = self.run_id
             if self.broker_id:
                 log_entry['broker_id'] = self.broker_id
-            
-            # Debug print
-            # print(f"DEBUG: Inserting log: {log_entry['message'][:50]}...", file=sys.stderr)
+            if self.username:
+                log_entry['username'] = self.username
             
             self.logs_collection.insert_one(log_entry)
         except Exception as e:
@@ -116,13 +116,15 @@ class RateLimitHandler:
 class SimpleNiftyTrader:
     """Simplified NIFTY 50 mean reversion trader"""
     
-    def __init__(self, broker: BrokerConnector, data_source: DataSource, db_handler: DatabaseHandler, settings: Dict, run_id: str = None, broker_id: str = None):
+    def __init__(self, broker: BrokerConnector, data_source: DataSource, db_handler: DatabaseHandler, settings: Dict, run_id: str = None, broker_id: str = None, username: str = None):
         self.broker = broker
         self.data_source = data_source
         self.db_handler = db_handler
         self.settings = settings
         self.run_id = run_id
         self.broker_id = broker_id # Store broker_id
+        self.username = username # Store username
+
         
         self.rate_limiter = RateLimitHandler()
         
@@ -188,6 +190,8 @@ class SimpleNiftyTrader:
                 trade_data['broker_id'] = self.broker_id
             if self.run_id:
                 trade_data['run_id'] = self.run_id
+            if self.username:
+                trade_data['username'] = self.username
                 
             if 'filled' not in trade_data:
                 trade_data['filled'] = False  # Default to not filled
@@ -303,30 +307,40 @@ class SimpleNiftyTrader:
             return {}, False # Failure
 
     def get_historical_data(self, symbol: str, days: int = 25) -> pd.DataFrame:
-        """Get historical data for MA calculation"""
-        def _fetch_data():
-            # Use data source for historical data
-            return self.data_source.get_historical_data(
-                symbol=symbol,
-                period=f"{days}d",
-                interval="1d"
-            )
-        
+        """Get historical data from Local DB (Data Warehouse) for MA calculation"""
         try:
-            response = self.rate_limiter.retry_with_backoff(_fetch_data)
+            # Buffer for weekends/holidays (fetch extra days to ensure we get 'days' trading days)
+            start_date = datetime.now(UTC) - timedelta(days=days * 2) 
             
-            # FyersConnector returns raw Fyers response dict
-            if response and response.get('s') == 'ok':
-                df = pd.DataFrame(response['candles'],
-                                columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
-                df['date'] = pd.to_datetime(df['timestamp'], unit='s')
-                df = df.sort_values('date').reset_index(drop=True)
-                return df
+            # Query the Data Warehouse
+            candles_collection = self.db_handler.db[f'market_candles_{self.db_handler.env}']
+            
+            cursor = candles_collection.find(
+                {
+                    "symbol": symbol,
+                    "date": {"$gte": start_date}
+                }
+            ).sort("date", 1)
+            
+            candles = list(cursor)
+            
+            if not candles:
+                # Fallback or Log Warning (Data Manager should have run)
+                logging.warning(f"⚠️ No local history found for {symbol}. Is Market Data Manager syncing?")
+                return pd.DataFrame()
+
+            # Convert to DataFrame
+            df = pd.DataFrame(candles)
+            
+            # Ensure columns exist and are correct types
+            df = df[['date', 'open', 'high', 'low', 'close', 'volume']]
+            df = df.sort_values('date').reset_index(drop=True)
+            
+            return df
+
         except Exception as e:
-            logging.error(f"Error getting historical data for {symbol}: {e}")
+            logging.error(f"Error getting historical data from DB for {symbol}: {e}")
             return pd.DataFrame()
-        
-        return pd.DataFrame()
 
     def calculate_moving_average(self, prices: pd.Series) -> float:
         """Calculate moving average"""
@@ -870,10 +884,12 @@ def main():
     parser = argparse.ArgumentParser(description="Run the Nifty Shop trading strategy.")
     parser.add_argument("--run-id", type=str, help="Unique ID for this strategy run.", default=None)
     parser.add_argument("--broker-id", type=str, help="Broker ID to run strategy for", default=None)
+    parser.add_argument("--username", type=str, help="Username of the owner", default="chaitu_shop") 
     args = parser.parse_args()
 
     run_id = args.run_id
     broker_id = args.broker_id
+    username = args.username
 
     # --- Configuration ---
     load_dotenv()
@@ -934,7 +950,7 @@ def main():
         format='%(asctime)s - %(message)s',
         handlers=[
             logging.StreamHandler(),
-            MongoLogHandler(db_handler, run_id, broker_id)
+            MongoLogHandler(db_handler, run_id, broker_id, username=username)
         ]
     )
 
@@ -1020,7 +1036,8 @@ def main():
         db_handler=db_handler,
         settings=settings,
         run_id=run_id,
-        broker_id=broker_id
+        broker_id=broker_id,
+        username=username
     )
     
     trader.run_daily_strategy()

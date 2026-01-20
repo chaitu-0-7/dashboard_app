@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Nifty Shop{% endblock %}
+{% block page_title %}Admin Panel{% endblock %}
+{% block page_subtitle %}Manage users and system status{% endblock %}
+
+{% block content %}
+<div class="row"
+    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Stat Cards -->
+    <div class="card p-4">
+        <div class="text-sm text-muted font-medium mb-1">Total Users</div>
+        <div class="text-2xl font-bold">{{ stats.total_users }}</div>
+    </div>
+    <div class="card p-4">
+        <div class="text-sm text-muted font-medium mb-1">Pending Approval</div>
+        <div class="text-2xl font-bold text-warning">{{ stats.pending_users }}</div>
+    </div>
+    <div class="card p-4">
+        <div class="text-sm text-muted font-medium mb-1">Active Sessions</div>
+        <div class="text-2xl font-bold text-success">{{ stats.active_sessions }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header border-b p-4">
+        <h3 class="font-semibold text-lg">Pending Approvals</h3>
+    </div>
+    <div class="p-0">
+        {% if pending_users %}
+        <div class="table-responsive">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-muted/30 border-b border-border/50 text-xs uppercase tracking-wide">
+                        <th class="p-4 font-semibold text-muted font-sans">User</th>
+                        <th class="p-4 font-semibold text-muted font-sans">Email</th>
+                        <th class="p-4 font-semibold text-muted font-sans">Joined</th>
+                        <th class="p-4 font-semibold text-muted font-sans text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-border/40">
+                    {% for user in pending_users %}
+                    <tr class="group hover:bg-muted/20 transition-all duration-300 animate-fade-in"
+                        style="animation-delay: {{ loop.index * 50 }}ms">
+                        <td class="p-4">
+                            <div class="flex items-center gap-3">
+                                {% if user.picture %}
+                                <img src="{{ user.picture }}" alt="" class="w-8 h-8 rounded-full ring-2 ring-border">
+                                {% else %}
+                                <div
+                                    class="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-xs font-bold">
+                                    {{ user.name[:2] }}</div>
+                                {% endif %}
+                                <span class="font-medium text-sm text-foreground">{{ user.name }}</span>
+                            </div>
+                        </td>
+                        <td class="p-4 text-sm text-muted font-mono text-xs">{{ user.email }}</td>
+                        <td class="p-4 text-sm text-muted font-mono text-xs">{{ user.created_at.strftime('%Y-%m-%d
+                            %H:%M') }}</td>
+                        <td class="p-4 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                <form action="{{ url_for('admin_approve_user', user_id=user['_id'] | string) }}"
+                                    method="POST" class="inline-block">
+                                    <button type="submit" class="btn btn-sm btn-ghost-success">
+                                        Approve
+                                    </button>
+                                </form>
+                                <form action="{{ url_for('admin_reject_user', user_id=user['_id'] | string) }}"
+                                    method="POST" class="inline-block">
+                                    <button type="submit" class="btn btn-sm btn-ghost-destructive"
+                                        onclick="return confirm('Are you sure you want to reject this user?')">
+                                        Reject
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="p-8 text-center text-muted">
+            <i data-feather="check-circle" class="w-12 h-12 mx-auto mb-3 opacity-20"></i>
+            <p>No pending approvals. All caught up!</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-6">
+    <div class="card-header border-b p-4">
+        <div class="flex items-center justify-between">
+            <h3 class="font-semibold text-lg">All Users</h3>
+        </div>
+    </div>
+    <div class="p-0">
+        <div class="table-responsive">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-muted/30 border-b border-border/50 text-xs uppercase tracking-wide">
+                        <th class="p-4 font-semibold text-muted font-sans">User</th>
+                        <th class="p-4 font-semibold text-muted font-sans hidden md:table-cell">Role</th>
+                        <th class="p-4 font-semibold text-muted font-sans">Status</th>
+                        <th class="p-4 font-semibold text-muted font-sans hidden md:table-cell">Joined</th>
+                        <th class="p-4 font-semibold text-muted font-sans text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-border/40">
+                    {% for user in all_users %}
+                    <tr class="group hover:bg-muted/20 transition-all duration-300 animate-fade-in"
+                        style="animation-delay: {{ loop.index * 50 }}ms">
+                        <td class="p-4">
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center text-primary font-bold text-xs ring-1 ring-primary/20">
+                                    {{ user.username[:2].upper() }}
+                                </span>
+                                <div>
+                                    <span
+                                        class="font-medium text-sm text-foreground group-hover:text-primary transition-colors">{{
+                                        user.username }}</span>
+                                    {% if user.email %}
+                                    <div class="text-xs text-muted md:hidden">{{ user.email }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-4 text-sm hidden md:table-cell">
+                            {% if user.role == 'admin' %}
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-primary/10 text-primary border border-primary/20 shadow-sm">
+                                ADMIN
+                            </span>
+                            {% else %}
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-muted/50 text-muted-foreground border border-border">
+                                USER
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="p-4 text-sm">
+                            {% if user.is_active %}
+                            <span class="badge badge-success">
+                                <span class="badge-dot success pulse"></span>
+                                Active
+                            </span>
+                            {% else %}
+                            <span class="badge badge-warning">
+                                <span class="badge-dot warning"></span>
+                                Pending
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="p-4 text-sm text-muted hidden md:table-cell font-mono text-xs">
+                            {{ user.created_at.strftime('%Y-%m-%d') }}
+                        </td>
+                        <td class="p-4 text-right">
+                            {% if user.username != g.user.username %}
+                            <!-- Pass ID and Username to JS -->
+                            <button type="button"
+                                class="btn btn-sm btn-outline text-danger flex items-center justify-center gap-2"
+                                onclick='openRemoveModal("{{ user["_id"] | string }}", "{{ user.username }}")'>
+                                <i data-feather="trash-2" class="w-4 h-4"></i> Remove
+                            </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Confirmation Modal -->
+<div id="removeUserModal" class="modal-overlay">
+    <div class="modal-content animate-fade-in">
+        <div class="modal-header">
+            <h3 class="modal-title">Remove User</h3>
+            <p class="modal-description">Are you sure you want to permanently remove <span id="removeUserName"
+                    class="font-bold text-foreground"></span>?</p>
+        </div>
+        <div class="p-4 bg-muted/20 border border-border rounded-md mb-4">
+            <ul class="list-disc list-inside text-sm text-muted space-y-1">
+                <li>User account will be deleted immediately.</li>
+                <li>All active sessions will be terminated.</li>
+                <li>A notification email will be sent to the user.</li>
+                <li class="text-danger font-bold">This action cannot be undone.</li>
+            </ul>
+        </div>
+        <form id="removeUserForm" method="POST" action="">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn btn-danger">Confirm Removal</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openRemoveModal(userId, username) {
+        const modal = document.getElementById('removeUserModal');
+        const form = document.getElementById('removeUserForm');
+        const nameSpan = document.getElementById('removeUserName');
+
+        // precise url construction
+        form.action = `/admin/users/remove/${userId}`;
+        nameSpan.textContent = username;
+
+        modal.classList.add('show');
+    }
+
+    function closeModal() {
+        document.getElementById('removeUserModal').classList.remove('show');
+    }
+
+    // Close on outside click
+    document.getElementById('removeUserModal').addEventListener('click', function (e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
+{% endblock %}

@@ -11,3 +11,5 @@ numpy
 pytz
 kiteconnect
 yfinance
+Authlib
+requests

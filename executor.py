@@ -84,10 +84,12 @@ def main():
         display_name = broker.get('display_name')
         broker_type = broker.get('broker_type')
         trading_mode = broker.get('trading_mode', 'NORMAL')
+        username = broker.get('username', 'chaitu_shop') # Default for legacy
         
         print(f"\n{'─'*60}")
         print(f"🔗 Broker: {display_name} ({broker_type})")
         print(f"   ID: {broker_id}")
+        print(f"   User: {username}")
         print(f"   Mode: {trading_mode}")
         print(f"{'─'*60}\n")
         
@@ -150,8 +152,10 @@ def main():
             
             # --- Run Strategy for this broker ---
             live_strategy_path = os.path.join(script_dir, "live_stratergy.py")
+            cmd = [sys.executable, live_strategy_path, "--run-id", run_id, "--broker-id", broker_id, "--username", username]
+            
             result = subprocess.run(
-                [sys.executable, live_strategy_path, "--run-id", run_id, "--broker-id", broker_id],
+                cmd,
                 check=True,
                 capture_output=True,
                 text=True

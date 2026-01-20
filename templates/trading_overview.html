@@ -81,6 +81,8 @@
     {% endif %}
 </div>
 
+
+
 <!-- Charts -->
 <div class="charts-grid mb-4">
     <div class="card">
@@ -123,6 +125,7 @@
                 <tr>
                     <th>Symbol</th>
                     <th>Qty</th>
+                    <th>Invested</th>
                     <th>Avg Price</th>
                     <th>LTP</th>
                     <th>Broker</th>
@@ -135,6 +138,7 @@
                 <tr>
                     <td style="font-weight: 500;">{{ position.symbol }}</td>
                     <td>{{ position.quantity }}</td>
+                    <td>₹{{ '%.2f' | format(position.invested_value) }}</td>
                     <td>₹{{ '%.2f' | format(position.avg_price) }}</td>
                     <td>₹{{ '%.2f' | format(position.current_price) }}</td>
                     <td>
@@ -296,6 +300,8 @@
     </div>
 </div>
 {% endif %}
+
+
 
 <!-- Modals -->
 <div id="editModal" class="modal-overlay" style="display: none;">
@@ -538,6 +544,9 @@
             }
         }
     });
+
+
+
     });
 
     function openEditModal(tradeId, symbol, quantity, price, date) {

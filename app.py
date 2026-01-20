@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 from auth import AuthManager, login_required
 from connectors.fyers import FyersConnector
 from connectors.zerodha import ZerodhaConnector
+from authlib.integrations.flask_client import OAuth
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -31,6 +32,23 @@ load_dotenv() # Load environment variables from .env file
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'a_very_secret_key_that_should_be_changed')
 
+# --- Google OAuth Setup ---
+oauth = OAuth(app)
+google = oauth.register(
+    name='google',
+    client_id=os.getenv('GOOGLE_CLIENT_ID'),
+    client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
+    access_token_url='https://oauth2.googleapis.com/token',
+    access_token_params=None,
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+    authorize_params=None,
+    api_base_url='https://www.googleapis.com/oauth2/v1/',
+    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={'scope': 'openid email profile'},
+)
+
+
 auth_manager = None # Will be initialized after db connection
 
 # --- Database Connection ---
@@ -51,25 +69,211 @@ if MONGO_URI:
     # Create initial user if no users exist
     if auth_manager.users_collection.count_documents({}) == 0:
         print("No users found. Creating initial user 'chaitu_shop'.")
-        auth_manager.create_user("chaitu_shop", "Chaitu2@nifty_shop")
+        auth_manager.create_user("chaitu_shop", "Chaitu2@nifty_shop", role="admin")
+    else:
+        # Ensure chaitu_shop is admin (Migration/Safety)
+        auth_manager.users_collection.update_one(
+            {"username": "chaitu_shop"}, 
+            {"$set": {"role": "admin", "is_active": True}}
+        )
+
 else:
     print("Could not find MongoDB URI in .env file")
-    db = None
-    mongo_client_tokens = None
-    fyers_tokens_collection = None
-    zerodha_tokens_collection = None
-    auth_manager = None
+    # ... (Handlers for no DB)
+    sys.exit(1)
 
 @app.before_request
 def load_logged_in_user():
     g.user = None
-    session_token = session.get('session_token')
-    if session_token and auth_manager:
-        session_data = auth_manager.get_session(session_token)
-        if session_data:
-            g.user = auth_manager.get_user(session_data['username'])
+    try:
+        session_token = session.get('session_token')
+        if session_token and auth_manager:
+            # print(f"DEBUG: Checking session {session_token[:8]}...")
+            session_data = auth_manager.get_session(session_token)
+            if session_data:
+                g.user = auth_manager.get_user(session_data['username'])
+                # print(f"DEBUG: Found User: {g.user.get('username')}")
+                if g.user and not g.user.get('is_active', True):
+                     auth_manager.delete_session(session_token)
+                     session.pop('session_token', None)
+                     g.user = None
+                     flash('Your account is pending approval or has been deactivated.', 'warning')
+            else:
+                session.pop('session_token', None)
+    except Exception as e:
+        print(f"❌ Error in load_logged_in_user: {e}")
+        import traceback
+        traceback.print_exc()
+
+# Admin Decorator
+from functools import wraps
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not g.user or g.user.get('role') != 'admin':
+            flash('Access denied. Admin permissions required.', 'error')
+            return redirect(url_for('dashboard'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+# --- Auth Routes ---
+@app.route('/login/google')
+def login_google():
+    redirect_uri = url_for('auth_callback', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+@app.route('/auth/callback')
+def auth_callback():
+    token = google.authorize_access_token()
+    resp = google.get('userinfo')
+    user_info = resp.json()
+    
+    email = user_info['email']
+    google_id = user_info['id']
+    picture = user_info.get('picture')
+    name = user_info.get('name', email)
+    
+    # Create or Get User
+    user = auth_manager.create_google_user(email, google_id, picture, name)
+    
+    if user.get('is_active'):
+        # Login
+        session_token = auth_manager.create_session(user['username'])
+        session['session_token'] = session_token
+        
+        # --- Auto Token Refresh Logic ---
+        from token_manager import TokenManager
+        try:
+            tm = TokenManager(db)
+            broker_doc = db.broker_accounts.find_one({"username": user['username'], "broker_type": "fyers"})
+            if broker_doc:
+                is_valid = tm.check_and_refresh_token(broker_doc)
+                if not is_valid:
+                     flash('Your broker token has expired and could not be auto-refreshed. Please update it.', 'warning')
+                     return redirect(url_for('token_refresh'))
+        except Exception as e:
+            print(f"Auto-refresh failed during login: {e}")
+        # -------------------------------
+
+        flash('Logged in successfully via Google.', 'success')
+        return redirect(url_for('dashboard'))
+    else:
+        # Pending Approval
+        flash('Account created! verification pending by Admin. You will be notified via email.', 'warning')
+        return redirect(url_for('login'))
+
+# --- Global Error Handling ---
+@app.errorhandler(500)
+def internal_error(error):
+    import traceback
+    traceback.print_exc() # Print to console
+    return f"<h2>Internal Server Error Detected</h2><pre>{traceback.format_exc()}</pre>", 500
+
+@app.errorhandler(404)
+def not_found(error):
+    return "<h2>404 Not Found</h2>", 404
+
+# --- Admin Routes ---
+from utils.email import send_approval_email, send_removal_email
+
+@app.route('/admin')
+@admin_required
+def admin_dashboard():
+    # Stats
+    total_users = auth_manager.users_collection.count_documents({})
+    pending_users_count = auth_manager.users_collection.count_documents({"is_active": False})
+    active_sessions = auth_manager.sessions_collection.count_documents({"expires_at": {"$gt": datetime.now(UTC)}})
+    
+    stats = {
+        "total_users": total_users,
+        "pending_users": pending_users_count,
+        "active_sessions": active_sessions
+    }
+    
+    # Pending Users
+    pending_users = list(auth_manager.users_collection.find({"is_active": False}).sort("created_at", -1))
+    
+    # All Users (Limit 50 for now)
+    all_users = list(auth_manager.users_collection.find({}).sort("created_at", -1).limit(50))
+    
+    return render_template('admin/dashboard.html', stats=stats, pending_users=pending_users, all_users=all_users, active_page='admin_dashboard')
+
+@app.route('/admin/users/remove/<user_id>', methods=['POST'])
+@admin_required
+def admin_remove_user(user_id):
+    try:
+        # Get user details first for email
+        user = auth_manager.users_collection.find_one({"_id": ObjectId(user_id)})
+        if user:
+            # Prevent removing self
+            if user['username'] == g.user['username']:
+                flash("You cannot remove yourself.", "error")
+                return redirect(url_for('admin_dashboard'))
+                
+            # Send Email (Try best effort)
+            if user.get('email'):
+                send_removal_email(user['email'], user.get('name', 'User'))
+            
+            # Delete
+            if auth_manager.delete_user(user_id):
+                flash(f"User {user.get('username')} removed successfully.", 'success')
+            else:
+                flash("Failed to delete user.", "error")
         else:
-            session.pop('session_token', None) # Clear invalid session token
+            flash("User not found.", "error")
+            
+    except Exception as e:
+        flash(f"Error removing user: {str(e)}", "error")
+    
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/users/approve/<user_id>', methods=['POST'])
+@admin_required
+def admin_approve_user(user_id):
+    try:
+        user = auth_manager.users_collection.find_one({"_id": ObjectId(user_id)})
+        if user:
+            auth_manager.users_collection.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$set": {"is_active": True}}
+            )
+            # Send Email
+            if user.get('email'):
+                send_approval_email(user['email'], user.get('name', 'User'))
+            
+            flash(f"User {user.get('username')} approved successfully.", 'success')
+        else:
+            flash("User not found.", "error")
+    except Exception as e:
+        flash(f"Error approving user: {str(e)}", "error")
+    
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/users/reject/<user_id>', methods=['POST'])
+@admin_required
+def admin_reject_user(user_id):
+    try:
+        # Delete user
+        auth_manager.users_collection.delete_one({"_id": ObjectId(user_id)})
+        flash("User rejected and removed.", 'success')
+    except Exception as e:
+        flash(f"Error rejecting user: {str(e)}", "error")
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/api/user/tour-complete', methods=['POST'])
+@login_required
+def tour_complete():
+    try:
+        if g.user:
+            auth_manager.users_collection.update_one(
+                {"_id": g.user['_id']},
+                {"$set": {"has_seen_tour": True}}
+            )
+            return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+    return jsonify({"status": "error"}), 400
 
 LOGS_PER_PAGE = APP_LOGS_PER_PAGE_HOME
 
@@ -181,20 +385,43 @@ def login():
         user = auth_manager.get_user(username)
 
         if user is None:
-            error = 'Incorrect username.'
+            flash('Incorrect username.', 'danger')
+            return redirect(url_for('login'))
         elif auth_manager.is_account_locked(user):
-            error = 'Account locked. Please contact administrator.'
-        elif not auth_manager.verify_password(user, password):
-            auth_manager.record_failed_login(username)
-            error = 'Incorrect password.'
-        else:
+            flash('Account locked. Please contact administrator.', 'danger')
+            return redirect(url_for('login'))
+        
+        if user and auth_manager.verify_password(user, password):
+            # Check if locked (this check is redundant if the elif above handles it, but keeping as per instruction)
+            if auth_manager.is_account_locked(user):
+                 flash('Account is locked due to too many failed attempts. Try again later.', 'error')
+                 return redirect(url_for('login'))
+
             auth_manager.reset_failed_logins(username)
             session_token = auth_manager.create_session(username)
             session['session_token'] = session_token
-            flash('Logged in successfully!', 'success')
-            return redirect(url_for('dashboard'))
+            
+            # --- Auto Token Refresh Logic ---
+            from token_manager import TokenManager
+            try:
+                tm = TokenManager(db)
+                broker_doc = db.broker_accounts.find_one({"username": username, "broker_type": "fyers"})
+                if broker_doc:
+                    is_valid = tm.check_and_refresh_token(broker_doc)
+                    if not is_valid:
+                         flash('Your broker token has expired and could not be auto-refreshed. Please update it.', 'warning')
+                         return redirect(url_for('token_refresh'))
+            except Exception as e:
+                print(f"Auto-refresh failed during login: {e}")
+            # -------------------------------
 
-        flash(error, 'danger')
+            flash('Logged in successfully.', 'success')
+            return redirect(url_for('dashboard'))
+        else:
+            # Record failed attempt
+            auth_manager.record_failed_login(username)
+            flash('Invalid username or password.', 'error')
+            return redirect(url_for('login'))
 
     return render_template('login.html')
 
@@ -207,9 +434,9 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
 
-@app.route('/')
-@login_required
-def dashboard():
+# @app.route('/')
+# @login_required
+def _deprecated_dashboard_old():
     if db is None:
         return "Database connection failed. Please check your MongoDB URI in files.txt"
 
@@ -504,7 +731,8 @@ def trading_overview():
     current_positions = []
     
     # Get all enabled brokers for dropdown
-    all_brokers = list(db['broker_accounts'].find({"enabled": True}))
+    user_filter = {"username": g.user['username']}
+    all_brokers = list(db['broker_accounts'].find({**user_filter, "enabled": True}))
     
     selected_broker_id = request.args.get('broker', 'all')
     
@@ -568,12 +796,14 @@ def trading_overview():
                             cost_price = p.get('costPrice', 0)
                             pnl = p.get('pl', 0)
                             pnl_pct = (pnl / (cost_price * p.get('quantity', 1))) * 100 if cost_price > 0 else 0
+                            invested_val = cost_price * p.get('quantity', 0)
             
                             current_positions.append({
                                 'symbol': p.get('symbol'),
                                 'quantity': p.get('quantity'),
                                 'avg_price': cost_price,
                                 'current_price': p.get('ltp'),
+                                'invested_value': invested_val,
                                 'pnl': pnl,
                                 'pnl_pct': pnl_pct,
                                 'broker': b_name
@@ -651,7 +881,8 @@ def trading_overview():
         flash(f"Detected {new_manual_count} manually closed positions. Please update their exit details.", "warning")
 
     # --- Fetch All Trades (User Pattern) ---
-    trade_query = {"filled": True}
+    user_filter = {"username": g.user['username']}
+    trade_query = {**user_filter, "filled": True}
     if selected_broker_id != 'all':
         trade_query['broker_id'] = selected_broker_id
         
@@ -867,7 +1098,7 @@ def api_logs():
     page = request.args.get('page', 1, type=int)
     skip_logs = (page - 1) * logs_per_page
 
-    query = {}
+    query = {"username": g.user['username']}
     search_query = request.args.get('search')
     log_level = request.args.get('level')
     log_date = request.args.get('date')
@@ -902,7 +1133,8 @@ def token_refresh():
     brokers_data = []
     
     # Fetch all enabled/configured brokers
-    db_brokers = list(db['broker_accounts'].find({}))
+    user_filter = {"username": g.user['username']}
+    db_brokers = list(db['broker_accounts'].find(user_filter))
     
     for broker in db_brokers:
         b_type = broker['broker_type']
@@ -984,7 +1216,8 @@ def token_refresh():
 @login_required
 def refresh_token_action():
     # Attempt Fyers Refresh
-    fyers_broker = db['broker_accounts'].find_one({'broker_type': 'fyers'})
+    user_filter = {"username": g.user['username']}
+    fyers_broker = db['broker_accounts'].find_one({**user_filter, 'broker_type': 'fyers'})
     if not fyers_broker:
          return redirect(url_for('token_refresh', status='failed', message='No Fyers broker found'))
          
@@ -1250,7 +1483,8 @@ def run_strategy():
     total_runs = 0
     if db is not None:
         strategy_runs_collection = db[f"strategy_runs_{MONGO_ENV}"]
-        runs = list(strategy_runs_collection.find().sort("run_time", -1).skip(skip_runs).limit(runs_per_page))
+        user_filter = {"username": g.user['username']}
+        runs = list(strategy_runs_collection.find(user_filter).sort("run_time", -1).skip(skip_runs).limit(runs_per_page))
         total_runs = strategy_runs_collection.count_documents({})
 
         for run in runs:
@@ -1264,7 +1498,8 @@ def run_strategy():
     # Fetch brokers for the dropdown
     brokers = []
     if db is not None:
-        brokers = list(db['broker_accounts'].find({'enabled': True}, {'broker_id': 1, 'display_name': 1, 'broker_type': 1, 'trading_mode': 1}))
+        user_filter = {"username": g.user['username']}
+        brokers = list(db['broker_accounts'].find({**user_filter, 'enabled': True}, {'broker_id': 1, 'display_name': 1, 'broker_type': 1, 'trading_mode': 1}))
 
     return render_template('run_strategy.html', active_page='strategy', runs=runs, page=page, has_more_runs=has_more_runs, brokers=brokers)
 
@@ -1306,6 +1541,11 @@ def trigger_strategy():
     data = request.get_json() or {}
     broker_id = data.get('broker_id')
     
+    # Verify Broker Ownership
+    broker = db['broker_accounts'].find_one({'broker_id': broker_id, 'username': g.user['username']})
+    if not broker:
+        return jsonify({'status': 'error', 'message': 'Invalid broker or permission denied.'}), 403
+    
     # Generate run_id here to return to frontend immediately
     run_id = str(uuid.uuid4())
     
@@ -1337,6 +1577,291 @@ def get_run_status(run_id):
         'run_id': run.get('run_id')
     })
 
+@app.route('/')
+@login_required
+def dashboard():
+    try:
+        if db is None:
+            flash("Database connection error.", "error")
+            return render_template('login.html')
+
+        # --- Broker Management & Connector Initialization ---
+        active_connectors = []
+        broker_errors = []
+        
+        # Get all enabled brokers for dropdown (User Filtered)
+        user_filter = {"username": g.user['username']}
+        all_brokers = list(db['broker_accounts'].find({**user_filter, "enabled": True}))
+        
+        # Determine Selected Broker
+        selected_broker_id = request.args.get('broker', 'all')
+        
+        # Filter brokers for processing metrics
+        brokers_to_process = all_brokers
+        if selected_broker_id != 'all':
+            brokers_to_process = [b for b in all_brokers if b['broker_id'] == selected_broker_id]
+            if not brokers_to_process: # invalid ID, fallback
+                selected_broker_id = 'all'
+                brokers_to_process = all_brokers
+
+        holdings_pnl = 0.0
+        open_positions_count = 0
+        raw_positions = []
+        used_capital = 0
+        num_positions = 0
+        
+        # Capital Aggregation
+        total_positions_can_open = 0
+        total_strategy_capital = 0  
+        
+        for broker in brokers_to_process:
+            b_type = broker.get('broker_type')
+            b_name = broker.get('display_name', b_type)
+            connector = None
+            broker_used_capital = 0 
+            
+            try:
+                # Check Token Validity (Basic Check)
+                gen_at = broker.get('token_generated_at')
+                if isinstance(gen_at, (int, float)): gen_at = datetime.fromtimestamp(gen_at, tz=UTC)
+                elif gen_at and gen_at.tzinfo is None: gen_at = UTC.localize(gen_at)
+                
+                is_valid = False
+                if gen_at:
+                    age = (datetime.now(UTC) - gen_at).total_seconds()
+                    if b_type == 'zerodha':
+                         if age < 86400: is_valid = True
+                    elif b_type == 'fyers':
+                         if age < ACCESS_TOKEN_VALIDITY: is_valid = True
+                
+                if not is_valid:
+                    # Silently skip API calls for expired tokens to prevent slow load/errors
+                    pass
+                else:
+                    # Initialize Connector
+                    if b_type == 'fyers':
+                         client_id = broker.get('client_id') or broker.get('api_key')
+                         secret_id = broker.get('secret_id') or broker.get('api_secret')
+                         connector = FyersConnector(
+                             api_key=client_id, 
+                             api_secret=secret_id, 
+                             access_token=broker.get('access_token'),
+                             pin=broker.get('pin')
+                         )
+                    elif b_type == 'zerodha':
+                         connector = ZerodhaConnector(
+                             api_key=broker.get('api_key'),
+                             api_secret=broker.get('api_secret'),
+                             access_token=broker.get('access_token')
+                         )
+                
+                if connector:
+                    active_connectors.append(connector)
+                    # Fetch Holdings
+                    try:
+                        b_holdings = connector.get_holdings()
+                        for p in b_holdings:
+                            qty = p.get('quantity', 0)
+                            if qty != 0:
+                                holdings_pnl += p.get('pl', 0)
+                                open_positions_count += 1
+                                cost = p.get('costPrice', 0)
+                                pos_value = cost * abs(qty)
+                                used_capital += pos_value
+                                broker_used_capital += pos_value
+                                num_positions += 1
+                                p['broker'] = b_name
+                                raw_positions.append(p)
+                    except Exception as e:
+                        print(f"Error fetching holdings for {b_name}: {e}")
+
+            except Exception as e:
+                 print(f"Error initializing {b_name}: {e}")
+            
+            # Calculate per-broker metrics
+            b_capital = broker.get('capital', 0)
+            b_trade_amt = broker.get('trade_amount', 0)
+            
+            total_strategy_capital += b_capital
+            b_avail = max(0, b_capital - broker_used_capital)
+            if b_trade_amt > 0:
+                total_positions_can_open += int(b_avail / b_trade_amt)
+
+        if broker_errors:
+            flash(" | ".join(broker_errors), "warning")
+
+        # Fetch today's executed trades
+        today = datetime.now(IST).date()
+        start_of_today = IST.localize(datetime(today.year, today.month, today.day, 0, 0, 0)).astimezone(UTC)
+        end_of_today = IST.localize(datetime(today.year, today.month, today.day, 23, 59, 59)).astimezone(UTC)
+        
+        today_query = {**user_filter, "date": {"$gte": start_of_today, "$lte": end_of_today}, "filled": True}
+        if selected_broker_id != 'all':
+            today_query['broker_id'] = selected_broker_id
+            
+        today_trades = list(db[f"trades_{MONGO_ENV}"].find(today_query))
+        recent_trades_count = len(today_trades)
+
+        # --- Daily activity logic ---
+        page = request.args.get('page', 1, type=int)
+        skip_days = (page - 1) * APP_LOGS_PER_PAGE_HOME
+        
+        # Date Query Filters
+        date_filter_logs = {**user_filter, "timestamp": {"$ne": None}}
+        date_filter_trades = {**user_filter, "date": {"$ne": None}}
+        
+        if selected_broker_id != 'all':
+            date_filter_logs['broker_id'] = selected_broker_id
+            date_filter_trades['broker_id'] = selected_broker_id
+
+        distinct_log_dates = db[f"logs_{MONGO_ENV}"].distinct("timestamp", date_filter_logs)
+        distinct_trade_dates = db[f"trades_{MONGO_ENV}"].distinct("date", date_filter_trades)
+
+        distinct_log_dates_ist = [d.astimezone(IST) for d in distinct_log_dates]
+        distinct_trade_dates_ist = [d.astimezone(IST) for d in distinct_trade_dates]
+
+        all_distinct_dates = sorted(list(set([d.date() for d in distinct_log_dates_ist] + [d.date() for d in distinct_trade_dates_ist])), reverse=True)
+
+        total_days = len(all_distinct_dates)
+        has_more_days = total_days > (skip_days + APP_LOGS_PER_PAGE_HOME)
+
+        current_page_dates = all_distinct_dates[skip_days : skip_days + APP_LOGS_PER_PAGE_HOME]
+
+        daily_data = {}
+
+        for date_obj in current_page_dates:
+            start_of_day_ist = IST.localize(datetime(date_obj.year, date_obj.month, date_obj.day, 0, 0, 0))
+            end_of_day_ist = IST.localize(datetime(date_obj.year, date_obj.month, date_obj.day, 23, 59, 59))
+            start_of_day_utc = start_of_day_ist.astimezone(UTC)
+            end_of_day_utc = end_of_day_ist.astimezone(UTC)
+
+            logs_query = {**user_filter, "timestamp": {"$gte": start_of_day_utc, "$lte": end_of_day_utc}}
+            if selected_broker_id != 'all': logs_query['broker_id'] = selected_broker_id
+            
+            logs_for_day = list(db[f"logs_{MONGO_ENV}"].find(logs_query).sort("timestamp", -1))
+            for log in logs_for_day:
+                log['timestamp'] = log['timestamp'].astimezone(IST)
+
+            trades_query = {**user_filter, "date": {"$gte": start_of_day_utc, "$lte": end_of_day_utc}}
+            if selected_broker_id != 'all': trades_query['broker_id'] = selected_broker_id
+
+            trades_for_day = list(db[f"trades_{MONGO_ENV}"].find(trades_query).sort("date", -1))
+            for trade in trades_for_day:
+                trade['date'] = trade['date'].astimezone(IST)
+
+            executed_trades_daily = []
+            cancelled_trades_daily = []
+
+            for trade in trades_for_day:
+                if 'profit' not in trade: trade['profit'] = 0.0
+                if 'profit_pct' not in trade: trade['profit_pct'] = 0.0
+                
+                if trade.get('filled', False):
+                    executed_trades_daily.append(trade)
+                else:
+                    cancelled_trades_daily.append(trade)
+            
+            daily_data[date_obj.strftime('%Y-%m-%d')] = {
+                'logs': logs_for_day,
+                'executed_trades': executed_trades_daily,
+                'cancelled_trades': cancelled_trades_daily
+            }
+
+        # --- Chart Data ---
+        daily_pnl_data = defaultdict(lambda: {'pnl': 0.0, 'trades': 0})
+        
+        chart_query = {**user_filter, "filled": True, "profit": {"$exists": True}}
+        if selected_broker_id != 'all': chart_query['broker_id'] = selected_broker_id
+        
+        all_filled_trades = list(db[f"trades_{MONGO_ENV}"].find(chart_query))
+        for trade in all_filled_trades:
+            if trade.get('action') == 'SELL':
+                trade_date = trade['date'].astimezone(IST).strftime('%Y-%m-%d')
+                daily_pnl_data[trade_date]['pnl'] += trade.get('profit', 0.0)
+                daily_pnl_data[trade_date]['trades'] += 1
+        
+        sorted_daily_pnl = sorted(daily_pnl_data.items())
+        chart_labels = [item[0] for item in sorted_daily_pnl]
+        chart_values = [item[1]['pnl'] for item in sorted_daily_pnl]
+        chart_trades = [item[1]['trades'] for item in sorted_daily_pnl]
+
+        cumu_query = {**user_filter, "filled": True}
+        if selected_broker_id != 'all': cumu_query['broker_id'] = selected_broker_id
+        
+        all_filled_trades_cumu = list(db[f"trades_{MONGO_ENV}"].find(cumu_query).sort("date", 1))
+        cumulative_pnl_data = []
+        cumulative_pnl = 0
+        for trade in all_filled_trades_cumu:
+            cumulative_pnl += trade.get('profit', 0.0)
+            cumulative_pnl_data.append({
+                'date': trade['date'].astimezone(IST).strftime('%Y-%m-%d'),
+                'pnl': cumulative_pnl
+            })
+
+        available_capital = max(0, total_strategy_capital - used_capital)
+        used_percentage = (used_capital / total_strategy_capital * 100) if total_strategy_capital > 0 else 0
+        available_percentage = (available_capital / total_strategy_capital * 100) if total_strategy_capital > 0 else 0
+        
+        avg_position_size = (used_capital / num_positions) if num_positions > 0 else 0
+        
+        capital_utilization = {
+            'used': used_capital,
+            'available': available_capital,
+            'total': total_strategy_capital,
+            'used_percentage': used_percentage,
+            'available_percentage': available_percentage,
+            'positions_can_open': total_positions_can_open,
+            'avg_position_size': avg_position_size,
+            'current_positions': num_positions
+        }
+
+        return render_template('dashboard.html',
+                               active_page='dashboard',
+                               holdings_pnl=holdings_pnl,
+                               open_positions_count=open_positions_count,
+                               recent_trades_count=recent_trades_count,
+                               daily_data=daily_data,
+                               page=page,
+                               has_more_days=has_more_days,
+                               total_days=total_days,
+                               chart_labels=json.dumps(chart_labels),
+                               chart_values=json.dumps(chart_values),
+                               chart_trades=json.dumps(chart_trades),
+                               capital_utilization=capital_utilization,
+                               cumulative_pnl_data=json.dumps(cumulative_pnl_data),
+                               brokers=all_brokers,
+                               selected_broker_id=selected_broker_id)
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        flash(f"Dashboard Error: {str(e)}", "error")
+        return render_template('dashboard.html', 
+                               active_page='dashboard',
+                               holdings_pnl=0,
+                               open_positions_count=0,
+                               recent_trades_count=0,
+                               daily_data={},
+                               page=1,
+                               has_more_days=False,
+                               total_days=0,
+                               chart_labels=json.dumps([]),
+                               chart_values=json.dumps([]),
+                               chart_trades=json.dumps([]),
+                               capital_utilization={
+                                   'used': 0, 
+                                   'available': 0, 
+                                   'total': 0, 
+                                   'used_percentage': 0, 
+                                   'available_percentage': 0, 
+                                   'positions_can_open': 0, 
+                                   'avg_position_size': 0, 
+                                   'current_positions': 0
+                               },
+                               cumulative_pnl_data=json.dumps([]),
+                               brokers=[],
+                               selected_broker_id='all')
+
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
@@ -1345,7 +1870,8 @@ def settings():
         return redirect(url_for('dashboard'))
 
     # Load broker accounts first to check if any exist
-    broker_accounts = list(db['broker_accounts'].find().sort('created_at', 1))
+    user_filter = {"username": g.user['username']}
+    broker_accounts = list(db['broker_accounts'].find(user_filter).sort('created_at', 1))
 
     if request.method == 'POST':
         try:
@@ -1374,7 +1900,7 @@ def settings():
                 new_settings['trading_mode'] = trading_mode
 
             result = db['broker_accounts'].update_one(
-                {'broker_id': broker_id},
+                {'broker_id': broker_id, 'username': g.user['username']},
                 {'$set': new_settings}
             )
             
@@ -1445,13 +1971,14 @@ def broker_toggle(broker_id):
     if db is None:
         return jsonify({'success': False, 'message': 'Database connection failed'}), 500
     
-    broker = db['broker_accounts'].find_one({'broker_id': broker_id})
+    user_filter = {'broker_id': broker_id, 'username': g.user['username']}
+    broker = db['broker_accounts'].find_one(user_filter)
     if not broker:
         return jsonify({'success': False, 'message': 'Broker not found'}), 404
     
     new_status = not broker.get('enabled', True)
     db['broker_accounts'].update_one(
-        {'broker_id': broker_id},
+        user_filter,
         {'$set': {'enabled': new_status}}
     )
     
@@ -1468,16 +1995,17 @@ def broker_set_default(broker_id):
     if db is None:
         return jsonify({'success': False, 'message': 'Database connection failed'}), 500
     
-    broker = db['broker_accounts'].find_one({'broker_id': broker_id})
+    user_filter = {'broker_id': broker_id, 'username': g.user['username']}
+    broker = db['broker_accounts'].find_one(user_filter)
     if not broker:
         return jsonify({'success': False, 'message': 'Broker not found'}), 404
     
-    # Remove default from all brokers
-    db['broker_accounts'].update_many({}, {'$set': {'is_default': False}})
+    # Remove default from all THIS USER's brokers
+    db['broker_accounts'].update_many({'username': g.user['username']}, {'$set': {'is_default': False}})
     
     # Set this broker as default
     db['broker_accounts'].update_one(
-        {'broker_id': broker_id},
+        user_filter,
         {'$set': {'is_default': True}})
     
     return jsonify({
@@ -1497,7 +2025,7 @@ def broker_update_mode(broker_id):
         return jsonify({'success': False, 'message': 'Invalid trading mode'}), 400
     
     result = db['broker_accounts'].update_one(
-        {'broker_id': broker_id},
+        {'broker_id': broker_id, 'username': g.user['username']},
         {'$set': {'trading_mode': trading_mode}}
     )
     
@@ -1521,7 +2049,7 @@ def broker_update_name(broker_id):
         return jsonify({'success': False, 'message': 'Display name cannot be empty'}), 400
     
     result = db['broker_accounts'].update_one(
-        {'broker_id': broker_id},
+        {'broker_id': broker_id, 'username': g.user['username']},
         {'$set': {'display_name': display_name}}
     )
     

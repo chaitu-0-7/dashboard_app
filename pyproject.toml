@@ -1,0 +1,20 @@
+[project]
+name = "nifty-shop"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "apscheduler>=3.11.2",
+    "authlib>=1.6.6",
+    "flask>=3.1.2",
+    "fyers-apiv3>=3.1.8",
+    "kiteconnect>=5.0.1",
+    "numpy>=2.2.6",
+    "pandas>=2.3.3",
+    "pymongo>=4.16.0",
+    "python-dotenv>=1.2.1",
+    "pytz>=2025.2",
+    "requests>=2.31.0",
+    "waitress>=3.0.2",
+    "werkzeug>=3.1.5",
+    "yfinance>=1.0",
+]

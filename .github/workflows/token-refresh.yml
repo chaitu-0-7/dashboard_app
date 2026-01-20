@@ -1,12 +1,12 @@
-name: Scheduled Python Script
+name: Daily Token Refresh
 
 on:
   schedule:
-    - cron: '40 9 * * 1-5'  # 3:20 PM IST (UTC = IST - 5:30)
-  workflow_dispatch:       # Allow manual triggering too
+    - cron: '30 6 * * *'  # 12:00 PM IST (UTC = IST - 5:30)
+  workflow_dispatch:      # Allow manual triggering
 
 jobs:
-  run-python-script:
+  refresh-tokens:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run script
+      - name: Run Token Maintenance
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
           FYERS_CLIENT_ID: ${{ secrets.FYERS_CLIENT_ID }}
@@ -31,4 +31,5 @@ jobs:
           FLASK_SECRET_KEY: ${{ secrets.FLASK_SECRET_KEY }}
           EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-        run: python global_executor.py
+          # Add other secrets as needed by token_maintenance.py
+        run: python token_maintenance.py

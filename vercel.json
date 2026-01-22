@@ -5,9 +5,4 @@
             "destination": "app.py"
         }
     ],
-    "functions": {
-        "app.py": {
-            "runtime": "python@3.12"
-        }
-    }
 }

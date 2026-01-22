@@ -2,9 +2,7 @@
 name = "nifty-shop"
 version = "0.1.0"
 requires-python = ">=3.10"
-override-dependencies = [
-    "asyncio; python_version >= '3.7'",
-]
+
 dependencies = [
     "apscheduler>=3.11.2",
     "authlib>=1.6.6",

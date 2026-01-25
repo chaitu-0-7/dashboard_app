@@ -235,20 +235,29 @@
             .then(r => r.json())
             .then(data => {
                 if (data.redirect) {
-                    window.location.href = data.redirect;
+                    // Auto-refresh failed, backend suggests manual auth
+                    showToast('Auto-refresh failed. Please authorize manually.', 'warning');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+
+                    // Open Manual Auth Section
+                    const section = document.getElementById('manual-auth-section-' + brokerId);
+                    if (section && section.classList.contains('hidden')) {
+                        toggleManualAuth(brokerId);
+                    }
                 } else if (data.success) {
                     // Show success and reload
                     btn.innerHTML = '<i data-feather="check" style="width: 16px; margin-right: 6px;"></i> Success';
                     feather.replace();
                     setTimeout(() => location.reload(), 1000);
                 } else {
-                    alert('Refresh Failed: ' + data.message);
+                    showToast('Refresh Failed: ' + data.message, 'danger');
                     btn.innerHTML = originalText;
                     btn.disabled = false;
                 }
             })
             .catch(e => {
-                alert('Error refreshing token');
+                showToast('Error refreshing token', 'danger');
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             });
@@ -322,6 +331,28 @@
         } else {
             section.classList.add('hidden');
         }
+    }
+
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `alert alert-${type} animate-fade-in shadow-lg`;
+        toast.style.position = 'fixed';
+        toast.style.bottom = '20px';
+        toast.style.right = '20px';
+        toast.style.zIndex = '100';
+        toast.innerHTML = `
+            <i data-feather="${type === 'success' ? 'check' : type === 'warning' ? 'alert-triangle' : 'alert-circle'}" style="width: 16px; margin-right: 6px;"></i>
+            ${message}
+        `;
+        document.body.appendChild(toast);
+        feather.replace();
+
+        // Auto hide
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.3s';
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
     }
 
     document.addEventListener('DOMContentLoaded', function () {

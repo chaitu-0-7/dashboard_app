@@ -1,4 +1,5 @@
 import os
+import tempfile
 import requests
 import hashlib
 from datetime import datetime, timedelta
@@ -25,7 +26,7 @@ class FyersConnector(BrokerConnector):
             self.fyers = fyersModel.FyersModel(
                 client_id=self.api_key,
                 token=self.access_token,
-                log_path=os.path.join(os.getcwd(), "fyers_logs")
+                log_path=os.path.join(tempfile.gettempdir(), "fyers_logs")
             )
         else:
             self.fyers = None

@@ -16,7 +16,7 @@ UTC = pytz.utc
 
 class TokenManager:
     def __init__(self, db=None):
-        if db:
+        if db is not None:
             self.db = db
         elif MONGO_URI:
             client = MongoClient(MONGO_URI, tz_aware=True, tzinfo=UTC)

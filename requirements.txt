@@ -12,4 +12,3 @@ pytz
 kiteconnect
 yfinance
 Authlib
-requests

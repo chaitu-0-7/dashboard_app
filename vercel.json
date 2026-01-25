@@ -1,0 +1,9 @@
+{
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "app.py"
+        }
+    ],
+    "installCommand": "pip install -r requirements.txt && pip uninstall -y asyncio || true"
+}

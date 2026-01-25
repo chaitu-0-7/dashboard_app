@@ -23,10 +23,14 @@ class FyersConnector(BrokerConnector):
     def _initialize_fyers_model(self):
         """Initializes the FyersModel instance with the current access token."""
         if self.access_token:
+            log_path = os.path.join(tempfile.gettempdir(), "fyers_logs")
+            if not os.path.exists(log_path):
+                os.makedirs(log_path, exist_ok=True)
+                
             self.fyers = fyersModel.FyersModel(
                 client_id=self.api_key,
                 token=self.access_token,
-                log_path=os.path.join(tempfile.gettempdir(), "fyers_logs")
+                log_path=log_path
             )
         else:
             self.fyers = None

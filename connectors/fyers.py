@@ -89,14 +89,19 @@ class FyersConnector(BrokerConnector):
             raise Exception(f"Refresh HTTP failed: {resp.text}")
 
     def is_token_valid(self) -> bool:
-        # This is a heuristic. Ideally we check expiry time if stored.
-        # Or we can make a lightweight API call.
+        """
+        Checks if the current access token is valid by attempting to fetch positions.
+        """
         if not self.fyers:
             return False
         try:
-            self.fyers.get_profile()
+            # attempting to fetch positions to validate token
+            # We use the raw fyers object call to check the response code directly if needed,
+            # but get_positions() wrapper already checks for code 200.
+            self.get_positions()
             return True
-        except:
+        except Exception as e:
+            # print(f"[DEBUG] Token validation failed: {e}")
             return False
 
     # --- Market Data ---

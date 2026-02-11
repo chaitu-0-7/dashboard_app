@@ -346,8 +346,22 @@ def is_token_valid(broker, token_data):
         generated_at = UTC.localize(generated_at)
         
     # Check timestamp first (24 hours validity)
+    # Check timestamp first (24 hours validity)
+    # For Fyers, we want to rely on the API check mostly, but if it's vastly outdated multiple days, maybe expire?
+    # User requested API check, so we relax this.
+    # checking if generated_at is older than validity
+    
+    is_expired_by_time = False
     if generated_at and datetime.now(UTC) > generated_at + timedelta(seconds=ACCESS_TOKEN_VALIDITY):
-        return False
+        is_expired_by_time = True
+
+    # If it's Zerodha, we adhere strictly to time because it's 1 day fixed usually.
+    if broker == 'zerodha' and is_expired_by_time:
+         return False
+
+    # For Fyers, if expired by time, we STILL try the API check below as requested.
+    # so we do NOT return False here for Fyers.
+
 
     # Verify with API
     try:

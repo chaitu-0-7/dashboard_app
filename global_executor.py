@@ -15,7 +15,7 @@ from config import MONGO_DB_NAME, MONGO_ENV
 from market_data_manager import MarketDataManager
 from live_stratergy import SimpleNiftyTrader, DatabaseHandler, MongoLogHandler
 from connectors.fyers import FyersConnector
-from connectors.data_source import YFinanceDataSource 
+from connectors.data_source import YFinanceDataSource
 
 # Setup Logging
 logging.basicConfig(
@@ -25,6 +25,7 @@ logging.basicConfig(
 )
 
 UTC = pytz.utc
+IST = pytz.timezone('Asia/Kolkata')
 
 def main():
     parser = argparse.ArgumentParser(description="Global Executor: Syncs Data & Runs Strategy for All Users.")
@@ -32,6 +33,29 @@ def main():
     args = parser.parse_args()
 
     logging.info("🌍 Starting Global Executor...")
+
+    # Check if today is Tuesday (for NIFTY 50 update)
+    today = datetime.now(IST)
+    is_tuesday = today.weekday() == 1  # Monday=0, Tuesday=1
+    
+    if is_tuesday:
+        logging.info("📅 Today is Tuesday - Running NIFTY 50 constituents update...")
+        try:
+            from utils.nifty50_manager import Nifty50Manager
+            manager = Nifty50Manager()
+            update_result = manager.update_constituents()
+            
+            if update_result['status'] == 'completed':
+                logging.info(f"✅ NIFTY 50 update completed: {len(update_result.get('symbols_added', []))} added, {len(update_result.get('symbols_removed', []))} removed")
+            else:
+                logging.warning(f"⚠️ NIFTY 50 update status: {update_result['status']}")
+                if update_result.get('error'):
+                    logging.error(f"   Error: {update_result['error']}")
+        except Exception as e:
+            logging.error(f"❌ NIFTY 50 update failed: {e}")
+            logging.info("   Continuing with strategy execution using existing list...")
+    else:
+        logging.info(f"📅 Today is {'Monday' if today.weekday() == 0 else 'Wednesday-Friday'} - Skipping NIFTY 50 update")
 
     # 1. Sync Market Data (The Data Warehouse)
     logging.info("📡 Phase 1: Syncing Market Data...")

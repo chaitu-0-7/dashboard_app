@@ -175,7 +175,7 @@ def not_found(error):
     return "<h2>404 Not Found</h2>", 404
 
 # --- Admin Routes ---
-from utils.email import send_approval_email, send_removal_email
+from utils.email_notifications import send_approval_email, send_removal_email
 
 @app.route('/admin')
 @admin_required
@@ -184,20 +184,201 @@ def admin_dashboard():
     total_users = auth_manager.users_collection.count_documents({})
     pending_users_count = auth_manager.users_collection.count_documents({"is_active": False})
     active_sessions = auth_manager.sessions_collection.count_documents({"expires_at": {"$gt": datetime.now(UTC)}})
-    
+
     stats = {
         "total_users": total_users,
         "pending_users": pending_users_count,
         "active_sessions": active_sessions
     }
-    
+
     # Pending Users
     pending_users = list(auth_manager.users_collection.find({"is_active": False}).sort("created_at", -1))
-    
+
     # All Users (Limit 50 for now)
     all_users = list(auth_manager.users_collection.find({}).sort("created_at", -1).limit(50))
-    
+
     return render_template('admin/dashboard.html', stats=stats, pending_users=pending_users, all_users=all_users, active_page='admin_dashboard')
+
+# --- NIFTY 50 Constituents Management ---
+@app.route('/admin/nifty-constituents')
+@admin_required
+def admin_nifty_constituents():
+    """Admin page to manage NIFTY 50 constituents"""
+    if db is None:
+        flash("Database connection failed", "error")
+        return redirect(url_for('admin_dashboard'))
+    
+    from utils.nifty50_manager import Nifty50Manager
+    
+    try:
+        manager = Nifty50Manager()
+        symbols = manager.get_all_constituents_with_status()
+        
+        # Calculate stats
+        active_count = sum(1 for s in symbols if s.get('status') == 'active')
+        pending_count = sum(1 for s in symbols if s.get('status') == 'pending_removal')
+        
+        # Get last update info
+        last_update_doc = db['nifty50_constituents'].find_one({"_id": "current_list"})
+        
+        last_update = None
+        source = 'N/A'
+        days_since_update = 999
+        
+        if last_update_doc:
+            last_update = last_update_doc.get('last_updated')
+            source = last_update_doc.get('source', 'N/A')
+            
+            if last_update:
+                if last_update.tzinfo is None:
+                    last_update = UTC.localize(last_update)
+                days_since_update = (datetime.now(UTC) - last_update).days
+        
+        # Count recently added (last 7 days)
+        recently_added = 0
+        if last_update_doc:
+            seven_days_ago = datetime.now(UTC) - timedelta(days=7)
+            recently_added = sum(
+                1 for s in last_update_doc.get('symbols', [])
+                if s.get('added_date') and s.get('added_date') > seven_days_ago
+            )
+        
+        return render_template(
+            'admin/nifty_constituents.html',
+            active_page='nifty_constituents',
+            symbols=symbols,
+            active_count=active_count,
+            pending_count=pending_count,
+            recently_added=recently_added,
+            total_symbols=len(symbols),
+            last_update=last_update,
+            source=source,
+            days_since_update=days_since_update
+        )
+        
+    except Exception as e:
+        flash(f"Error loading NIFTY 50 constituents: {e}", "error")
+        return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/nifty-constituents/add', methods=['POST'])
+@admin_required
+def admin_add_nifty_symbol():
+    """Add a new symbol to NIFTY 50 list"""
+    if db is None:
+        return jsonify({"success": False, "message": "Database connection failed"})
+    
+    try:
+        data = request.get_json()
+        symbol = data.get('symbol', '').strip()
+        company_name = data.get('company_name', '').strip()
+        
+        if not symbol:
+            return jsonify({"success": False, "message": "Symbol is required"})
+        
+        from utils.nifty50_manager import Nifty50Manager
+        manager = Nifty50Manager()
+        
+        result = manager.add_symbol(symbol, company_name)
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
+@app.route('/admin/nifty-constituents/remove', methods=['POST'])
+@admin_required
+def admin_remove_nifty_symbol():
+    """Mark a symbol for removal (pending_removal status)"""
+    if db is None:
+        return jsonify({"success": False, "message": "Database connection failed"})
+    
+    try:
+        data = request.get_json()
+        symbol = data.get('symbol', '').strip()
+        
+        if not symbol:
+            return jsonify({"success": False, "message": "Symbol is required"})
+        
+        from utils.nifty50_manager import Nifty50Manager
+        manager = Nifty50Manager()
+        
+        result = manager.remove_symbol(symbol)
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
+@app.route('/admin/nifty-constituents/restore', methods=['POST'])
+@admin_required
+def admin_restore_nifty_symbol():
+    """Restore a symbol from pending_removal to active"""
+    if db is None:
+        return jsonify({"success": False, "message": "Database connection failed"})
+    
+    try:
+        data = request.get_json()
+        symbol = data.get('symbol', '').strip()
+        
+        if not symbol:
+            return jsonify({"success": False, "message": "Symbol is required"})
+        
+        # Restore symbol in DB
+        db['nifty50_constituents'].update_one(
+            {"_id": "current_list", "symbols.symbol": symbol},
+            {
+                "$set": {
+                    "symbols.$.status": "active",
+                    "symbols.$.removed_date": None
+                }
+            }
+        )
+        
+        return jsonify({"success": True, "message": f"Symbol {symbol} restored"})
+        
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
+@app.route('/admin/nifty-constituents/validate/<symbol>')
+@admin_required
+def admin_validate_nifty_symbol(symbol):
+    """Validate a symbol (check if it exists and get price)"""
+    if db is None:
+        return jsonify({"valid": False, "error": "Database connection failed"})
+    
+    try:
+        from utils.nifty50_manager import Nifty50Manager
+        manager = Nifty50Manager()
+        
+        is_valid, price = manager.validate_symbol(symbol)
+        
+        if is_valid:
+            return jsonify({"valid": True, "price": price})
+        else:
+            return jsonify({"valid": False, "error": "Symbol not found or no price"})
+        
+    except Exception as e:
+        return jsonify({"valid": False, "error": str(e)})
+
+@app.route('/admin/nifty-constituents/update', methods=['POST'])
+@admin_required
+def admin_update_nifty_constituents():
+    """Force update NIFTY 50 constituents list"""
+    if db is None:
+        return jsonify({"status": "failed", "error": "Database connection failed"})
+    
+    try:
+        from utils.nifty50_manager import Nifty50Manager
+        manager = Nifty50Manager()
+        
+        result = manager.update_constituents(force=True)
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        return jsonify({"status": "failed", "error": str(e)})
+
+# --- End NIFTY 50 Routes ---
 
 @app.route('/admin/users/remove/<user_id>', methods=['POST'])
 @admin_required
@@ -1522,13 +1703,21 @@ def run_strategy():
 def get_run_logs(run_id):
     if db is None:
         return jsonify({'error': 'Database not connected'}), 500
-    
+
     logs_collection = db[f"logs_{MONGO_ENV}"]
-    
-    # Query logs for the specific run_id
+
+    # Query logs for the specific run_id AND current user
     # Sort by timestamp ascending
-    logs = list(logs_collection.find({'run_id': run_id}, {'_id': 0}).sort('timestamp', 1))
+    query = {'run_id': run_id, 'username': g.user['username']}
     
+    # Debug: Log the query
+    import logging
+    logging.info(f"Fetching logs for run_id={run_id}, username={g.user['username']}")
+    
+    logs = list(logs_collection.find(query, {'_id': 0}).sort('timestamp', 1))
+    
+    logging.info(f"Found {len(logs)} logs for run_id={run_id}")
+
     # Format timestamps for display
     formatted_logs = []
     for log in logs:
@@ -1537,16 +1726,16 @@ def get_run_logs(run_id):
             log_time = log['timestamp']
             if log_time.tzinfo is None:
                 log_time = UTC.localize(log_time)
-            
+
             timestamp_str = log_time.astimezone(IST).strftime('%Y-%m-%d %H:%M:%S')
-            
+
             formatted_logs.append({
                 'timestamp': timestamp_str,
                 'level': log.get('level', 'INFO'),
                 'message': log.get('message', ''),
                 'broker_id': log.get('broker_id', None)
             })
-            
+
     return jsonify({'logs': formatted_logs})
 
 @app.route('/trigger-strategy', methods=['POST'])

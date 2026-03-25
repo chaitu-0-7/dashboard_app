@@ -410,34 +410,54 @@ class SimpleNiftyTrader:
     def scan_for_opportunities(self) -> List[Dict]:
         """Scan for entry opportunities"""
         candidates = []
-        
-        for symbol in self.nifty50_symbols:
+
+        # Load NIFTY 50 symbols from DB (dynamic list)
+        try:
+            from utils.nifty50_manager import Nifty50Manager
+            nifty_manager = Nifty50Manager()
+            symbols_to_scan = nifty_manager.get_current_constituents()
+            logging.info(f"📋 Using dynamic NIFTY 50 list: {len(symbols_to_scan)} symbols")
+        except Exception as e:
+            logging.warning(f"Could not load Nifty50Manager: {e}. Using hardcoded list.")
+            symbols_to_scan = self.nifty50_symbols
+
+        logging.info(f"🔍 Scanning for opportunities (MA Period: {self.ma_period}, Entry Threshold: {self.entry_threshold}%)")
+
+        for symbol in symbols_to_scan:
             try:
                 df = self.get_historical_data(symbol, days=self.ma_period + 15)
                 if df.empty: continue
-                
+
                 ma = self.calculate_moving_average(df['close'])
                 if ma is None: continue
-                
-                current_price = self.get_current_price(symbol) # This is the correct call for scanning
+
+                current_price = self.get_current_price(symbol)
                 if current_price <= 0: continue
-                
+
                 if current_price >= ma: continue
-                
+
                 deviation = ((current_price - ma) / ma) * 100
-                
+
+                # CRITICAL FIX: Check entry threshold
+                if deviation > self.entry_threshold:
+                    # Not below threshold, skip
+                    continue
+
+                logging.info(f"  📍 {symbol}: Deviation {deviation:.2f}% (threshold: {self.entry_threshold}%) - QUALIFIED")
+
                 candidates.append({
                     'symbol': symbol,
                     'price': current_price,
                     'ma': ma,
                     'deviation': deviation
                 })
-                
+
             except Exception as e:
                 logging.warning(f"Could not scan {symbol}: {e}")
                 continue
-        
+
         candidates.sort(key=lambda x: x['deviation'])
+        logging.info(f"✅ Found {len(candidates)} qualified candidates (returning top {self.max_stocks_to_scan})")
         return candidates[:self.max_stocks_to_scan]
 
     def check_exit_conditions(self, positions: Dict) -> List[Dict]:
@@ -668,12 +688,20 @@ class SimpleNiftyTrader:
         return price
 
     def try_averaging_down(self, positions: Dict):
-        """Try averaging down on worst performer"""
+        """Try averaging down on worst performer (only if symbol is in active NIFTY 50 list)"""
         if not positions:
             return
 
         worst_performer = None
         worst_performance = float('inf')
+
+        # Load NIFTY 50 manager to check symbol status
+        try:
+            from utils.nifty50_manager import Nifty50Manager
+            nifty_manager = Nifty50Manager()
+        except Exception as e:
+            logging.warning(f"Could not load Nifty50Manager: {e}. Using fallback logic.")
+            nifty_manager = None
 
         for symbol, position in positions.items():
             try:
@@ -684,6 +712,11 @@ class SimpleNiftyTrader:
                 performance = ((current_price - position['avg_price']) / position['avg_price']) * 100
 
                 if performance <= self.averaging_threshold and performance < worst_performance:
+                    # CRITICAL CHECK: Only average if symbol is in active NIFTY 50 list
+                    if nifty_manager and not nifty_manager.is_symbol_in_nifty50(symbol):
+                        logging.info(f"⚠️ Skipping averaging for {symbol}: Not in active NIFTY 50 list (status: pending_removal or removed)")
+                        continue
+                    
                     worst_performance = performance
                     worst_performer = {
                         'symbol': symbol,
@@ -697,6 +730,8 @@ class SimpleNiftyTrader:
         if worst_performer:
             logging.info(f"🔄 AVERAGING DOWN: {worst_performer['symbol']} at {worst_performer['performance']:.1f}% loss")
             self.execute_buy(worst_performer['symbol'], worst_performer['price'], is_averaging=True)
+        else:
+            logging.info("🔄 No valid averaging candidates (all either above threshold or not in NIFTY 50)")
 
     def run_daily_strategy(self):
         """Main daily strategy execution"""
@@ -762,32 +797,55 @@ class SimpleNiftyTrader:
 
             entry_candidates = self.scan_for_opportunities()
             new_candidates = [c for c in entry_candidates if c['symbol'] not in current_positions]
-            
+
             # Check Max Open Positions Limit
             if self.max_open_positions != -1 and len(current_positions) >= self.max_open_positions:
                 logging.info(f"🚫 Max open positions ({self.max_open_positions}) reached. Skipping {len(new_candidates)} new entries.")
                 new_candidates = []
 
+            # Log scanning results
+            logging.info(f"📊 Scan Results: Found {len(entry_candidates)} candidates, {len(new_candidates)} are new (not in current positions)")
             for candidate in new_candidates:
                 logging.info(f"Eligible candidate: {candidate['symbol']} (Deviation: {candidate['deviation']:.2f}%) - Price: ₹{candidate['price']:.2f}, MA: ₹{candidate['ma']:.2f})")
-            
+
             best_entry = None
             available_balance = self.get_account_balance()
-            
+            logging.info(f"💰 Available Balance: ₹{available_balance:,.2f}")
+
             for candidate in new_candidates:
                 quantity = math.floor(self.max_trade_value / candidate['price'])
                 required_amount = candidate['price'] * quantity
-                
-                if (required_amount <= available_balance or self.db_handler.env == 'dev') and quantity > 0:
-                    best_entry = candidate
-                    break
-            
+
+                logging.info(f"  Checking {candidate['symbol']}: qty={quantity}, required=₹{required_amount:,.2f}, balance=₹{available_balance:,.2f}")
+
+                if quantity <= 0:
+                    logging.warning(f"  ⚠️ Skipping {candidate['symbol']}: quantity={quantity} (price ₹{candidate['price']:.2f} too high for max_trade_value ₹{self.max_trade_value})")
+                    continue
+
+                if required_amount > available_balance and self.db_handler.env != 'dev':
+                    logging.warning(f"  ⚠️ Skipping {candidate['symbol']}: Insufficient balance (need ₹{required_amount:,.2f}, have ₹{available_balance:,.2f})")
+                    continue
+
+                best_entry = candidate
+                logging.info(f"  ✅ Selected {candidate['symbol']} as best entry")
+                break
+
             if best_entry:
                 logging.info(f"🎯 ENTRY OPPORTUNITY: {best_entry['symbol']} at {best_entry['deviation']:.1f}% below MA")
                 self.execute_buy(best_entry['symbol'], best_entry['price'])
             else:
-                if not best_entry and current_positions:
+                # Try averaging down if we have existing positions
+                # This happens when:
+                # 1. No new candidates found (all above threshold or already held)
+                # 2. OR new candidates exist but can't purchase (balance/quantity issues)
+                if current_positions:
+                    logging.info("🔄 Checking for averaging opportunities on existing positions...")
                     self.try_averaging_down(current_positions)
+                else:
+                    if new_candidates:
+                        logging.info("📋 New candidates available but none could be purchased (balance/quantity issues) and no existing positions to average.")
+                    else:
+                        logging.info("📋 No new candidates and no existing positions to average. Standing by.")
             
             self.print_current_status(current_positions)
         

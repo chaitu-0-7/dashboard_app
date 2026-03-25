@@ -73,6 +73,11 @@
                     <i data-feather="shield" class="nav-icon"></i>
                     Admin Panel
                 </a>
+                <a href="{{ url_for('admin_nifty_constituents') }}"
+                    class="nav-item {% if active_page == 'nifty_constituents' %}active{% endif %}">
+                    <i data-feather="list" class="nav-icon"></i>
+                    NIFTY 50 List
+                </a>
                 {% endif %}
             </nav>
 

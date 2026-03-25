@@ -1,0 +1,468 @@
+{% extends "base.html" %}
+
+{% block title %}NIFTY 50 Constituents - Nifty Shop{% endblock %}
+{% block page_title %}NIFTY 50 Constituents{% endblock %}
+{% block page_subtitle %}Manage index constituents list{% endblock %}
+
+{% block content %}
+
+<!-- Update Status Banner -->
+{% if last_update %}
+<div class="card mb-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">
+    <div class="p-4">
+        <div class="flex-between">
+            <div>
+                <h3 style="margin-bottom: 0.5rem;">✅ List Updated Successfully</h3>
+                <p style="opacity: 0.9; margin: 0;">
+                    Last update: {{ last_update.strftime('%Y-%m-%d %H:%M') }} IST | 
+                    Source: {{ source|upper }} | 
+                    Active Symbols: {{ total_symbols }}
+                </p>
+            </div>
+            <button class="btn btn-light" onclick="forceUpdate()">
+                <i data-feather="refresh-cw" style="width: 16px; margin-right: 6px;"></i>
+                Force Update Now
+            </button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Stats Cards -->
+<div class="grid mb-4" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+    <div class="card p-4">
+        <div class="text-muted text-sm mb-2">Active Symbols</div>
+        <div style="font-size: 2rem; font-weight: bold; color: #10b981;">{{ active_count }}</div>
+    </div>
+    <div class="card p-4">
+        <div class="text-muted text-sm mb-2">Pending Removal</div>
+        <div style="font-size: 2rem; font-weight: bold; color: #f59e0b;">{{ pending_count }}</div>
+    </div>
+    <div class="card p-4">
+        <div class="text-muted text-sm mb-2">Recently Added</div>
+        <div style="font-size: 2rem; font-weight: bold; color: #3b82f6;">{{ recently_added }}</div>
+    </div>
+    <div class="card p-4">
+        <div class="text-muted text-sm mb-2">Last Update</div>
+        <div style="font-size: 1.2rem; font-weight: bold; color: #6b7280;">{{ days_since_update }}d ago</div>
+    </div>
+</div>
+
+<!-- Main Table -->
+<div class="card">
+    <div class="card-header flex-between">
+        <h3 class="card-title">Constituents List</h3>
+        <div class="flex-center gap-2">
+            <button class="btn btn-outline" onclick="showAddModal()">
+                <i data-feather="plus" style="width: 16px; margin-right: 6px;"></i>
+                Add Symbol
+            </button>
+            <button class="btn btn-outline" onclick="exportToCSV()">
+                <i data-feather="download" style="width: 16px; margin-right: 6px;"></i>
+                Export CSV
+            </button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="constituents-table">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Company Name</th>
+                    <th>Status</th>
+                    <th>Added Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for symbol in symbols %}
+                <tr data-symbol="{{ symbol.symbol }}">
+                    <td>
+                        <code style="font-weight: 600;">{{ symbol.symbol }}</code>
+                    </td>
+                    <td>{{ symbol.company_name or symbol.symbol.replace('NSE:', '').replace('-EQ', '') }}</td>
+                    <td>
+                        {% if symbol.status == 'active' %}
+                        <span class="badge badge-success">✅ Active</span>
+                        {% elif symbol.status == 'pending_removal' %}
+                        <span class="badge badge-warning">⚠️ Pending Removal</span>
+                        {% else %}
+                        <span class="badge badge-secondary">{{ symbol.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if symbol.added_date %}
+                        {{ symbol.added_date.strftime('%Y-%m-%d') }}
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="flex-center gap-2">
+                            {% if symbol.status == 'active' %}
+                            <button class="btn btn-sm btn-outline" onclick="markForRemoval('{{ symbol.symbol }}')" title="Mark for Removal">
+                                <i data-feather="trash-2" style="width: 14px;"></i>
+                            </button>
+                            {% elif symbol.status == 'pending_removal' %}
+                            <button class="btn btn-sm btn-success" onclick="restoreSymbol('{{ symbol.symbol }}')" title="Restore">
+                                <i data-feather="check" style="width: 14px;"></i>
+                            </button>
+                            {% endif %}
+                            <button class="btn btn-sm btn-outline" onclick="validateSymbol('{{ symbol.symbol }}')" title="Validate">
+                                <i data-feather="check-circle" style="width: 14px;"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add Symbol Modal -->
+<div class="modal-overlay" id="add-modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <h3 class="mb-4">Add New Symbol</h3>
+        <form id="add-form" onsubmit="return addSymbol(event)">
+            <div class="form-group mb-3">
+                <label class="form-label">Symbol</label>
+                <input type="text" class="form-control" id="symbol-input" 
+                       placeholder="e.g., NSE:RELIANCE-EQ" required 
+                       pattern="NSE:[A-Z]+-EQ">
+                <small class="text-muted">Format: NSE:SYMBOL-EQ</small>
+            </div>
+            <div class="form-group mb-4">
+                <label class="form-label">Company Name (Optional)</label>
+                <input type="text" class="form-control" id="company-input" 
+                       placeholder="e.g., Reliance Industries">
+            </div>
+            <div class="flex-end gap-2">
+                <button type="button" class="btn btn-outline" onclick="closeAddModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">
+                    <i data-feather="plus" style="width: 16px; margin-right: 6px;"></i>
+                    Add Symbol
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Loading Modal -->
+<div class="modal-overlay" id="loading-modal">
+    <div class="modal-content">
+        <div class="loader"></div>
+        <h3 class="mt-4">Processing...</h3>
+        <p class="text-muted">This may take a moment</p>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Show/hide modals
+    function showAddModal() {
+        document.getElementById('add-modal').classList.add('show');
+        document.getElementById('symbol-input').focus();
+    }
+
+    function closeAddModal() {
+        document.getElementById('add-modal').classList.remove('show');
+        document.getElementById('add-form').reset();
+    }
+
+    function showLoading() {
+        document.getElementById('loading-modal').classList.add('show');
+    }
+
+    function hideLoading() {
+        document.getElementById('loading-modal').classList.remove('show');
+    }
+
+    // Add symbol
+    async function addSymbol(event) {
+        event.preventDefault();
+        
+        const symbol = document.getElementById('symbol-input').value.trim();
+        const company = document.getElementById('company-input').value.trim();
+        
+        showLoading();
+        
+        try {
+            const response = await fetch('/admin/nifty-constituents/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ symbol, company_name: company })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showToast('Success', data.message, 'success');
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                showToast('Error', data.message, 'error');
+                hideLoading();
+            }
+        } catch (error) {
+            showToast('Error', 'Failed to add symbol', 'error');
+            hideLoading();
+        }
+        
+        return false;
+    }
+
+    // Mark for removal
+    async function markForRemoval(symbol) {
+        if (!confirm(`Mark ${symbol} for removal?\n\nThis will prevent new entries and averaging, but existing positions will remain open.`)) {
+            return;
+        }
+        
+        showLoading();
+        
+        try {
+            const response = await fetch('/admin/nifty-constituents/remove', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ symbol })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showToast('Success', data.message, 'success');
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                showToast('Error', data.message, 'error');
+                hideLoading();
+            }
+        } catch (error) {
+            showToast('Error', 'Failed to mark for removal', 'error');
+            hideLoading();
+        }
+    }
+
+    // Restore symbol
+    async function restoreSymbol(symbol) {
+        showLoading();
+        
+        try {
+            const response = await fetch('/admin/nifty-constituents/restore', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ symbol })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showToast('Success', data.message, 'success');
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                showToast('Error', data.message, 'error');
+                hideLoading();
+            }
+        } catch (error) {
+            showToast('Error', 'Failed to restore symbol', 'error');
+            hideLoading();
+        }
+    }
+
+    // Validate symbol
+    async function validateSymbol(symbol) {
+        showLoading();
+        
+        try {
+            const response = await fetch(`/admin/nifty-constituents/validate/${symbol}`);
+            const data = await response.json();
+            
+            if (data.valid) {
+                showToast('Valid', `${symbol} is trading at ₹${data.price}`, 'success');
+            } else {
+                showToast('Invalid', `${symbol} validation failed`, 'error');
+            }
+        } catch (error) {
+            showToast('Error', 'Validation failed', 'error');
+        }
+        
+        hideLoading();
+    }
+
+    // Force update
+    async function forceUpdate() {
+        if (!confirm('Force update NIFTY 50 list now?\n\nThis will fetch latest data from NSE/Fyers and update the database.')) {
+            return;
+        }
+        
+        showLoading();
+        
+        try {
+            const response = await fetch('/admin/nifty-constituents/update', {
+                method: 'POST'
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'completed') {
+                showToast('Success', `Update completed: ${data.symbols_added?.length || 0} added, ${data.symbols_removed?.length || 0} removed`, 'success');
+                setTimeout(() => window.location.reload(), 2000);
+            } else {
+                showToast('Error', data.error || 'Update failed', 'error');
+                hideLoading();
+            }
+        } catch (error) {
+            showToast('Error', 'Update failed', 'error');
+            hideLoading();
+        }
+    }
+
+    // Export to CSV
+    function exportToCSV() {
+        const rows = [];
+        rows.push(['Symbol', 'Company Name', 'Status', 'Added Date']);
+        
+        document.querySelectorAll('#constituents-table tbody tr').forEach(tr => {
+            const symbol = tr.cells[0].innerText.trim();
+            const company = tr.cells[1].innerText.trim();
+            const status = tr.cells[2].innerText.trim();
+            const addedDate = tr.cells[3].innerText.trim();
+            rows.push([symbol, company, status, addedDate]);
+        });
+        
+        const csv = rows.map(row => row.join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `nifty50_constituents_${new Date().toISOString().split('T')[0]}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        showToast('Success', 'CSV exported', 'success');
+    }
+
+    // Toast notification
+    function showToast(title, message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `toast-notification ${type}`;
+        toast.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-left: 4px solid ${type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--danger)' : 'var(--primary)'};
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            min-width: 300px;
+            animation: slideIn 0.3s ease-out;
+        `;
+        toast.innerHTML = `
+            <div style="font-weight: bold; margin-bottom: 4px;">${title}</div>
+            <div style="font-size: 0.9rem; color: var(--text-muted);">${message}</div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-10px)';
+            toast.style.transition = 'all 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // Initialize feather icons
+    feather.replace();
+</script>
+
+<style>
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .modal-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: var(--shadow-lg);
+        animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .loader {
+        border: 4px solid var(--bg-hover);
+        border-top: 4px solid var(--primary);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        100% { transform: rotate(360deg); }
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .badge-success { background-color: #d1fae5; color: #065f46; }
+    .badge-warning { background-color: #fef3c7; color: #92400e; }
+    .badge-danger { background-color: #fee2e2; color: #991b1b; }
+    .badge-secondary { background-color: var(--bg-hover); color: var(--text-muted); }
+
+    .btn-sm {
+        padding: 4px 8px;
+        font-size: 0.875rem;
+    }
+
+    .grid {
+        display: grid;
+    }
+
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-3 { margin-bottom: 0.75rem; }
+    .mt-4 { margin-top: 1rem; }
+    .flex-end { display: flex; justify-content: flex-end; }
+    .gap-2 { gap: 0.5rem; }
+</style>
+{% endblock %}

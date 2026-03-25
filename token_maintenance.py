@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from token_manager import TokenManager
-from utils.email import send_token_expiry_alert
+from utils.email_notifications import send_token_expiry_alert
 
 # Setup Logging
 logging.basicConfig(
